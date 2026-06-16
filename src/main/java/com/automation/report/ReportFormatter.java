@@ -209,22 +209,57 @@ public class ReportFormatter {
         sb.append("<tr><td class='stat-label'>Site A</td><td>").append(a.getImages().size()).append(" image(s)</td></tr>");
         sb.append("<tr><td class='stat-label'>Site B</td><td>").append(b.getImages().size()).append(" image(s)</td></tr>");
         sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.getMatchedImagesCount()).append("</td></tr>");
+        if (result.getVisualMatchImagesCount() > 0) {
+            sb.append("<tr><td class='stat-label'>Visual Match</td><td class='status-cell warn'>").append(result.getVisualMatchImagesCount()).append(" (same image, different path/format)</td></tr>");
+        }
         sb.append("<tr><td class='stat-label'>Mismatched</td><td>").append(result.getMismatchedImageIndices().size()).append("</td></tr>");
         sb.append("</tbody></table>");
 
-        sb.append("<table><thead><tr><th style='width:5%'>#</th><th style='width:25%'>Site A Source</th><th style='width:20%'>Site A Hash</th><th style='width:25%'>Site B Source</th><th style='width:20%'>Site B Hash</th><th style='width:5%'>Status</th></tr></thead><tbody>");
+        sb.append("<table><thead><tr><th style='width:4%'>#</th><th style='width:31%'>Site A Source</th><th style='width:10%'>Site A Hash</th><th style='width:31%'>Site B Source</th><th style='width:10%'>Site B Hash</th><th style='width:14%'>Status</th></tr></thead><tbody>");
         int imgTotal = Math.max(a.getImages().size(), b.getImages().size());
         for (int i = 0; i < imgTotal; i++) {
             boolean hasA = i < a.getImages().size();
             boolean hasB = i < b.getImages().size();
-            boolean match = hasA && hasB && a.getImages().get(i).getSrc().equals(b.getImages().get(i).getSrc());
-            sb.append("<tr").append(match ? "" : " class='row-fail'").append(">");
+            
+            String statusText;
+            String statusClass;
+            if (hasA && hasB) {
+                boolean hashMatch = a.getImages().get(i).getHash().equals(b.getImages().get(i).getHash());
+                if (hashMatch) {
+                    statusText = "MATCH";
+                    statusClass = "pass";
+                } else {
+                    // Check perceptual hash — visually identical but different binary
+                    String phA = a.getImages().get(i).getPerceptualHash();
+                    String phB = b.getImages().get(i).getPerceptualHash();
+                    boolean perceptualMatch = !"phash-error".equals(phA)
+                            && !"phash-error".equals(phB)
+                            && phA.equals(phB);
+                    if (perceptualMatch) {
+                        statusText = "VISUAL MATCH";
+                        statusClass = "warn";
+                    } else {
+                        boolean srcMatch = a.getImages().get(i).getSrc().equals(b.getImages().get(i).getSrc());
+                        statusText = srcMatch ? "HASH DIFF" : "DIFF";
+                        statusClass = "fail";
+                    }
+                }
+            } else if (!hasA) {
+                statusText = "MISSING IN A";
+                statusClass = "fail";
+            } else {
+                statusText = "MISSING IN B";
+                statusClass = "fail";
+            }
+
+            boolean isPass = statusClass.equals("pass") || statusClass.equals("warn");
+            sb.append("<tr").append(isPass ? "" : " class='row-fail'").append(">");
             sb.append("<td class='num-cell'>").append(i).append("</td>");
             sb.append("<td class='src-cell'>").append(hasA ? esc(a.getImages().get(i).getSrc()) : "<em class='na'>N/A</em>").append("</td>");
             sb.append("<td class='hash-cell'>").append(hasA ? a.getImages().get(i).getHash().substring(0, 8) + "..." : "N/A").append("</td>");
             sb.append("<td class='src-cell'>").append(hasB ? esc(b.getImages().get(i).getSrc()) : "<em class='na'>N/A</em>").append("</td>");
             sb.append("<td class='hash-cell'>").append(hasB ? b.getImages().get(i).getHash().substring(0, 8) + "..." : "N/A").append("</td>");
-            sb.append("<td class='status-cell ").append(match ? "pass" : "fail").append("'>").append(match ? "MATCH" : "DIFF").append("</td>");
+            sb.append("<td class='status-cell ").append(statusClass).append("'>").append(statusText).append("</td>");
             sb.append("</tr>");
         }
         sb.append("</tbody></table></div>");
@@ -411,6 +446,7 @@ public class ReportFormatter {
             /* ── Status cells ────────────────────────────────────────────── */
             .status-cell { font-weight: bold; white-space: nowrap; }
             .status-cell.pass { color: #1a6e1a; }
+            .status-cell.warn { color: #8a6000; }
             .status-cell.fail { color: #a30000; }
 
             /* ── Specific cell types ─────────────────────────────────────── */

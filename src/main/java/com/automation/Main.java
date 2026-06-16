@@ -32,7 +32,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         System.out.println("[INFO] Content Comparator Started");
 
-        String excelPath = "automation/test_comparisons.xlsx";
+        String excelPath = "test_comparisons.xlsx";
         if (args.length > 0) {
             excelPath = args[0];
         }

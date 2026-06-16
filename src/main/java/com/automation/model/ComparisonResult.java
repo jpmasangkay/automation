@@ -19,6 +19,7 @@ public class ComparisonResult {
     private final boolean imagesMatch;
     private final List<Integer> mismatchedImageIndices;
     private final int matchedImagesCount;
+    private final int visualMatchImagesCount; // same image, different path/format/rendition
 
     // Links
     private final boolean linksMatch;
@@ -44,7 +45,7 @@ public class ComparisonResult {
     public ComparisonResult(SiteData siteA, SiteData siteB,
             boolean textMatches, int totalLinesA, int totalLinesB, int matchedLineCount,
             List<String> textOnlyInA, List<String> textOnlyInB,
-            boolean imagesMatch, List<Integer> mismatchedImageIndices, int matchedImagesCount,
+            boolean imagesMatch, List<Integer> mismatchedImageIndices, int matchedImagesCount, int visualMatchImagesCount,
             boolean linksMatch, List<LinkData> linksOnlyInA, List<LinkData> linksOnlyInB, int matchedLinksCount,
             boolean metadataMatches, Map<String, String> metaOnlyInA, Map<String, String> metaOnlyInB,
             Map<String, String[]> metaValueDiffs,
@@ -62,6 +63,7 @@ public class ComparisonResult {
         this.imagesMatch = imagesMatch;
         this.mismatchedImageIndices = mismatchedImageIndices;
         this.matchedImagesCount = matchedImagesCount;
+        this.visualMatchImagesCount = visualMatchImagesCount;
         this.linksMatch = linksMatch;
         this.linksOnlyInA = linksOnlyInA;
         this.linksOnlyInB = linksOnlyInB;
@@ -123,6 +125,10 @@ public class ComparisonResult {
 
     public int getMatchedImagesCount() {
         return matchedImagesCount;
+    }
+
+    public int getVisualMatchImagesCount() {
+        return visualMatchImagesCount;
     }
 
     public boolean isLinksMatch() {

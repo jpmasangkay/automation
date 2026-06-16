@@ -4,6 +4,8 @@ import com.automation.model.ImageData;
 import com.automation.model.LinkData;
 import com.automation.model.SiteData;
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.LoadState;
+import com.microsoft.playwright.options.LoadState;
 
 import java.net.URI;
 import java.security.MessageDigest;
@@ -20,15 +22,44 @@ public class ContentExtractor {
                     new BrowserType.LaunchOptions().setHeadless(true));
             Page page = browser.newPage();
 
+            // Block third-party popups, surveys, and cookie banners at the network level
+            page.route("**/*qualtrics.com**", Route::abort);
+            page.route("**/*cookielaw.org**", Route::abort);
+            page.route("**/*onetrust.com**", Route::abort);
+            page.route("**/*tealiumiq.com**", Route::abort);
+            page.route("**/*google-analytics.com**", Route::abort);
+
             System.out.println("[INFO] Navigating to Site " + label + ": " + url);
             page.navigate(url);
-            page.waitForLoadState();
+            page.waitForLoadState(LoadState.NETWORKIDLE);
             System.out.println("[INFO] Site " + label + " loaded.");
+
+            // Scroll the full page to force all lazy-loaded components (images, feeds) to resolve
+            try {
+                page.evaluate("() => new Promise(resolve => {" +
+                    "let pos = 0;" +
+                    "const step = () => {" +
+                    "  window.scrollBy(0, 400);" +
+                    "  pos += 400;" +
+                    "  if (pos < document.body.scrollHeight && pos < 20000) { setTimeout(step, 80); }" +
+                    "  else { window.scrollTo(0, 0); setTimeout(resolve, 500); }" +
+                    "}; step();" +
+                "})");
+            } catch (Exception e) {
+                System.out.println("[WARN] Page scroll failed: " + e.getMessage());
+            }
+
+            // Create a dedicated helper page for perceptual hashing (64x64, shared across all images)
+            Page helperPage = browser.newPage();
+            helperPage.setViewportSize(64, 64);
+            helperPage.setContent("<html><body style='margin:0;padding:0;width:64px;height:64px;overflow:hidden;background:#fff;'>" +
+                    "<img id='ph' style='width:64px;height:64px;display:block;object-fit:fill;' /></body></html>");
+            helperPage.waitForLoadState();
 
             System.out.println("[INFO] Extracting content from Site " + label + "...");
             cleanDom(page);
             String rawText = extractText(page);
-            List<ImageData> images = extractImages(page, label);
+            List<ImageData> images = extractImages(page, helperPage, label);
             List<LinkData> links = extractLinks(page, label);
             Map<String, String> metadata = extractMetadata(page, label);
             Map<String, String> dataLayer = extractDataLayer(page, label);
@@ -62,11 +93,23 @@ public class ContentExtractor {
                             '.header', '.footer', '.navigation', '.navigation__sticky',
                             '.page-header', '.page-footer',
                             '.site-header', '.site-footer',
-                            '.navbar', '.nav-container'
+                            '.navbar', '.nav-container',
+                            '#onetrust-consent-sdk', '.cookie-banner', '#cookie-law-info-bar' // common cookie banners
                         ];
                         selectors.forEach(sel => {
                             document.querySelectorAll(sel).forEach(el => el.remove());
                         });
+
+                        // 3. Freeze all animations and transitions to prevent screenshot flakiness
+                        const style = document.createElement('style');
+                        style.innerHTML = `
+                            * {
+                                transition: none !important;
+                                animation: none !important;
+                                scroll-behavior: auto !important;
+                            }
+                        `;
+                        document.head.appendChild(style);
                     }
                 """);
     }
@@ -80,30 +123,101 @@ public class ContentExtractor {
     }
 
     // -------------------------------------------------------
-    // IMAGES — pixel-level via per-element screenshot
+    // IMAGES — deterministic via full-page load + binary download + perceptual hash
     // -------------------------------------------------------
-    private List<ImageData> extractImages(Page page, String siteLabel) {
-        List<ElementHandle> elements = page.querySelectorAll("img");
+    private List<ImageData> extractImages(Page page, Page helperPage, String siteLabel) {
+        // Step 1: Scroll the full page to force all lazy-loaded images to resolve
+        try {
+            page.evaluate("() => new Promise(resolve => {" +
+                "let pos = 0;" +
+                "const step = () => {" +
+                "  window.scrollBy(0, 400);" +
+                "  pos += 400;" +
+                "  if (pos < document.body.scrollHeight && pos < 20000) { setTimeout(step, 80); }" +
+                "  else { window.scrollTo(0, 0); setTimeout(resolve, 500); }" +
+                "}; step();" +
+            "})");
+        } catch (Exception e) {
+            System.out.println("[WARN] Page scroll failed: " + e.getMessage());
+        }
+
+        // Step 2: Wait for every img on the page to reach a 'complete' state
+        try {
+            page.evaluate("() => Promise.all(" +
+                "  Array.from(document.images)" +
+                "    .filter(img => !img.complete)" +
+                "    .map(img => new Promise(resolve => {" +
+                "      img.onload = resolve;" +
+                "      img.onerror = resolve;" +
+                "    }))" +
+                ")");
+        } catch (Exception e) {
+            System.out.println("[WARN] Image load wait failed: " + e.getMessage());
+        }
+        page.waitForTimeout(500);
+
+        // Step 3: Collect all resolved (currentSrc) image URLs from the page
+        @SuppressWarnings("unchecked")
+        List<Map<String, String>> imgInfoList = (List<Map<String, String>>) page.evaluate(
+            "() => Array.from(document.images)" +
+            "  .map(img => ({" +
+            "    src: img.getAttribute('src') || ''," +
+            "    currentSrc: img.currentSrc || img.src || ''" +
+            "  }))" +
+            "  .filter(info => {" +
+            "    const u = info.currentSrc.toLowerCase();" +
+            "    return u.startsWith('http') &&" +
+            "           !u.includes('placeholder') &&" +
+            "           !u.includes('blank.gif') &&" +
+            "           !u.includes('spacer') &&" +
+            "           !u.includes('cookielaw') &&" +
+            "           !u.includes('qualtrics') &&" +
+            "           !u.includes('data:image');" +
+            "  })"
+        );
+
         List<ImageData> images = new ArrayList<>();
         int index = 0;
-
-        for (ElementHandle img : elements) {
+        for (Map<String, String> info : imgInfoList) {
+            String src = info.get("src");
+            String currentSrc = info.get("currentSrc");
             try {
-                String src = img.getAttribute("src");
-                if (src == null || src.isBlank())
-                    continue;
-                img.scrollIntoViewIfNeeded();
-                page.waitForTimeout(300);
-                byte[] png = img.screenshot();
-                String hash = md5(png);
-                images.add(new ImageData(index, src, png, hash));
+                // Primary: download exact binary
+                byte[] imageBytes = page.context().request().get(currentSrc).body();
+                String hash = md5(imageBytes);
+                // Secondary: render at fixed 64x64 for visual fingerprint
+                String perceptualHash = computePerceptualHash(currentSrc, helperPage);
+                images.add(new ImageData(index, src.isBlank() ? currentSrc : src, imageBytes, hash, perceptualHash));
                 index++;
             } catch (Exception e) {
-                System.out.println("[WARN] Site " + siteLabel + " - skipped image " + index + ": " + e.getMessage());
+                System.out.println("[WARN] Site " + siteLabel + " - skipped image " + index + " (" + currentSrc + "): " + e.getMessage());
             }
         }
         System.out.println("[INFO] Site " + siteLabel + " - captured " + images.size() + " image(s).");
         return images;
+    }
+
+    /**
+     * Renders the image at a fixed 64x64px viewport using Playwright and returns
+     * an MD5 of the screenshot. This produces a visual fingerprint that is
+     * independent of CDN path, image format (webp/png/jpg), or rendition size.
+     */
+    private String computePerceptualHash(String imageUrl, Page helperPage) {
+        try {
+            helperPage.evaluate(
+                "(url) => new Promise((res, rej) => {" +
+                "  const img = document.getElementById('ph');" +
+                "  const load = () => res();" +
+                "  const err  = () => rej(new Error('load failed'));" +
+                "  img.addEventListener('load',  load, {once: true});" +
+                "  img.addEventListener('error', err,  {once: true});" +
+                "  img.src = ''; img.src = url;" +  // force re-load even if same URL
+                "})", imageUrl);
+            byte[] shot = helperPage.locator("#ph").screenshot();
+            return md5(shot);
+        } catch (Exception e) {
+            return "phash-error";
+        }
     }
 
     // -------------------------------------------------------

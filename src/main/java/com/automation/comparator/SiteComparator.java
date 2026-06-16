@@ -27,13 +27,26 @@ public class SiteComparator {
         // IMAGES
         int totalComparable = Math.min(a.getImages().size(), b.getImages().size());
         int matchedImagesCount = 0;
+        int visualMatchImagesCount = 0;
         List<Integer> mismatchedImageIndices = new ArrayList<>();
 
         for (int i = 0; i < totalComparable; i++) {
-            if (a.getImages().get(i).getSrc().equals(b.getImages().get(i).getSrc())) {
+            boolean hashMatch = a.getImages().get(i).getHash().equals(b.getImages().get(i).getHash());
+            if (hashMatch) {
                 matchedImagesCount++;
             } else {
-                mismatchedImageIndices.add(i);
+                // Binary hashes differ — check if they are visually identical
+                String phA = a.getImages().get(i).getPerceptualHash();
+                String phB = b.getImages().get(i).getPerceptualHash();
+                boolean perceptualMatch = !"phash-error".equals(phA)
+                        && !"phash-error".equals(phB)
+                        && phA.equals(phB);
+                if (perceptualMatch) {
+                    matchedImagesCount++;
+                    visualMatchImagesCount++;
+                } else {
+                    mismatchedImageIndices.add(i);
+                }
             }
         }
         boolean imagesMatch = mismatchedImageIndices.isEmpty()
@@ -100,7 +113,7 @@ public class SiteComparator {
         return new ComparisonResult(
                 a, b,
                 textMatches, linesA.size(), linesB.size(), matchedLineCount, textOnlyInA, textOnlyInB,
-                imagesMatch, mismatchedImageIndices, matchedImagesCount,
+                imagesMatch, mismatchedImageIndices, matchedImagesCount, visualMatchImagesCount,
                 linksMatch, linksOnlyInA, linksOnlyInB, commonLinks.size(),
                 metadataMatches, metaOnlyInA, metaOnlyInB, metaValueDiffs,
                 dataLayerMatches, dlOnlyInA, dlOnlyInB, dlValueDiffs,
