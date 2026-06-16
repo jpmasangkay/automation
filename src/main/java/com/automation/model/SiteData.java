@@ -11,12 +11,12 @@ public class SiteData {
     private final List<ImageData> images;
     private final List<LinkData> links;
     private final Map<String, String> metadata;
-    private final String dataLayerJson;
+    private final Map<String, String> dataLayer;
     private final long extractionTimeMillis;
 
     public SiteData(String label, String url, String rawText, String normalizedText,
                     List<ImageData> images, List<LinkData> links,
-                    Map<String, String> metadata, String dataLayerJson,
+                    Map<String, String> metadata, Map<String, String> dataLayer,
                     long extractionTimeMillis) {
         this.label = label;
         this.url = url;
@@ -25,7 +25,7 @@ public class SiteData {
         this.images = images;
         this.links = links;
         this.metadata = metadata;
-        this.dataLayerJson = dataLayerJson;
+        this.dataLayer = dataLayer;
         this.extractionTimeMillis = extractionTimeMillis;
     }
 
@@ -36,6 +36,6 @@ public class SiteData {
     public List<ImageData> getImages()        { return images; }
     public List<LinkData> getLinks()          { return links; }
     public Map<String, String> getMetadata()  { return metadata; }
-    public String getDataLayerJson()          { return dataLayerJson; }
+    public Map<String, String> getDataLayer() { return dataLayer; }
     public long getExtractionTimeMillis()     { return extractionTimeMillis; }
 }

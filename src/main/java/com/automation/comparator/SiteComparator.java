@@ -9,12 +9,6 @@ import java.util.stream.Collectors;
 
 public class SiteComparator {
 
-    // Date/time metadata keys excluded from comparison.
-    private static final Set<String> IGNORED_META_KEYS = new HashSet<>(Arrays.asList(
-            "created", "date", "last-modified", "revised", "expires",
-            "article:published_time", "article:modified_time"
-    ));
-
     public ComparisonResult compare(SiteData a, SiteData b) {
         long startTime = System.currentTimeMillis();
 
@@ -36,7 +30,7 @@ public class SiteComparator {
         List<Integer> mismatchedImageIndices = new ArrayList<>();
 
         for (int i = 0; i < totalComparable; i++) {
-            if (a.getImages().get(i).getHash().equals(b.getImages().get(i).getHash())) {
+            if (a.getImages().get(i).getSrc().equals(b.getImages().get(i).getSrc())) {
                 matchedImagesCount++;
             } else {
                 mismatchedImageIndices.add(i);
@@ -64,7 +58,6 @@ public class SiteComparator {
         allKeys.addAll(metaB.keySet());
 
         for (String key : allKeys) {
-            if (IGNORED_META_KEYS.contains(key.toLowerCase())) continue;
             boolean inA = metaA.containsKey(key);
             boolean inB = metaB.containsKey(key);
             if (inA && !inB) {
@@ -78,9 +71,29 @@ public class SiteComparator {
         boolean metadataMatches = metaOnlyInA.isEmpty() && metaOnlyInB.isEmpty() && metaValueDiffs.isEmpty();
 
         // DATALAYER
-        String dlA = a.getDataLayerJson();
-        String dlB = b.getDataLayerJson();
-        boolean dataLayerMatches = dlA.equals(dlB);
+        Map<String, String> dlA = a.getDataLayer();
+        Map<String, String> dlB = b.getDataLayer();
+
+        Map<String, String> dlOnlyInA = new LinkedHashMap<>();
+        Map<String, String> dlOnlyInB = new LinkedHashMap<>();
+        Map<String, String[]> dlValueDiffs = new LinkedHashMap<>();
+
+        Set<String> allDlKeys = new LinkedHashSet<>();
+        allDlKeys.addAll(dlA.keySet());
+        allDlKeys.addAll(dlB.keySet());
+
+        for (String key : allDlKeys) {
+            boolean inA = dlA.containsKey(key);
+            boolean inB = dlB.containsKey(key);
+            if (inA && !inB) {
+                dlOnlyInA.put(key, dlA.get(key));
+            } else if (!inA && inB) {
+                dlOnlyInB.put(key, dlB.get(key));
+            } else if (!dlA.get(key).equals(dlB.get(key))) {
+                dlValueDiffs.put(key, new String[]{dlA.get(key), dlB.get(key)});
+            }
+        }
+        boolean dataLayerMatches = dlOnlyInA.isEmpty() && dlOnlyInB.isEmpty() && dlValueDiffs.isEmpty();
 
         long elapsed = System.currentTimeMillis() - startTime;
 
@@ -90,7 +103,7 @@ public class SiteComparator {
                 imagesMatch, mismatchedImageIndices, matchedImagesCount,
                 linksMatch, linksOnlyInA, linksOnlyInB, commonLinks.size(),
                 metadataMatches, metaOnlyInA, metaOnlyInB, metaValueDiffs,
-                dataLayerMatches, dlA, dlB,
+                dataLayerMatches, dlOnlyInA, dlOnlyInB, dlValueDiffs,
                 elapsed
         );
     }

@@ -17,12 +17,6 @@ import java.util.*;
 
 public class ReportFormatter {
 
-    // Date/time metadata keys — excluded from the comparison table display.
-    private static final Set<String> IGNORED_META_KEYS = new HashSet<>(Arrays.asList(
-            "created", "date", "last-modified", "revised", "expires",
-            "article:published_time", "article:modified_time"
-    ));
-
     public void generateReport(ComparisonResult result) {
         String html = buildHtml(result);
 
@@ -35,7 +29,17 @@ public class ReportFormatter {
             return;
         }
 
-        String pdfPath = buildFilename(result.getSiteA().getUrl(), result.getSiteB().getUrl());
+        Path reportsDir = Paths.get("reports");
+        try {
+            if (!Files.exists(reportsDir)) {
+                Files.createDirectories(reportsDir);
+            }
+        } catch (IOException e) {
+            System.out.println("[WARN] Failed to create reports directory: " + e.getMessage());
+            reportsDir = Paths.get(".");
+        }
+        Path pdfPath = reportsDir.resolve(buildFilename(result.getSiteA().getUrl(), result.getSiteB().getUrl()));
+
         try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.chromium().launch(
                     new BrowserType.LaunchOptions().setHeadless(true));
@@ -43,14 +47,14 @@ public class ReportFormatter {
             page.navigate("file:///" + tempHtml.toAbsolutePath().toString().replace("\\", "/"));
             page.waitForLoadState();
             page.pdf(new Page.PdfOptions()
-                    .setPath(Paths.get(pdfPath))
+                    .setPath(pdfPath)
                     .setPrintBackground(true)
                     .setFormat("A4")
                     .setMargin(new Margin()
                             .setTop("18mm").setBottom("18mm")
                             .setLeft("16mm").setRight("16mm")));
             browser.close();
-            System.out.println("[INFO] Report saved: " + Paths.get(pdfPath).toAbsolutePath());
+            System.out.println("[INFO] Report saved: " + pdfPath.toAbsolutePath());
         } catch (Exception e) {
             System.out.println("[ERROR] PDF generation failed: " + e.getMessage());
         }
@@ -83,14 +87,14 @@ public class ReportFormatter {
         sb.append("<div class='section-title'>Summary</div>");
         sb.append("<table><thead><tr><th>Check</th><th>Site A</th><th>Site B</th><th>Result</th></tr></thead><tbody>");
         summaryRow(sb, "Metadata",  a.getMetadata().size() + " tag(s)",  b.getMetadata().size() + " tag(s)",  result.isMetadataMatches());
-        summaryRow(sb, "DataLayer", dataLayerLabel(a.getDataLayerJson()), dataLayerLabel(b.getDataLayerJson()), result.isDataLayerMatches());
+        summaryRow(sb, "DataLayer", a.getDataLayer().size() + " property(ies)", b.getDataLayer().size() + " property(ies)", result.isDataLayerMatches());
         summaryRow(sb, "Text",      a.getRawText().split("\\n").length + " line(s)", b.getRawText().split("\\n").length + " line(s)", result.isTextMatches());
         summaryRow(sb, "Images",    a.getImages().size() + " image(s)",  b.getImages().size() + " image(s)",   result.isImagesMatch());
         summaryRow(sb, "Links",     a.getLinks().size() + " link(s)",    b.getLinks().size() + " link(s)",     result.isLinksMatch());
         sb.append("</tbody></table>");
 
         sb.append("<div class='final-result ").append(result.isAllMatch() ? "final-pass" : "final-fail").append("'>");
-        sb.append("Overall: ").append(result.isAllMatch() ? "PASS" : "FAIL");
+        sb.append("Overall: ").append(result.isAllMatch() ? "PASS" : "MISMATCH");
         sb.append("</div>");
         sb.append("</div>");
 
@@ -98,7 +102,7 @@ public class ReportFormatter {
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>1. Metadata <span class='result-inline ")
           .append(result.isMetadataMatches() ? "pass" : "fail").append("'>")
-          .append(result.isMetadataMatches() ? "PASS" : "FAIL").append("</span></div>");
+          .append(result.isMetadataMatches() ? "PASS" : "MISMATCH").append("</span></div>");
         sb.append("<table><thead><tr><th>Key</th><th>Site A Value</th><th>Site B Value</th><th>Status</th></tr></thead><tbody>");
 
         Set<String> allMetaKeys = new LinkedHashSet<>();
@@ -106,7 +110,6 @@ public class ReportFormatter {
         allMetaKeys.addAll(b.getMetadata().keySet());
 
         for (String key : allMetaKeys) {
-            if (IGNORED_META_KEYS.contains(key.toLowerCase())) continue;
             String valA = a.getMetadata().getOrDefault(key, null);
             String valB = b.getMetadata().getOrDefault(key, null);
             boolean diff = !Objects.equals(valA, valB);
@@ -121,21 +124,37 @@ public class ReportFormatter {
         }
         sb.append("</tbody></table></div>");
 
-        // ── Section 2: DataLayer ─────────────────────────────────────────────
+        // ── Section 2: Site Data Layer ───────────────────────────────────────
         sb.append("<div class='block'>");
-        sb.append("<div class='section-title'>2. DataLayer <span class='result-inline ")
+        sb.append("<div class='section-title'>2. Site Data Layer <span class='result-inline ")
           .append(result.isDataLayerMatches() ? "pass" : "fail").append("'>")
-          .append(result.isDataLayerMatches() ? "PASS" : "FAIL").append("</span></div>");
-        sb.append("<table><thead><tr><th style='width:50%'>Site A</th><th style='width:50%'>Site B</th></tr></thead><tbody>");
-        sb.append("<tr><td><pre>").append(esc(result.getDataLayerJsonA())).append("</pre></td>");
-        sb.append("<td><pre>").append(esc(result.getDataLayerJsonB())).append("</pre></td></tr>");
+          .append(result.isDataLayerMatches() ? "PASS" : "MISMATCH").append("</span></div>");
+        sb.append("<table><thead><tr><th>Property</th><th>Site A Value</th><th>Site B Value</th><th>Status</th></tr></thead><tbody>");
+
+        Set<String> allDlKeys = new LinkedHashSet<>();
+        allDlKeys.addAll(a.getDataLayer().keySet());
+        allDlKeys.addAll(b.getDataLayer().keySet());
+
+        for (String key : allDlKeys) {
+            String valA = a.getDataLayer().getOrDefault(key, null);
+            String valB = b.getDataLayer().getOrDefault(key, null);
+            boolean diff = !Objects.equals(valA, valB);
+            sb.append("<tr").append(diff ? " class='row-fail'" : "").append(">");
+            sb.append("<td class='key-cell'>").append(esc(key)).append("</td>");
+            sb.append("<td>").append(valA != null ? esc(valA) : "<em class='na'>not present</em>").append("</td>");
+            sb.append("<td>").append(valB != null ? esc(valB) : "<em class='na'>not present</em>").append("</td>");
+            sb.append("<td class='status-cell ").append(diff ? "fail" : "pass").append("'>")
+              .append(diff ? (valA == null ? "MISSING IN A" : valB == null ? "MISSING IN B" : "DIFF") : "MATCH")
+              .append("</td>");
+            sb.append("</tr>");
+        }
         sb.append("</tbody></table></div>");
 
         // ── Section 3: Text ──────────────────────────────────────────────────
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>3. Text Content <span class='result-inline ")
           .append(result.isTextMatches() ? "pass" : "fail").append("'>")
-          .append(result.isTextMatches() ? "PASS" : "FAIL").append("</span></div>");
+          .append(result.isTextMatches() ? "PASS" : "MISMATCH").append("</span></div>");
 
         sb.append("<table class='stat-table'><tbody>");
         sb.append("<tr><td class='stat-label'>Site A</td><td>")
@@ -184,7 +203,7 @@ public class ReportFormatter {
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>4. Images <span class='result-inline ")
           .append(result.isImagesMatch() ? "pass" : "fail").append("'>")
-          .append(result.isImagesMatch() ? "PASS" : "FAIL").append("</span></div>");
+          .append(result.isImagesMatch() ? "PASS" : "MISMATCH").append("</span></div>");
 
         sb.append("<table class='stat-table'><tbody>");
         sb.append("<tr><td class='stat-label'>Site A</td><td>").append(a.getImages().size()).append(" image(s)</td></tr>");
@@ -198,7 +217,7 @@ public class ReportFormatter {
         for (int i = 0; i < imgTotal; i++) {
             boolean hasA = i < a.getImages().size();
             boolean hasB = i < b.getImages().size();
-            boolean match = hasA && hasB && a.getImages().get(i).getHash().equals(b.getImages().get(i).getHash());
+            boolean match = hasA && hasB && a.getImages().get(i).getSrc().equals(b.getImages().get(i).getSrc());
             sb.append("<tr").append(match ? "" : " class='row-fail'").append(">");
             sb.append("<td class='num-cell'>").append(i).append("</td>");
             sb.append("<td class='src-cell'>").append(hasA ? esc(a.getImages().get(i).getSrc()) : "<em class='na'>N/A</em>").append("</td>");
@@ -214,7 +233,7 @@ public class ReportFormatter {
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>5. Links <span class='result-inline ")
           .append(result.isLinksMatch() ? "pass" : "fail").append("'>")
-          .append(result.isLinksMatch() ? "PASS" : "FAIL").append("</span></div>");
+          .append(result.isLinksMatch() ? "PASS" : "MISMATCH").append("</span></div>");
 
         sb.append("<table class='stat-table'><tbody>");
         sb.append("<tr><td class='stat-label'>Site A</td><td>").append(a.getLinks().size()).append(" unique link(s)</td></tr>");
@@ -258,14 +277,11 @@ public class ReportFormatter {
         sb.append("<td>").append(valA).append("</td>");
         sb.append("<td>").append(valB).append("</td>");
         sb.append("<td class='status-cell ").append(pass ? "pass" : "fail").append("'>")
-          .append(pass ? "PASS" : "FAIL").append("</td>");
+          .append(pass ? "PASS" : "MISMATCH").append("</td>");
         sb.append("</tr>");
     }
 
-    private String dataLayerLabel(String json) {
-        if ("NO_DATALAYER".equals(json)) return "No dataLayer";
-        return "Present";
-    }
+
 
     private String buildFilename(String urlA, String urlB) {
         String ts = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));

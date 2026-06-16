@@ -26,32 +26,54 @@ public class ContentExtractor {
             System.out.println("[INFO] Site " + label + " loaded.");
 
             System.out.println("[INFO] Extracting content from Site " + label + "...");
+            cleanDom(page);
             String rawText = extractText(page);
             List<ImageData> images = extractImages(page, label);
             List<LinkData> links = extractLinks(page, label);
             Map<String, String> metadata = extractMetadata(page, label);
-            String dataLayerJson = extractDataLayer(page, label);
+            Map<String, String> dataLayer = extractDataLayer(page, label);
 
             browser.close();
 
             long elapsed = System.currentTimeMillis() - startTime;
             System.out.println("[INFO] Site " + label + " extraction complete (" + elapsed + " ms).");
-            return new SiteData(label, url, rawText, normalize(rawText), images, links, metadata, dataLayerJson,
+            return new SiteData(label, url, rawText, normalize(rawText), images, links, metadata, dataLayer,
                     elapsed);
 
         } catch (Exception e) {
             System.out.println("[ERROR] Site " + label + " failed: " + e.getMessage());
-            return new SiteData(label, url, "", "", List.of(), List.of(), Map.of(), "NO_DATALAYER", 0);
+            return new SiteData(label, url, "", "", List.of(), List.of(), Map.of(), Map.of(), 0);
         }
     }
 
     // -------------------------------------------------------
     // TEXT
     // -------------------------------------------------------
+    private void cleanDom(Page page) {
+        page.evaluate("""
+                    () => {
+                        // 1. Remove non-visible elements
+                        document.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+
+                        // 2. Remove standard page headers, footers, and navigation bars
+                        const selectors = [
+                            'header', 'footer', 'nav',
+                            '#header', '#footer', '#navigation', '#navbar',
+                            '.header', '.footer', '.navigation', '.navigation__sticky',
+                            '.page-header', '.page-footer',
+                            '.site-header', '.site-footer',
+                            '.navbar', '.nav-container'
+                        ];
+                        selectors.forEach(sel => {
+                            document.querySelectorAll(sel).forEach(el => el.remove());
+                        });
+                    }
+                """);
+    }
+
     private String extractText(Page page) {
         return (String) page.evaluate("""
                     () => {
-                        document.querySelectorAll('script, style, noscript').forEach(el => el.remove());
                         return document.body ? document.body.innerText : '';
                     }
                 """);
@@ -71,6 +93,7 @@ public class ContentExtractor {
                 if (src == null || src.isBlank())
                     continue;
                 img.scrollIntoViewIfNeeded();
+                page.waitForTimeout(300);
                 byte[] png = img.screenshot();
                 String hash = md5(png);
                 images.add(new ImageData(index, src, png, hash));
@@ -140,19 +163,68 @@ public class ContentExtractor {
                 """
                             () => {
                                 const meta = {};
-                                const title = document.querySelector('title');
-                                if (title) meta['title'] = title.textContent.trim();
+                                
+                                // 1. Title
+                                const titleTag = document.querySelector('title');
+                                let titleVal = titleTag ? titleTag.textContent.trim() : null;
+                                if (!titleVal) {
+                                    const ogTitle = document.querySelector('meta[property="og:title"]');
+                                    if (ogTitle) titleVal = ogTitle.getAttribute('content');
+                                }
+                                if (!titleVal) {
+                                    const metaTitle = document.querySelector('meta[name="title"]');
+                                    if (metaTitle) titleVal = metaTitle.getAttribute('content');
+                                }
+                                if (titleVal !== null) {
+                                    meta['Title'] = titleVal.trim();
+                                }
 
-                                document.querySelectorAll('meta').forEach(tag => {
-                                    const name     = tag.getAttribute('name')     || tag.getAttribute('property') || tag.getAttribute('http-equiv');
-                                    const content  = tag.getAttribute('content');
-                                    const charset  = tag.getAttribute('charset');
-                                    if (charset) {
-                                        meta['charset'] = charset;
-                                    } else if (name && content !== null) {
-                                        meta[name] = content;
+                                // 2. Description
+                                let descVal = null;
+                                const metaDesc = document.querySelector('meta[name="description"]');
+                                if (metaDesc) descVal = metaDesc.getAttribute('content');
+                                if (!descVal) {
+                                    const ogDesc = document.querySelector('meta[property="og:description"]');
+                                    if (ogDesc) descVal = ogDesc.getAttribute('content');
+                                }
+                                if (descVal !== null) {
+                                    meta['Description'] = descVal.trim();
+                                }
+
+                                // 3. Keywords
+                                const metaKw = document.querySelector('meta[name="keywords"]');
+                                if (metaKw) {
+                                    const kwVal = metaKw.getAttribute('content');
+                                    if (kwVal !== null) {
+                                        meta['Keywords'] = kwVal.trim();
                                     }
-                                });
+                                }
+
+
+                                // 5. Author
+                                let authorVal = null;
+                                const metaAuthor = document.querySelector('meta[name="author"]');
+                                if (metaAuthor) authorVal = metaAuthor.getAttribute('content');
+                                if (!authorVal) {
+                                    const ogAuthor = document.querySelector('meta[property="og:author"]') || document.querySelector('meta[property="article:author"]');
+                                    if (ogAuthor) authorVal = ogAuthor.getAttribute('content');
+                                }
+                                if (authorVal !== null) {
+                                    meta['Author'] = authorVal.trim();
+                                }
+
+                                // 6. Publisher
+                                let publisherVal = null;
+                                const metaPublisher = document.querySelector('meta[name="publisher"]');
+                                if (metaPublisher) publisherVal = metaPublisher.getAttribute('content');
+                                if (!publisherVal) {
+                                    const ogPublisher = document.querySelector('meta[property="og:publisher"]') || document.querySelector('meta[property="article:publisher"]');
+                                    if (ogPublisher) publisherVal = ogPublisher.getAttribute('content');
+                                }
+                                if (publisherVal !== null) {
+                                    meta['Publisher'] = publisherVal.trim();
+                                }
+
                                 return meta;
                             }
                         """);
@@ -171,26 +243,100 @@ public class ContentExtractor {
     // DATALAYER — reads window.dataLayer as a JSON string.
     // Compatible with Google Tag Manager / Google Analytics.
     // -------------------------------------------------------
-    private String extractDataLayer(Page page, String siteLabel) {
-        String result = (String) page.evaluate("""
-                    () => {
-                        try {
-                            if (!window.dataLayer || !Array.isArray(window.dataLayer)) {
-                                return 'NO_DATALAYER';
-                            }
-                            return JSON.stringify(window.dataLayer, null, 2);
-                        } catch (e) {
-                            return 'ERROR: ' + e.message;
-                        }
-                    }
-                """);
+    private Map<String, String> extractDataLayer(Page page, String siteLabel) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> raw = (Map<String, Object>) page.evaluate(
+                """
+                            () => {
+                                const result = {};
+                                const targetMapping = {
+                                  'sitetype': 'Site Type',
+                                  'brandwebsitetype': 'Brand Website Type',
+                                  'globalbrandr360': 'Global Brand - R360',
+                                  'globalbrand': 'Global Brand - R360',
+                                  'gbu': 'GBU',
+                                  'region': 'Region',
+                                  'country': 'Country',
+                                  'targetenus': 'Target (en_US)',
+                                  'target': 'Target (en_US)',
+                                  'targetaudience': 'Target (en_US)',
+                                  'targetpersona': 'Target (en_US)',
+                                  'franchiser360': 'Franchise - R360',
+                                  'franchise': 'Franchise - R360',
+                                  'therapeuticearear360': 'Therapeutic Area - R360',
+                                  'therapeuticarear360': 'Therapeutic Area - R360',
+                                  'therapeuticarea': 'Therapeutic Area - R360',
+                                  'indicationr360': 'Indication - R360',
+                                  'indication': 'Indication - R360',
+                                  'specialty': 'Specialty',
+                                  'customfield1value': 'Custom Field 1 Value',
+                                  'customfield1': 'Custom Field 1 Value',
+                                  'customfield2value': 'Custom Field 2 Value',
+                                  'customfield2': 'Custom Field 2 Value',
+                                  'customfield3value': 'Custom Field 3 Value',
+                                  'customfield3': 'Custom Field 3 Value',
+                                  'customfield4value': 'Custom Field 4 Value',
+                                  'customfield4': 'Custom Field 4 Value',
+                                  'customfield5value': 'Custom Field 5 Value',
+                                  'customfield5': 'Custom Field 5 Value'
+                                };
 
-        if ("NO_DATALAYER".equals(result)) {
-            System.out.println("[INFO] Site " + siteLabel + " - no dataLayer found.");
-        } else {
-            System.out.println("[INFO] Site " + siteLabel + " - dataLayer extracted.");
+                                const normalizeKey = (key) => key.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+                                // 1. Scan window.dataLayer
+                                if (window.dataLayer && Array.isArray(window.dataLayer)) {
+                                    window.dataLayer.forEach(item => {
+                                        if (item && typeof item === 'object') {
+                                            Object.keys(item).forEach(k => {
+                                                const nk = normalizeKey(k);
+                                                if (targetMapping[nk]) {
+                                                    result[targetMapping[nk]] = String(item[k]).trim();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+
+                                // 2. Scan window.digitalData / siteData / siteDataLayer
+                                const checkObjectRecursively = (obj, depth = 0) => {
+                                    if (!obj || typeof obj !== 'object' || depth > 5) return;
+                                    Object.keys(obj).forEach(k => {
+                                        const nk = normalizeKey(k);
+                                        if (targetMapping[nk]) {
+                                            result[targetMapping[nk]] = String(obj[k]).trim();
+                                        } else if (obj[k] && typeof obj[k] === 'object') {
+                                            checkObjectRecursively(obj[k], depth + 1);
+                                        }
+                                    });
+                                };
+                                if (window.digitalData) checkObjectRecursively(window.digitalData);
+                                if (window.siteData) checkObjectRecursively(window.siteData);
+                                if (window.siteDataLayer) checkObjectRecursively(window.siteDataLayer);
+
+                                // 3. Scan meta tags
+                                document.querySelectorAll('meta').forEach(tag => {
+                                    const name = tag.getAttribute('name') || tag.getAttribute('property') || tag.getAttribute('http-equiv');
+                                    const content = tag.getAttribute('content');
+                                    if (name && content !== null) {
+                                        const nk = normalizeKey(name);
+                                        if (targetMapping[nk]) {
+                                            result[targetMapping[nk]] = content.trim();
+                                        }
+                                    }
+                                });
+
+                                return result;
+                            }
+                        """);
+
+        Map<String, String> dataLayer = new LinkedHashMap<>();
+        if (raw != null) {
+            for (Map.Entry<String, Object> entry : raw.entrySet()) {
+                dataLayer.put(entry.getKey(), entry.getValue() != null ? entry.getValue().toString() : "");
+            }
         }
-        return result;
+        System.out.println("[INFO] Site " + siteLabel + " - extracted " + dataLayer.size() + " data layer property(ies).");
+        return dataLayer;
     }
 
     // -------------------------------------------------------

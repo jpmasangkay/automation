@@ -2,7 +2,6 @@ package com.automation.model;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class ComparisonResult {
     private final SiteData siteA;
@@ -35,21 +34,23 @@ public class ComparisonResult {
 
     // DataLayer
     private final boolean dataLayerMatches;
-    private final String dataLayerJsonA;
-    private final String dataLayerJsonB;
+    private final Map<String, String> dataLayerOnlyInA;
+    private final Map<String, String> dataLayerOnlyInB;
+    private final Map<String, String[]> dataLayerValueDiffs;
 
     // Timing
     private final long comparisonTimeMillis;
 
     public ComparisonResult(SiteData siteA, SiteData siteB,
-                            boolean textMatches, int totalLinesA, int totalLinesB, int matchedLineCount,
-                            List<String> textOnlyInA, List<String> textOnlyInB,
-                            boolean imagesMatch, List<Integer> mismatchedImageIndices, int matchedImagesCount,
-                            boolean linksMatch, List<LinkData> linksOnlyInA, List<LinkData> linksOnlyInB, int matchedLinksCount,
-                            boolean metadataMatches, Map<String, String> metaOnlyInA, Map<String, String> metaOnlyInB,
-                            Map<String, String[]> metaValueDiffs,
-                            boolean dataLayerMatches, String dataLayerJsonA, String dataLayerJsonB,
-                            long comparisonTimeMillis) {
+            boolean textMatches, int totalLinesA, int totalLinesB, int matchedLineCount,
+            List<String> textOnlyInA, List<String> textOnlyInB,
+            boolean imagesMatch, List<Integer> mismatchedImageIndices, int matchedImagesCount,
+            boolean linksMatch, List<LinkData> linksOnlyInA, List<LinkData> linksOnlyInB, int matchedLinksCount,
+            boolean metadataMatches, Map<String, String> metaOnlyInA, Map<String, String> metaOnlyInB,
+            Map<String, String[]> metaValueDiffs,
+            boolean dataLayerMatches, Map<String, String> dataLayerOnlyInA, Map<String, String> dataLayerOnlyInB,
+            Map<String, String[]> dataLayerValueDiffs,
+            long comparisonTimeMillis) {
         this.siteA = siteA;
         this.siteB = siteB;
         this.textMatches = textMatches;
@@ -70,8 +71,9 @@ public class ComparisonResult {
         this.metaOnlyInB = metaOnlyInB;
         this.metaValueDiffs = metaValueDiffs;
         this.dataLayerMatches = dataLayerMatches;
-        this.dataLayerJsonA = dataLayerJsonA;
-        this.dataLayerJsonB = dataLayerJsonB;
+        this.dataLayerOnlyInA = dataLayerOnlyInA;
+        this.dataLayerOnlyInB = dataLayerOnlyInB;
+        this.dataLayerValueDiffs = dataLayerValueDiffs;
         this.comparisonTimeMillis = comparisonTimeMillis;
     }
 
@@ -79,27 +81,99 @@ public class ComparisonResult {
         return textMatches && imagesMatch && linksMatch && metadataMatches && dataLayerMatches;
     }
 
-    public SiteData getSiteA()                          { return siteA; }
-    public SiteData getSiteB()                          { return siteB; }
-    public boolean isTextMatches()                      { return textMatches; }
-    public int getTotalLinesA()                         { return totalLinesA; }
-    public int getTotalLinesB()                         { return totalLinesB; }
-    public int getMatchedLineCount()                    { return matchedLineCount; }
-    public List<String> getTextOnlyInA()               { return textOnlyInA; }
-    public List<String> getTextOnlyInB()               { return textOnlyInB; }
-    public boolean isImagesMatch()                      { return imagesMatch; }
-    public List<Integer> getMismatchedImageIndices()    { return mismatchedImageIndices; }
-    public int getMatchedImagesCount()                  { return matchedImagesCount; }
-    public boolean isLinksMatch()                       { return linksMatch; }
-    public List<LinkData> getLinksOnlyInA()             { return linksOnlyInA; }
-    public List<LinkData> getLinksOnlyInB()             { return linksOnlyInB; }
-    public int getMatchedLinksCount()                   { return matchedLinksCount; }
-    public boolean isMetadataMatches()                  { return metadataMatches; }
-    public Map<String, String> getMetaOnlyInA()         { return metaOnlyInA; }
-    public Map<String, String> getMetaOnlyInB()         { return metaOnlyInB; }
-    public Map<String, String[]> getMetaValueDiffs()    { return metaValueDiffs; }
-    public boolean isDataLayerMatches()                 { return dataLayerMatches; }
-    public String getDataLayerJsonA()                   { return dataLayerJsonA; }
-    public String getDataLayerJsonB()                   { return dataLayerJsonB; }
-    public long getComparisonTimeMillis()               { return comparisonTimeMillis; }
+    public SiteData getSiteA() {
+        return siteA;
+    }
+
+    public SiteData getSiteB() {
+        return siteB;
+    }
+
+    public boolean isTextMatches() {
+        return textMatches;
+    }
+
+    public int getTotalLinesA() {
+        return totalLinesA;
+    }
+
+    public int getTotalLinesB() {
+        return totalLinesB;
+    }
+
+    public int getMatchedLineCount() {
+        return matchedLineCount;
+    }
+
+    public List<String> getTextOnlyInA() {
+        return textOnlyInA;
+    }
+
+    public List<String> getTextOnlyInB() {
+        return textOnlyInB;
+    }
+
+    public boolean isImagesMatch() {
+        return imagesMatch;
+    }
+
+    public List<Integer> getMismatchedImageIndices() {
+        return mismatchedImageIndices;
+    }
+
+    public int getMatchedImagesCount() {
+        return matchedImagesCount;
+    }
+
+    public boolean isLinksMatch() {
+        return linksMatch;
+    }
+
+    public List<LinkData> getLinksOnlyInA() {
+        return linksOnlyInA;
+    }
+
+    public List<LinkData> getLinksOnlyInB() {
+        return linksOnlyInB;
+    }
+
+    public int getMatchedLinksCount() {
+        return matchedLinksCount;
+    }
+
+    public boolean isMetadataMatches() {
+        return metadataMatches;
+    }
+
+    public Map<String, String> getMetaOnlyInA() {
+        return metaOnlyInA;
+    }
+
+    public Map<String, String> getMetaOnlyInB() {
+        return metaOnlyInB;
+    }
+
+    public Map<String, String[]> getMetaValueDiffs() {
+        return metaValueDiffs;
+    }
+
+    public boolean isDataLayerMatches() {
+        return dataLayerMatches;
+    }
+
+    public Map<String, String> getDataLayerOnlyInA() {
+        return dataLayerOnlyInA;
+    }
+
+    public Map<String, String> getDataLayerOnlyInB() {
+        return dataLayerOnlyInB;
+    }
+
+    public Map<String, String[]> getDataLayerValueDiffs() {
+        return dataLayerValueDiffs;
+    }
+
+    public long getComparisonTimeMillis() {
+        return comparisonTimeMillis;
+    }
 }
