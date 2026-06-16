@@ -1,5 +1,5 @@
 # 🔍 Site Content Comparator
-[![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.49.0-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)](https://playwright.dev/java/)
 [![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
 
@@ -40,7 +40,7 @@ A robust Java-based automation tool designed to perform deep, structural, and vi
 
 | Technology | Purpose |
 |-----------|---------|
-| **Java 17** | Core language and logic implementation |
+| **Java 21** | Core language and logic implementation |
 | **Playwright Java** | Headless browser automation (Chromium) for accurate DOM rendering |
 | **Maven** | Dependency management and build tool |
 | **Java Concurrency** | `ExecutorService` and `Future` for parallel site scraping |
@@ -51,7 +51,7 @@ A robust Java-based automation tool designed to perform deep, structural, and vi
 
 ### Prerequisites
 
-- [Java Development Kit (JDK) 17+](https://adoptium.net/)
+- [Java Development Kit (JDK) 21+](https://adoptium.net/)
 - [Apache Maven](https://maven.apache.org/)
 
 ### Installation
