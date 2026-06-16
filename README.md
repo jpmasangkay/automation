@@ -59,7 +59,7 @@ A robust Java-based automation tool designed to perform deep, structural, and vi
 ```bash
 # Clone the repository
 git clone <your-repository-url>
-cd Automation/automation
+cd automation
 
 # Install dependencies and build the project
 mvn clean install
@@ -80,23 +80,22 @@ mvn exec:java -Dexec.mainClass="com.automation.Main"
 
 ## 📁 Project Structure
 
-```
-Automation/
-└── automation/
-    ├── pom.xml                          # Maven dependencies and build config
-    └── src/main/java/com/automation/
-        ├── Main.java                    # Entry point — Thread pool and orchestrator
-        ├── model/                       # Data structures
-        │   ├── ComparisonResult.java    # Aggregated diff results
-        │   ├── SiteData.java            # Extracted page data payload
-        │   ├── ImageData.java           # Image src, byte array, and MD5 hash
-        │   └── LinkData.java            # Extracted link and computed slug
-        ├── extractor/
-        │   └── ContentExtractor.java    # Playwright logic to navigate and scrape
-        ├── comparator/
-        │   └── SiteComparator.java      # Diffing logic for text, images, and metadata
-        └── report/
-            └── ReportFormatter.java     # HTML generation and PDF export via Playwright
+```text
+automation/
+├── pom.xml                          # Maven dependencies and build config
+└── src/main/java/com/automation/
+    ├── Main.java                    # Entry point — Thread pool and orchestrator
+    ├── model/                       # Data structures
+    │   ├── ComparisonResult.java    # Aggregated diff results
+    │   ├── SiteData.java            # Extracted page data payload
+    │   ├── ImageData.java           # Image src, byte array, and MD5 hash
+    │   └── LinkData.java            # Extracted link and computed slug
+    ├── extractor/
+    │   └── ContentExtractor.java    # Playwright logic to navigate and scrape
+    ├── comparator/
+    │   └── SiteComparator.java      # Diffing logic for text, images, and metadata
+    └── report/
+        └── ReportFormatter.java     # HTML generation and PDF export via Playwright
 ```
 
 ---
