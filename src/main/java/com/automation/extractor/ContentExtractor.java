@@ -5,7 +5,6 @@ import com.automation.model.LinkData;
 import com.automation.model.SiteData;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.LoadState;
-import com.microsoft.playwright.options.LoadState;
 
 import java.net.URI;
 import java.security.MessageDigest;
