@@ -33,35 +33,9 @@ pause & exit /b 1
 :java_ok
 echo  [OK] Java found: %JAVA_EXE%
 
-:: ── Find Maven ────────────────────────────────────────────────
-set MVN_EXE=
-where mvn >nul 2>&1
-if not errorlevel 1 ( set MVN_EXE=mvn & goto :mvn_ok )
-for %%E in (M2_HOME MAVEN_HOME) do (
-    if defined %%E ( if exist "!%%E!\bin\mvn.cmd" ( set MVN_EXE=!%%E!\bin\mvn.cmd & goto :mvn_ok ) )
-)
-:: Scan Maven Wrapper cache dynamically
-if exist "%USERPROFILE%\.m2\wrapper\dists" (
-    for /d %%D in ("%USERPROFILE%\.m2\wrapper\dists\apache-maven-*") do (
-        for /d %%H in ("%%D\*") do (
-            for /d %%A in ("%%H\apache-maven-*") do (
-                if exist "%%A\bin\mvn.cmd" ( set MVN_EXE=%%A\bin\mvn.cmd & goto :mvn_ok )
-            )
-        )
-    )
-)
-for %%D in (
-    "C:\Program Files\apache-maven*" "C:\tools\apache-maven*" "C:\maven*"
-    "D:\maven*" "D:\tools\apache-maven*" "%USERPROFILE%\scoop\apps\maven\current"
-) do (
-    for /d %%M in ("%%~D") do (
-        if exist "%%M\bin\mvn.cmd" ( set MVN_EXE=%%M\bin\mvn.cmd & goto :mvn_ok )
-    )
-)
-echo  [ERROR] Maven not found. Install from https://maven.apache.org/download.cgi
-pause & exit /b 1
-:mvn_ok
-echo  [OK] Maven found: %MVN_EXE%
+:: ── Set Maven (Using bundled Maven Wrapper) ──────────────────────
+set MVN_EXE="%~dp0mvnw.cmd"
+echo  [OK] Using bundled Maven Wrapper: !MVN_EXE!
 
 :: Set JAVA_HOME for Maven
 if not "%JAVA_EXE%"=="java" (
@@ -73,7 +47,7 @@ if not "%JAVA_EXE%"=="java" (
 echo.
 echo  Cleaning and rebuilding automation-runner.jar...
 echo.
-call "%MVN_EXE%" clean package --no-transfer-progress -f "%~dp0pom.xml"
+call !MVN_EXE! clean package --no-transfer-progress -f "%~dp0pom.xml"
 
 if errorlevel 1 (
     echo.

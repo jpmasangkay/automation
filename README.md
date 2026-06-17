@@ -55,14 +55,13 @@ That's it! The script will:
 
 ## 📋 Prerequisites
 
-The script will check these automatically and give download links if missing.
+The script will check for Java automatically and give a download link if missing. It uses a bundled Maven Wrapper to download build tools if needed.
 
 | Requirement | Minimum Version | Download |
 |-------------|----------------|---------|
 | Java (JDK)  | 21+            | [adoptium.net](https://adoptium.net/) |
-| Apache Maven | Any recent     | [maven.apache.org](https://maven.apache.org/download.cgi) |
 
-> **Already using IntelliJ IDEA?** Java and Maven are likely already on your machine — the script will find them automatically.
+> **Already using IntelliJ IDEA?** Java is likely already on your machine — the script will find it automatically.
 
 ---
 
@@ -125,7 +124,7 @@ Automation\
 
 ### Build manually
 ```bash
-mvn clean package --no-transfer-progress
+mvnw.cmd clean package --no-transfer-progress
 # Output: target/automation-runner.jar
 ```
 

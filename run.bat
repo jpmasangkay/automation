@@ -126,93 +126,10 @@ echo  [OK] Java %JAVA_VER_NUM% will be used.
 
 
 :: ════════════════════════════════════════════════════════════
-::  STEP 2 — Find Maven
+::  STEP 2 — Set Maven (Using bundled Maven Wrapper)
 :: ════════════════════════════════════════════════════════════
-set MVN_EXE=
-
-:: 2a. Check PATH
-where mvn >nul 2>&1
-if not errorlevel 1 (
-    set MVN_EXE=mvn
-    echo  [OK] Maven found on PATH.
-    goto :mvn_found
-)
-
-:: 2b. Check M2_HOME / MAVEN_HOME
-for %%E in (M2_HOME MAVEN_HOME) do (
-    if defined %%E (
-        if exist "!%%E!\bin\mvn.cmd" (
-            set MVN_EXE=!%%E!\bin\mvn.cmd
-            echo  [OK] Maven found via %%E.
-            goto :mvn_found
-        )
-    )
-)
-
-:: 2c. Known cached Maven Wrapper distributions (IntelliJ / Spring Initializr projects)
-for %%M in (
-    "%USERPROFILE%\.m2\wrapper\dists\apache-maven-3.9.11-bin\6mqf5t809d9geo83kj4ttckcbc\apache-maven-3.9.11\bin\mvn.cmd"
-    "%USERPROFILE%\.m2\wrapper\dists\apache-maven-3.9.6-bin\*\apache-maven-3.9.6\bin\mvn.cmd"
-    "%USERPROFILE%\.m2\wrapper\dists\apache-maven-3.8.5-bin\*\apache-maven-3.8.5\bin\mvn.cmd"
-) do (
-    if exist "%%~M" (
-        set MVN_EXE=%%~M
-        echo  [OK] Maven found in wrapper cache: %%~M
-        goto :mvn_found
-    )
-)
-
-:: 2d. Scan .m2\wrapper\dists dynamically (covers any version)
-if exist "%USERPROFILE%\.m2\wrapper\dists" (
-    for /d %%D in ("%USERPROFILE%\.m2\wrapper\dists\apache-maven-*") do (
-        for /d %%H in ("%%D\*") do (
-            for /d %%A in ("%%H\apache-maven-*") do (
-                if exist "%%A\bin\mvn.cmd" (
-                    set MVN_EXE=%%A\bin\mvn.cmd
-                    echo  [OK] Maven found: %%A
-                    goto :mvn_found
-                )
-            )
-        )
-    )
-)
-
-:: 2e. Probe common install locations
-for %%D in (
-    "C:\Program Files\apache-maven*"
-    "C:\tools\apache-maven*"
-    "C:\tools\maven*"
-    "C:\maven*"
-    "D:\maven*"
-    "D:\tools\maven*"
-    "%USERPROFILE%\scoop\apps\maven\current"
-    "C:\ProgramData\chocolatey\lib\maven\apache-maven*"
-) do (
-    for /d %%M in ("%%~D") do (
-        if exist "%%M\bin\mvn.cmd" (
-            set MVN_EXE=%%M\bin\mvn.cmd
-            echo  [OK] Maven found at: %%M
-            goto :mvn_found
-        )
-    )
-)
-
-echo  [ERROR] Apache Maven was not found on this machine.
-echo.
-echo  Please install Maven (free):
-echo.
-echo    Option 1 — Download directly:
-echo      https://maven.apache.org/download.cgi
-echo      (Get the "Binary zip archive", extract to C:\tools\maven, add its \bin to PATH)
-echo.
-echo    Option 2 — Install via Chocolatey (if you have it):
-echo      choco install maven
-echo.
-echo  After installing, run this script again.
-echo.
-pause
-exit /b 1
-:mvn_found
+set MVN_EXE="%~dp0mvnw.cmd"
+echo  [OK] Using bundled Maven Wrapper: !MVN_EXE!
 
 
 :: ════════════════════════════════════════════════════════════
@@ -232,8 +149,8 @@ if not exist "%JAR_PATH%" (
         set JAVA_HOME=!_JAVA_BIN:~0,-5!
     )
 
-    set "_MAVEN_OPTS=-Dmaven.compiler.executable=%JAVA_EXE%"
-    call "%MVN_EXE%" clean package --no-transfer-progress -f "%~dp0pom.xml" 2>&1
+    set "MAVEN_OPTS=-Dmaven.compiler.executable=%JAVA_EXE%"
+    call !MVN_EXE! clean package --no-transfer-progress -f "%~dp0pom.xml" 2>&1
 
     if errorlevel 1 (
         echo.
