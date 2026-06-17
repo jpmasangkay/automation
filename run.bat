@@ -27,7 +27,7 @@ goto :skip_func
 :test_java
     if not exist "%~1" exit /b 1
     set _RAW=
-    for /f "tokens=3 delims= " %%v in ('"%~1" -version 2^>^&1 ^| findstr /i "version"') do set _RAW=%%v
+    for /f "usebackq tokens=3 delims= " %%v in (`""%~1" -version 2^>^&1 ^| findstr /i "version""`) do set _RAW=%%v
     set _RAW=!_RAW:"=!
     set _MAJ=0
     for /f "delims=." %%m in ("!_RAW!") do set /a _MAJ=%%m 2>nul
@@ -82,7 +82,14 @@ for %%J in (
     )
 )
 
-:: 1d. Scan common install folders dynamically
+:: 1d. Check previously auto-downloaded Java
+call :test_java "%USERPROFILE%\.jdks\automation-java\jdk-21\bin\java.exe"
+if not errorlevel 1 (
+    echo  [OK] Auto-downloaded Java %JAVA_VER_NUM% found.
+    goto :java_found
+)
+
+:: 1e. Scan common install folders dynamically
 for %%D in (
     "%USERPROFILE%\.jdks"
     "C:\Program Files\Eclipse Adoptium"
@@ -107,20 +114,35 @@ for %%D in (
     )
 )
 
-echo  [ERROR] Java 21 or newer was not found on this machine.
+echo  [WARNING] Java 21+ was not found on this machine.
+echo  [SETUP] Downloading portable Java 21 automatically...
+echo  [SETUP] This is a one-time ~180MB download. Please wait...
 echo.
-echo  Please install Java (free) from one of these links:
-echo.
-echo    ^> Adoptium Temurin (recommended):
-echo      https://adoptium.net/
-echo.
-echo    ^> Microsoft Build of OpenJDK:
-echo      https://www.microsoft.com/openjdk
-echo.
-echo  After installing, run this script again.
-echo.
+
+if not exist "%USERPROFILE%\.jdks\automation-java" mkdir "%USERPROFILE%\.jdks\automation-java"
+%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -Command "$ErrorActionPreference = 'Stop'; $url = 'https://api.adoptium.net/v3/binary/latest/21/ga/windows/x64/jdk/hotspot/normal/eclipse?project=jdk'; $zip = '%TEMP%\jdk21.zip'; $dest = '%USERPROFILE%\.jdks\automation-java'; Write-Host 'Downloading Java 21...'; Invoke-WebRequest -Uri $url -OutFile $zip; Write-Host 'Extracting...'; Expand-Archive -Path $zip -DestinationPath $dest -Force; Remove-Item $zip; Write-Host 'Java download complete!'"
+
+if errorlevel 1 (
+    echo.
+    echo  [ERROR] Failed to download Java automatically.
+    echo  Please install it manually from https://adoptium.net/
+    pause
+    exit /b 1
+)
+
+:: Find the exact extracted jdk folder (it has a dynamic name like jdk-21.0.2+13)
+for /d %%K in ("%USERPROFILE%\.jdks\automation-java\*") do (
+    call :test_java "%%K\bin\java.exe"
+    if not errorlevel 1 (
+        echo  [OK] Auto-downloaded Java %JAVA_VER_NUM% is ready.
+        goto :java_found
+    )
+)
+
+echo  [ERROR] Could not locate java.exe after downloading.
 pause
 exit /b 1
+
 :java_found
 echo  [OK] Java %JAVA_VER_NUM% will be used.
 
