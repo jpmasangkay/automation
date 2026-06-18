@@ -11,13 +11,11 @@ public class SiteData {
     private final List<LinkData> links;
     private final Map<String, String> metadata;
     private final Map<String, String> dataLayer;
-    private final Map<String, String> dataLayer;
     private final long extractionTimeMillis;
     private final byte[] fullPageScreenshot;
 
     public SiteData(String label, String url, String rawText,
                     List<ImageData> images, List<LinkData> links,
-                    Map<String, String> metadata, Map<String, String> dataLayer,
                     Map<String, String> metadata, Map<String, String> dataLayer,
                     long extractionTimeMillis, byte[] fullPageScreenshot) {
         this.label = label;
