@@ -135,9 +135,9 @@ java -jar target/automation-runner.jar data/your_file.xlsx
 
 ### Excel file auto-detection priority
 1. Path passed as a command-line argument
-23. **One** `.xlsx` in `data\` → auto-selects it
-4. **Multiple** `.xlsx` in `data\` → numbered menu to pick
-5. Fallback → `test_comparisons.xlsx` in root
+2. **One** `.xlsx` in `data\` → auto-selects it
+3. **Multiple** `.xlsx` in `data\` → numbered menu to pick
+4. Fallback → `test_comparisons.xlsx` in root
 
 ---
 

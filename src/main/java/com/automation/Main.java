@@ -5,6 +5,9 @@ import com.automation.extractor.ContentExtractor;
 import com.automation.model.ComparisonResult;
 import com.automation.model.SiteData;
 import com.automation.report.ReportFormatter;
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Playwright;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -53,12 +56,16 @@ public class Main {
         System.out.println("  Found  : " + pairs.size() + " URL pair(s) to compare");
         System.out.println();
 
-        ContentExtractor extractor = new ContentExtractor();
-        SiteComparator comparator = new SiteComparator();
-        ReportFormatter reportFormatter = new ReportFormatter();
+        try (Playwright playwright = Playwright.create()) {
+            Browser browser = playwright.chromium().launch(
+                    new BrowserType.LaunchOptions().setHeadless(true).setArgs(java.util.List.of("--headless=new")));
 
-        ExecutorService pool = Executors.newFixedThreadPool(2);
-        int passed = 0, failed = 0;
+            ContentExtractor extractor = new ContentExtractor(browser);
+            SiteComparator comparator = new SiteComparator();
+            ReportFormatter reportFormatter = new ReportFormatter(browser);
+
+            ExecutorService pool = Executors.newFixedThreadPool(2);
+            int passed = 0, failed = 0;
 
         try {
             int count = 1;
@@ -109,6 +116,7 @@ public class Main {
         System.out.println("   Reports saved to:  reports\\");
         System.out.println("  ════════════════════════════════════════════════════════");
         System.out.println();
+        }
     }
 
     /** Resolves the Excel file: from arg, from data/ folder, or fallback. */
@@ -130,8 +138,8 @@ public class Main {
                 return xlsxFiles[0];
             }
             if (xlsxFiles != null && xlsxFiles.length > 1) {
-                System.out.println("  [INFO] Multiple files in data/ folder — using the first one found.");
-                System.out.println("         Tip: Use run.bat to choose interactively.");
+                java.util.Arrays.sort(xlsxFiles, java.util.Comparator.comparingLong(File::lastModified).reversed());
+                System.out.println("  [INFO] Multiple files in data/ folder — using the newest: " + xlsxFiles[0].getName());
                 return xlsxFiles[0];
             }
         }
@@ -197,6 +205,8 @@ public class Main {
         switch (cell.getCellType()) {
             case STRING:
                 return cell.getStringCellValue();
+            case NUMERIC:
+                return new DataFormatter().formatCellValue(cell);
             case FORMULA:
                 try {
                     return cell.getStringCellValue();

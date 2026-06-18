@@ -30,7 +30,14 @@ if (-not $JavaExe) {
         "$env:USERPROFILE\.jdks",
         "C:\Program Files\Eclipse Adoptium",
         "C:\Program Files\Microsoft",
-        "C:\Program Files\Java"
+        "C:\Program Files\Java",
+        "C:\Program Files\BellSoft",
+        "C:\Program Files\Amazon Corretto",
+        "C:\Program Files\Azul Systems",
+        "C:\tools\jdk",
+        "C:\tools\java",
+        "D:\Java",
+        "D:\Tools\jdk"
     )
     foreach ($root in $searchRoots) {
         if (-not (Test-Path $root)) { continue }

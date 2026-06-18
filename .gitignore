@@ -15,6 +15,9 @@ reports/
 data/*.xlsx
 !data/README.txt
 
+# Maven zip
+apache-maven-*.zip
+
 # IDE
 .idea/
 *.iml

@@ -7,21 +7,19 @@ public class SiteData {
     private final String label;
     private final String url;
     private final String rawText;
-    private final String normalizedText;
     private final List<ImageData> images;
     private final List<LinkData> links;
     private final Map<String, String> metadata;
     private final Map<String, String> dataLayer;
     private final long extractionTimeMillis;
 
-    public SiteData(String label, String url, String rawText, String normalizedText,
+    public SiteData(String label, String url, String rawText,
                     List<ImageData> images, List<LinkData> links,
                     Map<String, String> metadata, Map<String, String> dataLayer,
                     long extractionTimeMillis) {
         this.label = label;
         this.url = url;
         this.rawText = rawText;
-        this.normalizedText = normalizedText;
         this.images = images;
         this.links = links;
         this.metadata = metadata;
@@ -32,7 +30,6 @@ public class SiteData {
     public String getLabel()                  { return label; }
     public String getUrl()                    { return url; }
     public String getRawText()                { return rawText; }
-    public String getText()                   { return normalizedText; }
     public List<ImageData> getImages()        { return images; }
     public List<LinkData> getLinks()          { return links; }
     public Map<String, String> getMetadata()  { return metadata; }

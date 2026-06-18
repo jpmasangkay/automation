@@ -1,33 +1,34 @@
 package com.automation.report;
 
 import com.automation.model.ComparisonResult;
+import com.automation.model.ComparisonResult.*;
 import com.automation.model.LinkData;
 import com.automation.model.SiteData;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.Margin;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ReportFormatter {
 
+    private final Browser browser;
+
+    public ReportFormatter(Browser browser) {
+        this.browser = browser;
+    }
+
     public void generateReport(ComparisonResult result) {
         String html = buildHtml(result);
-
-        Path tempHtml = null;
-        try {
-            tempHtml = Files.createTempFile("comparator_", ".html");
-            Files.writeString(tempHtml, html);
-        } catch (IOException e) {
-            System.out.println("[ERROR] Failed to write temp HTML: " + e.getMessage());
-            return;
-        }
 
         Path reportsDir = Paths.get("reports");
         try {
@@ -38,13 +39,24 @@ public class ReportFormatter {
             System.out.println("[WARN] Failed to create reports directory: " + e.getMessage());
             reportsDir = Paths.get(".");
         }
-        Path pdfPath = reportsDir.resolve(buildFilename(result.getSiteA().getUrl(), result.getSiteB().getUrl()));
+        
+        String baseFilename = buildFilename(result.siteA().getUrl(), result.siteB().getUrl());
+        Path htmlPath = reportsDir.resolve(baseFilename + ".html");
+        Path pdfPath = reportsDir.resolve(baseFilename + ".pdf");
+        Path csvPath = reportsDir.resolve(baseFilename + ".csv");
 
-        try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.chromium().launch(
-                    new BrowserType.LaunchOptions().setHeadless(true));
+        try {
+            Files.writeString(htmlPath, html);
+        } catch (IOException e) {
+            System.out.println("[ERROR] Failed to write HTML: " + e.getMessage());
+            return;
+        }
+        
+        generateCsv(result, csvPath);
+
+        try {
             Page page = browser.newPage();
-            page.navigate("file:///" + tempHtml.toAbsolutePath().toString().replace("\\", "/"));
+            page.navigate("file:///" + htmlPath.toAbsolutePath().toString().replace("\\", "/"));
             page.waitForLoadState();
             page.pdf(new Page.PdfOptions()
                     .setPath(pdfPath)
@@ -53,18 +65,31 @@ public class ReportFormatter {
                     .setMargin(new Margin()
                             .setTop("18mm").setBottom("18mm")
                             .setLeft("16mm").setRight("16mm")));
-            browser.close();
-            System.out.println("[INFO] Report saved: " + pdfPath.toAbsolutePath());
+            page.close();
+            System.out.println("[INFO] Reports saved: " + pdfPath.toAbsolutePath());
         } catch (Exception e) {
             System.out.println("[ERROR] PDF generation failed: " + e.getMessage());
         }
+    }
 
-        try { Files.deleteIfExists(tempHtml); } catch (IOException ignored) {}
+    private void generateCsv(ComparisonResult result, Path csvPath) {
+        StringBuilder csv = new StringBuilder();
+        csv.append("Check,Site A,Site B,Result\n");
+        csv.append("Metadata,").append(result.siteA().getMetadata().size()).append(",").append(result.siteB().getMetadata().size()).append(",").append(result.metadataDiff().matches() ? "PASS" : "MISMATCH").append("\n");
+        csv.append("DataLayer,").append(result.siteA().getDataLayer().size()).append(",").append(result.siteB().getDataLayer().size()).append(",").append(result.dataLayerDiff().matches() ? "PASS" : "MISMATCH").append("\n");
+        csv.append("Text,").append(result.textDiff().totalLinesA()).append(",").append(result.textDiff().totalLinesB()).append(",").append(result.textDiff().matches() ? "PASS" : "MISMATCH").append("\n");
+        csv.append("Images,").append(result.siteA().getImages().size()).append(",").append(result.siteB().getImages().size()).append(",").append(result.imageDiff().matches() ? "PASS" : "MISMATCH").append("\n");
+        csv.append("Links,").append(result.siteA().getLinks().size()).append(",").append(result.siteB().getLinks().size()).append(",").append(result.linkDiff().matches() ? "PASS" : "MISMATCH").append("\n");
+        try {
+            Files.writeString(csvPath, csv.toString());
+        } catch (IOException e) {
+            System.out.println("[WARN] Failed to write CSV: " + e.getMessage());
+        }
     }
 
     private String buildHtml(ComparisonResult result) {
-        SiteData a = result.getSiteA();
-        SiteData b = result.getSiteB();
+        SiteData a = result.siteA();
+        SiteData b = result.siteB();
         String ts = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         StringBuilder sb = new StringBuilder();
@@ -72,25 +97,30 @@ public class ReportFormatter {
         sb.append("<title>Content Comparison Report</title>");
         sb.append("<style>").append(css()).append("</style></head><body>");
 
-        // ── Report Header ───────────────────────────────────────────────────
+        // ── Report Header
         sb.append("<div class='page-header'>");
         sb.append("<div class='report-title'>Content Comparison Report</div>");
         sb.append("<table class='header-info'><tbody>");
         sb.append("<tr><td class='info-label'>Generated</td><td>").append(ts).append("</td></tr>");
         sb.append("<tr><td class='info-label'>Site A</td><td>").append(esc(a.getUrl())).append("</td></tr>");
         sb.append("<tr><td class='info-label'>Site B</td><td>").append(esc(b.getUrl())).append("</td></tr>");
+        sb.append("<tr><td class='info-label'>Performance</td><td>")
+          .append("Extraction A: ").append(a.getExtractionTimeMillis()).append("ms, ")
+          .append("Extraction B: ").append(b.getExtractionTimeMillis()).append("ms, ")
+          .append("Comparison: ").append(result.comparisonTimeMillis()).append("ms")
+          .append("</td></tr>");
         sb.append("</tbody></table>");
         sb.append("</div>");
 
-        // ── Summary Table ────────────────────────────────────────────────────
+        // ── Summary Table
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>Summary</div>");
         sb.append("<table><thead><tr><th>Check</th><th>Site A</th><th>Site B</th><th>Result</th></tr></thead><tbody>");
-        summaryRow(sb, "Metadata",  a.getMetadata().size() + " tag(s)",  b.getMetadata().size() + " tag(s)",  result.isMetadataMatches());
-        summaryRow(sb, "DataLayer", a.getDataLayer().size() + " property(ies)", b.getDataLayer().size() + " property(ies)", result.isDataLayerMatches());
-        summaryRow(sb, "Text",      a.getRawText().split("\\n").length + " line(s)", b.getRawText().split("\\n").length + " line(s)", result.isTextMatches());
-        summaryRow(sb, "Images",    a.getImages().size() + " image(s)",  b.getImages().size() + " image(s)",   result.isImagesMatch());
-        summaryRow(sb, "Links",     a.getLinks().size() + " link(s)",    b.getLinks().size() + " link(s)",     result.isLinksMatch());
+        summaryRow(sb, "Metadata",  a.getMetadata().size() + " tag(s)",  b.getMetadata().size() + " tag(s)",  result.metadataDiff().matches());
+        summaryRow(sb, "DataLayer", a.getDataLayer().size() + " property(ies)", b.getDataLayer().size() + " property(ies)", result.dataLayerDiff().matches());
+        summaryRow(sb, "Text",      result.textDiff().totalLinesA() + " text node(s)", result.textDiff().totalLinesB() + " text node(s)", result.textDiff().matches());
+        summaryRow(sb, "Images",    a.getImages().size() + " image(s)",  b.getImages().size() + " image(s)",   result.imageDiff().matches());
+        summaryRow(sb, "Links",     a.getLinks().size() + " link(s)",    b.getLinks().size() + " link(s)",     result.linkDiff().matches());
         sb.append("</tbody></table>");
 
         sb.append("<div class='final-result ").append(result.isAllMatch() ? "final-pass" : "final-fail").append("'>");
@@ -98,78 +128,25 @@ public class ReportFormatter {
         sb.append("</div>");
         sb.append("</div>");
 
-        // ── Section 1: Metadata ──────────────────────────────────────────────
-        sb.append("<div class='block'>");
-        sb.append("<div class='section-title'>1. Metadata <span class='result-inline ")
-          .append(result.isMetadataMatches() ? "pass" : "fail").append("'>")
-          .append(result.isMetadataMatches() ? "PASS" : "MISMATCH").append("</span></div>");
-        sb.append("<table><thead><tr><th>Key</th><th>Site A Value</th><th>Site B Value</th><th>Status</th></tr></thead><tbody>");
+        // ── Section 1: Metadata
+        sb.append(renderMapDiff("1. Metadata", result.metadataDiff(), a.getMetadata(), b.getMetadata()));
 
-        Set<String> allMetaKeys = new LinkedHashSet<>();
-        allMetaKeys.addAll(a.getMetadata().keySet());
-        allMetaKeys.addAll(b.getMetadata().keySet());
+        // ── Section 2: DataLayer
+        sb.append(renderMapDiff("2. Site Data Layer", result.dataLayerDiff(), a.getDataLayer(), b.getDataLayer()));
 
-        for (String key : allMetaKeys) {
-            String valA = a.getMetadata().getOrDefault(key, null);
-            String valB = b.getMetadata().getOrDefault(key, null);
-            boolean diff = !Objects.equals(valA, valB);
-            sb.append("<tr").append(diff ? " class='row-fail'" : "").append(">");
-            sb.append("<td class='key-cell'>").append(esc(key)).append("</td>");
-            sb.append("<td>").append(valA != null ? esc(valA) : "<em class='na'>not present</em>").append("</td>");
-            sb.append("<td>").append(valB != null ? esc(valB) : "<em class='na'>not present</em>").append("</td>");
-            sb.append("<td class='status-cell ").append(diff ? "fail" : "pass").append("'>")
-              .append(diff ? (valA == null ? "MISSING IN A" : valB == null ? "MISSING IN B" : "DIFF") : "MATCH")
-              .append("</td>");
-            sb.append("</tr>");
-        }
-        sb.append("</tbody></table></div>");
-
-        // ── Section 2: Site Data Layer ───────────────────────────────────────
-        sb.append("<div class='block'>");
-        sb.append("<div class='section-title'>2. Site Data Layer <span class='result-inline ")
-          .append(result.isDataLayerMatches() ? "pass" : "fail").append("'>")
-          .append(result.isDataLayerMatches() ? "PASS" : "MISMATCH").append("</span></div>");
-        sb.append("<table><thead><tr><th>Property</th><th>Site A Value</th><th>Site B Value</th><th>Status</th></tr></thead><tbody>");
-
-        Set<String> allDlKeys = new LinkedHashSet<>();
-        allDlKeys.addAll(a.getDataLayer().keySet());
-        allDlKeys.addAll(b.getDataLayer().keySet());
-
-        for (String key : allDlKeys) {
-            String valA = a.getDataLayer().getOrDefault(key, null);
-            String valB = b.getDataLayer().getOrDefault(key, null);
-            boolean diff = !Objects.equals(valA, valB);
-            sb.append("<tr").append(diff ? " class='row-fail'" : "").append(">");
-            sb.append("<td class='key-cell'>").append(esc(key)).append("</td>");
-            sb.append("<td>").append(valA != null ? esc(valA) : "<em class='na'>not present</em>").append("</td>");
-            sb.append("<td>").append(valB != null ? esc(valB) : "<em class='na'>not present</em>").append("</td>");
-            sb.append("<td class='status-cell ").append(diff ? "fail" : "pass").append("'>")
-              .append(diff ? (valA == null ? "MISSING IN A" : valB == null ? "MISSING IN B" : "DIFF") : "MATCH")
-              .append("</td>");
-            sb.append("</tr>");
-        }
-        sb.append("</tbody></table></div>");
-
-        // ── Section 3: Text ──────────────────────────────────────────────────
+        // ── Section 3: Text
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>3. Text Content <span class='result-inline ")
-          .append(result.isTextMatches() ? "pass" : "fail").append("'>")
-          .append(result.isTextMatches() ? "PASS" : "MISMATCH").append("</span></div>");
+          .append(result.textDiff().matches() ? "pass" : "fail").append("'>")
+          .append(result.textDiff().matches() ? "PASS" : "MISMATCH").append("</span></div>");
 
         sb.append("<table class='stat-table'><tbody>");
-        sb.append("<tr><td class='stat-label'>Site A</td><td>")
-          .append(result.getTotalLinesA()).append(" unique text node(s), ")
-          .append(a.getRawText().split(" ").length).append(" word(s)</td></tr>");
-        sb.append("<tr><td class='stat-label'>Site B</td><td>")
-          .append(result.getTotalLinesB()).append(" unique text node(s), ")
-          .append(b.getRawText().split(" ").length).append(" word(s)</td></tr>");
-        sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.getMatchedLineCount()).append(" text node(s)</td></tr>");
+        sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.textDiff().matchedLineCount()).append(" text node(s)</td></tr>");
         sb.append("<tr><td class='stat-label'>Differences</td><td>")
-          .append(result.getTextOnlyInA().size() + result.getTextOnlyInB().size()).append(" text node(s)</td></tr>");
+          .append(result.textDiff().onlyInA().size() + result.textDiff().onlyInB().size()).append(" text node(s)</td></tr>");
         sb.append("</tbody></table>");
 
-        if (result.isTextMatches()) {
-            // Show full text side by side when matching
+        if (result.textDiff().matches()) {
             sb.append("<p class='note'>Content is identical. Showing first 60 text nodes from each site.</p>");
             sb.append("<table><thead><tr><th style='width:50%'>Site A Text</th><th style='width:50%'>Site B Text</th></tr></thead><tbody>");
             String[] textLinesA = a.getRawText().split("\\n");
@@ -183,15 +160,24 @@ public class ReportFormatter {
             }
             sb.append("</tbody></table>");
         } else {
-            // Show the differing lines
             sb.append("<table><thead><tr><th>Site</th><th>Text Node Content</th></tr></thead><tbody>");
-            for (String line : result.getTextOnlyInA()) {
+            int countA = 0;
+            for (String line : result.textDiff().onlyInA()) {
                 if (line.isBlank()) continue;
+                if (countA++ > 50) {
+                    sb.append("<tr class='row-fail'><td class='status-cell fail'>...</td><td><i>and " + (result.textDiff().onlyInA().size() - 50) + " more only in A</i></td></tr>");
+                    break;
+                }
                 sb.append("<tr class='row-fail'><td class='status-cell fail' style='white-space:nowrap'>Only in A</td>")
                   .append("<td>").append(esc(line)).append("</td></tr>");
             }
-            for (String line : result.getTextOnlyInB()) {
+            int countB = 0;
+            for (String line : result.textDiff().onlyInB()) {
                 if (line.isBlank()) continue;
+                if (countB++ > 50) {
+                    sb.append("<tr class='row-fail'><td class='status-cell fail'>...</td><td><i>and " + (result.textDiff().onlyInB().size() - 50) + " more only in B</i></td></tr>");
+                    break;
+                }
                 sb.append("<tr class='row-fail'><td class='status-cell fail' style='white-space:nowrap'>Only in B</td>")
                   .append("<td>").append(esc(line)).append("</td></tr>");
             }
@@ -199,86 +185,47 @@ public class ReportFormatter {
         }
         sb.append("</div>");
 
-        // ── Section 4: Images ────────────────────────────────────────────────
+        // ── Section 4: Images
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>4. Images <span class='result-inline ")
-          .append(result.isImagesMatch() ? "pass" : "fail").append("'>")
-          .append(result.isImagesMatch() ? "PASS" : "MISMATCH").append("</span></div>");
+          .append(result.imageDiff().matches() ? "pass" : "fail").append("'>")
+          .append(result.imageDiff().matches() ? "PASS" : "MISMATCH").append("</span></div>");
 
         sb.append("<table class='stat-table'><tbody>");
-        sb.append("<tr><td class='stat-label'>Site A</td><td>").append(a.getImages().size()).append(" image(s)</td></tr>");
-        sb.append("<tr><td class='stat-label'>Site B</td><td>").append(b.getImages().size()).append(" image(s)</td></tr>");
-        sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.getMatchedImagesCount()).append("</td></tr>");
-        if (result.getVisualMatchImagesCount() > 0) {
-            sb.append("<tr><td class='stat-label'>Visual Match</td><td class='status-cell warn'>").append(result.getVisualMatchImagesCount()).append(" (same image, different path/format)</td></tr>");
+        sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.imageDiff().matchedImagesCount()).append("</td></tr>");
+        if (result.imageDiff().visualMatchImagesCount() > 0) {
+            sb.append("<tr><td class='stat-label'>Visual Match</td><td class='status-cell warn'>").append(result.imageDiff().visualMatchImagesCount()).append(" (same image, different path/format)</td></tr>");
         }
-        sb.append("<tr><td class='stat-label'>Mismatched</td><td>").append(result.getMismatchedImageIndices().size()).append("</td></tr>");
+        sb.append("<tr><td class='stat-label'>Mismatched</td><td>").append(result.imageDiff().mismatchCount()).append("</td></tr>");
         sb.append("</tbody></table>");
 
-        sb.append("<table><thead><tr><th style='width:4%'>#</th><th style='width:31%'>Site A Source</th><th style='width:10%'>Site A Hash</th><th style='width:31%'>Site B Source</th><th style='width:10%'>Site B Hash</th><th style='width:14%'>Status</th></tr></thead><tbody>");
-        int imgTotal = Math.max(a.getImages().size(), b.getImages().size());
-        for (int i = 0; i < imgTotal; i++) {
-            boolean hasA = i < a.getImages().size();
-            boolean hasB = i < b.getImages().size();
-            
-            String statusText;
-            String statusClass;
-            if (hasA && hasB) {
-                boolean hashMatch = a.getImages().get(i).getHash().equals(b.getImages().get(i).getHash());
-                if (hashMatch) {
-                    statusText = "MATCH";
-                    statusClass = "pass";
-                } else {
-                    // Check perceptual hash — visually identical but different binary
-                    String phA = a.getImages().get(i).getPerceptualHash();
-                    String phB = b.getImages().get(i).getPerceptualHash();
-                    boolean perceptualMatch = !"phash-error".equals(phA)
-                            && !"phash-error".equals(phB)
-                            && phA.equals(phB);
-                    if (perceptualMatch) {
-                        statusText = "VISUAL MATCH";
-                        statusClass = "warn";
-                    } else {
-                        boolean srcMatch = a.getImages().get(i).getSrc().equals(b.getImages().get(i).getSrc());
-                        statusText = srcMatch ? "HASH DIFF" : "DIFF";
-                        statusClass = "fail";
-                    }
-                }
-            } else if (!hasA) {
-                statusText = "MISSING IN A";
-                statusClass = "fail";
-            } else {
-                statusText = "MISSING IN B";
-                statusClass = "fail";
-            }
-
-            boolean isPass = statusClass.equals("pass") || statusClass.equals("warn");
+        sb.append("<table><thead><tr><th style='width:31%'>Site A Source</th><th style='width:10%'>Site A Hash</th><th style='width:31%'>Site B Source</th><th style='width:10%'>Site B Hash</th><th style='width:14%'>Status</th></tr></thead><tbody>");
+        
+        for (ImageMatch match : result.imageDiff().matchesList()) {
+            boolean isPass = match.status().equals("MATCH") || match.status().equals("VISUAL MATCH");
+            String classStatus = match.status().equals("MATCH") ? "pass" : (match.status().equals("VISUAL MATCH") ? "warn" : "fail");
             sb.append("<tr").append(isPass ? "" : " class='row-fail'").append(">");
-            sb.append("<td class='num-cell'>").append(i).append("</td>");
-            sb.append("<td class='src-cell'>").append(hasA ? esc(a.getImages().get(i).getSrc()) : "<em class='na'>N/A</em>").append("</td>");
-            sb.append("<td class='hash-cell'>").append(hasA ? a.getImages().get(i).getHash().substring(0, 8) + "..." : "N/A").append("</td>");
-            sb.append("<td class='src-cell'>").append(hasB ? esc(b.getImages().get(i).getSrc()) : "<em class='na'>N/A</em>").append("</td>");
-            sb.append("<td class='hash-cell'>").append(hasB ? b.getImages().get(i).getHash().substring(0, 8) + "..." : "N/A").append("</td>");
-            sb.append("<td class='status-cell ").append(statusClass).append("'>").append(statusText).append("</td>");
+            sb.append("<td class='src-cell'>").append(match.imgA() != null ? esc(match.imgA().getSrc()) : "<em class='na'>N/A</em>").append("</td>");
+            sb.append("<td class='hash-cell'>").append(match.imgA() != null ? match.imgA().getHash().substring(0, 8) + "..." : "N/A").append("</td>");
+            sb.append("<td class='src-cell'>").append(match.imgB() != null ? esc(match.imgB().getSrc()) : "<em class='na'>N/A</em>").append("</td>");
+            sb.append("<td class='hash-cell'>").append(match.imgB() != null ? match.imgB().getHash().substring(0, 8) + "..." : "N/A").append("</td>");
+            sb.append("<td class='status-cell ").append(classStatus).append("'>").append(match.status()).append("</td>");
             sb.append("</tr>");
         }
         sb.append("</tbody></table></div>");
 
-        // ── Section 5: Links ─────────────────────────────────────────────────
+        // ── Section 5: Links
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>5. Links <span class='result-inline ")
-          .append(result.isLinksMatch() ? "pass" : "fail").append("'>")
-          .append(result.isLinksMatch() ? "PASS" : "MISMATCH").append("</span></div>");
+          .append(result.linkDiff().matches() ? "pass" : "fail").append("'>")
+          .append(result.linkDiff().matches() ? "PASS" : "MISMATCH").append("</span></div>");
 
         sb.append("<table class='stat-table'><tbody>");
-        sb.append("<tr><td class='stat-label'>Site A</td><td>").append(a.getLinks().size()).append(" unique link(s)</td></tr>");
-        sb.append("<tr><td class='stat-label'>Site B</td><td>").append(b.getLinks().size()).append(" unique link(s)</td></tr>");
-        sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.getMatchedLinksCount()).append("</td></tr>");
-        sb.append("<tr><td class='stat-label'>Only in A</td><td>").append(result.getLinksOnlyInA().size()).append("</td></tr>");
-        sb.append("<tr><td class='stat-label'>Only in B</td><td>").append(result.getLinksOnlyInB().size()).append("</td></tr>");
+        sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.linkDiff().matchedLinksCount()).append("</td></tr>");
+        sb.append("<tr><td class='stat-label'>Only in A</td><td>").append(result.linkDiff().onlyInA().size()).append("</td></tr>");
+        sb.append("<tr><td class='stat-label'>Only in B</td><td>").append(result.linkDiff().onlyInB().size()).append("</td></tr>");
         sb.append("</tbody></table>");
 
-        // Full links table
         Map<String, LinkData> slugToLinkA = new LinkedHashMap<>();
         for (LinkData l : a.getLinks()) slugToLinkA.put(l.getSlug(), l);
         Map<String, LinkData> slugToLinkB = new LinkedHashMap<>();
@@ -310,6 +257,35 @@ public class ReportFormatter {
         return sb.toString();
     }
 
+    private String renderMapDiff(String title, MapDiff diff, Map<String, String> mapA, Map<String, String> mapB) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div class='block'>");
+        sb.append("<div class='section-title'>").append(title).append(" <span class='result-inline ")
+          .append(diff.matches() ? "pass" : "fail").append("'>")
+          .append(diff.matches() ? "PASS" : "MISMATCH").append("</span></div>");
+        sb.append("<table><thead><tr><th>Key</th><th>Site A Value</th><th>Site B Value</th><th>Status</th></tr></thead><tbody>");
+
+        Set<String> allKeys = new LinkedHashSet<>();
+        allKeys.addAll(mapA.keySet());
+        allKeys.addAll(mapB.keySet());
+
+        for (String key : allKeys) {
+            String valA = mapA.get(key);
+            String valB = mapB.get(key);
+            boolean isDiff = !Objects.equals(valA, valB);
+            sb.append("<tr").append(isDiff ? " class='row-fail'" : "").append(">");
+            sb.append("<td class='key-cell'>").append(esc(key)).append("</td>");
+            sb.append("<td>").append(valA != null ? esc(valA) : "<em class='na'>not present</em>").append("</td>");
+            sb.append("<td>").append(valB != null ? esc(valB) : "<em class='na'>not present</em>").append("</td>");
+            sb.append("<td class='status-cell ").append(isDiff ? "fail" : "pass").append("'>")
+              .append(isDiff ? (valA == null ? "MISSING IN A" : valB == null ? "MISSING IN B" : "DIFF") : "MATCH")
+              .append("</td>");
+            sb.append("</tr>");
+        }
+        sb.append("</tbody></table></div>");
+        return sb.toString();
+    }
+
     private void summaryRow(StringBuilder sb, String check, String valA, String valB, boolean pass) {
         sb.append("<tr>");
         sb.append("<td class='key-cell'>").append(check).append("</td>");
@@ -320,11 +296,17 @@ public class ReportFormatter {
         sb.append("</tr>");
     }
 
-
-
     private String buildFilename(String urlA, String urlB) {
         String ts = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        return extractDomain(urlA) + "_vs_" + extractDomain(urlB) + "_" + ts + ".pdf";
+        String hash = "";
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] bytes = md.digest((urlA + urlB).getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 4; i++) sb.append(String.format("%02x", bytes[i]));
+            hash = "_" + sb.toString();
+        } catch (Exception e) {}
+        return extractDomain(urlA) + "_vs_" + extractDomain(urlB) + hash + "_" + ts;
     }
 
     private String extractDomain(String url) {
@@ -340,145 +322,9 @@ public class ReportFormatter {
     }
 
     private String css() {
-        return """
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            body {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 9.5pt;
-                color: #111;
-                background: #fff;
-                line-height: 1.45;
-            }
-
-            /* ── Header ─────────────────────────────────────────────────── */
-            .page-header {
-                padding: 20px 24px 16px;
-                border-bottom: 2px solid #111;
-                margin-bottom: 0;
-            }
-            .report-title {
-                font-size: 15pt;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 1.5px;
-            }
-            .header-info {
-                margin-top: 10px;
-                border: none;
-                width: auto;
-            }
-            .header-info td {
-                border: none;
-                padding: 2px 16px 2px 0;
-                font-size: 8.5pt;
-                color: #444;
-                background: transparent;
-            }
-            .info-label {
-                font-weight: bold;
-                color: #111 !important;
-                white-space: nowrap;
-            }
-
-            /* ── Blocks ──────────────────────────────────────────────────── */
-            .block {
-                padding: 16px 24px 14px;
-                border-bottom: 1px solid #d0d0d0;
-            }
-            .section-title {
-                font-size: 10.5pt;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 0.8px;
-                margin-bottom: 10px;
-                color: #111;
-            }
-            .result-inline {
-                font-size: 8pt;
-                font-weight: bold;
-                margin-left: 10px;
-                letter-spacing: 0.5px;
-            }
-            .result-inline.pass { color: #1a6e1a; }
-            .result-inline.fail { color: #a30000; }
-
-            /* ── Final Result ────────────────────────────────────────────── */
-            .final-result {
-                margin-top: 10px;
-                font-size: 10pt;
-                font-weight: bold;
-                padding: 6px 12px;
-                display: inline-block;
-            }
-            .final-pass { color: #1a6e1a; border: 1px solid #1a6e1a; background: #f0faf0; }
-            .final-fail { color: #a30000; border: 1px solid #a30000; background: #fdf0f0; }
-
-            /* ── Tables ──────────────────────────────────────────────────── */
-            table {
-                width: 100%;
-                table-layout: fixed;
-                border-collapse: collapse;
-                font-size: 8.5pt;
-                margin-top: 8px;
-            }
-            th {
-                background: #efefef;
-                color: #111;
-                padding: 6px 9px;
-                text-align: left;
-                font-weight: bold;
-                font-size: 7.5pt;
-                text-transform: uppercase;
-                letter-spacing: 0.3px;
-                border-top: 1px solid #aaa;
-                border-bottom: 1px solid #aaa;
-            }
-            td {
-                padding: 5px 9px;
-                border-bottom: 1px solid #e5e5e5;
-                vertical-align: top;
-                word-break: break-word;
-            }
-            tr:nth-child(even) td { background: #fafafa; }
-            tr.row-fail td { background: #fff4f4 !important; }
-
-            /* ── Stat table ──────────────────────────────────────────────── */
-            .stat-table { width: auto; margin-bottom: 10px; }
-            .stat-table td { border: none; padding: 2px 16px 2px 0; }
-            .stat-label { font-weight: bold; white-space: nowrap; color: #444; }
-
-            /* ── Status cells ────────────────────────────────────────────── */
-            .status-cell { font-weight: bold; white-space: nowrap; }
-            .status-cell.pass { color: #1a6e1a; }
-            .status-cell.warn { color: #8a6000; }
-            .status-cell.fail { color: #a30000; }
-
-            /* ── Specific cell types ─────────────────────────────────────── */
-            .key-cell   { font-family: monospace; font-size: 8pt; word-break: break-all; color: #222; }
-            .hash-cell  { font-family: monospace; font-size: 8pt; word-break: break-all; }
-            .src-cell   { font-size: 7.5pt; color: #444; }
-            .num-cell   { text-align: right; width: 30px; color: #666; }
-            .na         { color: #999; font-style: italic; }
-
-            /* ── Pre blocks ──────────────────────────────────────────────── */
-            pre {
-                font-family: monospace;
-                font-size: 7.5pt;
-                white-space: pre-wrap;
-                word-break: break-all;
-                background: #f7f7f7;
-                border: 1px solid #ddd;
-                padding: 8px;
-                margin: 0;
-            }
-
-            /* ── Notes ───────────────────────────────────────────────────── */
-            .note {
-                font-size: 7.5pt;
-                color: #777;
-                margin-bottom: 6px;
-                font-style: italic;
-            }
-        """;
+        try (InputStream is = getClass().getResourceAsStream("/report.css")) {
+            if (is != null) return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {}
+        return "";
     }
 }

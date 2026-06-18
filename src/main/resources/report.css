@@ -1,0 +1,138 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9.5pt;
+    color: #111;
+    background: #fff;
+    line-height: 1.45;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.page-header {
+    padding: 20px 24px 16px;
+    border-bottom: 2px solid #111;
+    margin-bottom: 0;
+}
+.report-title {
+    font-size: 15pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+.header-info {
+    margin-top: 10px;
+    border: none;
+    width: auto;
+}
+.header-info td {
+    border: none;
+    padding: 2px 16px 2px 0;
+    font-size: 8.5pt;
+    color: #444;
+    background: transparent;
+}
+.info-label {
+    font-weight: bold;
+    color: #111 !important;
+    white-space: nowrap;
+}
+
+/* ── Blocks ──────────────────────────────────────────────────── */
+.block {
+    padding: 16px 24px 14px;
+    border-bottom: 1px solid #d0d0d0;
+}
+.section-title {
+    font-size: 10.5pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+    color: #111;
+}
+.result-inline {
+    font-size: 8pt;
+    font-weight: bold;
+    margin-left: 10px;
+    letter-spacing: 0.5px;
+}
+.result-inline.pass { color: #1a6e1a; }
+.result-inline.fail { color: #a30000; }
+
+/* ── Final Result ────────────────────────────────────────────── */
+.final-result {
+    margin-top: 10px;
+    font-size: 10pt;
+    font-weight: bold;
+    padding: 6px 12px;
+    display: inline-block;
+}
+.final-pass { color: #1a6e1a; border: 1px solid #1a6e1a; background: #f0faf0; }
+.final-fail { color: #a30000; border: 1px solid #a30000; background: #fdf0f0; }
+
+/* ── Tables ──────────────────────────────────────────────────── */
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+    margin-top: 8px;
+}
+th {
+    background: #efefef;
+    color: #111;
+    padding: 6px 9px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+}
+td {
+    padding: 5px 9px;
+    border-bottom: 1px solid #e5e5e5;
+    vertical-align: top;
+    word-break: break-word;
+}
+tr:nth-child(even) td { background: #fafafa; }
+tr.row-fail td { background: #fff4f4 !important; }
+
+/* ── Stat table ──────────────────────────────────────────────── */
+.stat-table { width: auto; margin-bottom: 10px; }
+.stat-table td { border: none; padding: 2px 16px 2px 0; }
+.stat-label { font-weight: bold; white-space: nowrap; color: #444; }
+
+/* ── Status cells ────────────────────────────────────────────── */
+.status-cell { font-weight: bold; white-space: nowrap; }
+.status-cell.pass { color: #1a6e1a; }
+.status-cell.warn { color: #8a6000; }
+.status-cell.fail { color: #a30000; }
+
+/* ── Specific cell types ─────────────────────────────────────── */
+.key-cell   { font-family: monospace; font-size: 8pt; word-break: break-all; color: #222; }
+.hash-cell  { font-family: monospace; font-size: 8pt; word-break: break-all; }
+.src-cell   { font-size: 7.5pt; color: #444; }
+.num-cell   { text-align: right; width: 30px; color: #666; }
+.na         { color: #999; font-style: italic; }
+
+/* ── Pre blocks ──────────────────────────────────────────────── */
+pre {
+    font-family: monospace;
+    font-size: 7.5pt;
+    white-space: pre-wrap;
+    word-break: break-all;
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    padding: 8px;
+    margin: 0;
+}
+
+/* ── Notes ───────────────────────────────────────────────────── */
+.note {
+    font-size: 7.5pt;
+    color: #777;
+    margin-bottom: 6px;
+    font-style: italic;
+}

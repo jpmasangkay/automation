@@ -153,6 +153,7 @@ if (-not (Test-Path $JarPath)) {
         $env:JAVA_HOME = Split-Path (Split-Path $JavaExe -Parent) -Parent
     }
 
+    $env:MAVEN_ARGS="--no-transfer-progress"
     & $MvnExe clean package --no-transfer-progress -f (Join-Path $ScriptDir "pom.xml")
 
     if ($LASTEXITCODE -ne 0) {

@@ -13,67 +13,91 @@ import java.util.stream.Collectors;
 
 public class ContentExtractor {
 
+    private final Browser browser;
+    private static final Set<String> GENERIC_SLUGS = new HashSet<>(Arrays.asList(
+            "index", "index.html", "home", "default", "main", "..", "."
+    ));
+
+    public ContentExtractor(Browser browser) {
+        this.browser = browser;
+    }
+
     public SiteData extractSiteData(String url, String label) {
         long startTime = System.currentTimeMillis();
 
-        try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.chromium().launch(
-                    new BrowserType.LaunchOptions().setHeadless(true));
-            Page page = browser.newPage();
-
-            // Block third-party popups, surveys, and cookie banners at the network level
-            page.route("**/*qualtrics.com**", Route::abort);
-            page.route("**/*cookielaw.org**", Route::abort);
-            page.route("**/*onetrust.com**", Route::abort);
-            page.route("**/*tealiumiq.com**", Route::abort);
-            page.route("**/*google-analytics.com**", Route::abort);
-
-            System.out.println("[INFO] Navigating to Site " + label + ": " + url);
-            page.navigate(url);
-            page.waitForLoadState(LoadState.NETWORKIDLE);
-            System.out.println("[INFO] Site " + label + " loaded.");
-
-            // Scroll the full page to force all lazy-loaded components (images, feeds) to resolve
-            try {
-                page.evaluate("() => new Promise(resolve => {" +
-                    "let pos = 0;" +
-                    "const step = () => {" +
-                    "  window.scrollBy(0, 400);" +
-                    "  pos += 400;" +
-                    "  if (pos < document.body.scrollHeight && pos < 20000) { setTimeout(step, 80); }" +
-                    "  else { window.scrollTo(0, 0); setTimeout(resolve, 500); }" +
-                    "}; step();" +
-                "})");
-            } catch (Exception e) {
-                System.out.println("[WARN] Page scroll failed: " + e.getMessage());
+        try {
+            APIResponse response = browser.newContext().request().head(url, 
+                com.microsoft.playwright.options.RequestOptions.create().setTimeout(10000));
+            if (!response.ok() && response.status() != 405 && response.status() != 403) {
+                System.out.println("[WARN] Site " + label + " returned HTTP " + response.status() + " on HEAD pre-check. Proceeding anyway...");
             }
-
-            // Create a dedicated helper page for perceptual hashing (64x64, shared across all images)
-            Page helperPage = browser.newPage();
-            helperPage.setViewportSize(64, 64);
-            helperPage.setContent("<html><body style='margin:0;padding:0;width:64px;height:64px;overflow:hidden;background:#fff;'>" +
-                    "<img id='ph' style='width:64px;height:64px;display:block;object-fit:fill;' /></body></html>");
-            helperPage.waitForLoadState();
-
-            System.out.println("[INFO] Extracting content from Site " + label + "...");
-            cleanDom(page);
-            String rawText = extractText(page);
-            List<ImageData> images = extractImages(page, helperPage, label);
-            List<LinkData> links = extractLinks(page, label);
-            Map<String, String> metadata = extractMetadata(page, label);
-            Map<String, String> dataLayer = extractDataLayer(page, label);
-
-            browser.close();
-
-            long elapsed = System.currentTimeMillis() - startTime;
-            System.out.println("[INFO] Site " + label + " extraction complete (" + elapsed + " ms).");
-            return new SiteData(label, url, rawText, normalize(rawText), images, links, metadata, dataLayer,
-                    elapsed);
-
         } catch (Exception e) {
-            System.out.println("[ERROR] Site " + label + " failed: " + e.getMessage());
-            return new SiteData(label, url, "", "", List.of(), List.of(), Map.of(), Map.of(), 0);
+            System.out.println("[WARN] Site " + label + " HTTP pre-check failed: " + e.getMessage() + ". Proceeding anyway...");
         }
+
+        int maxRetries = 2;
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                Page page = browser.newPage();
+
+                // Block third-party popups, surveys, and cookie banners at the network level
+                page.route("**/*qualtrics.com**", Route::abort);
+                page.route("**/*cookielaw.org**", Route::abort);
+                page.route("**/*onetrust.com**", Route::abort);
+                page.route("**/*tealiumiq.com**", Route::abort);
+                page.route("**/*google-analytics.com**", Route::abort);
+
+                System.out.println("[INFO] Navigating to Site " + label + " (Attempt " + attempt + "/" + maxRetries + "): " + url);
+                page.navigate(url, new Page.NavigateOptions().setTimeout(60000));
+                page.waitForLoadState(LoadState.NETWORKIDLE, new Page.WaitForLoadStateOptions().setTimeout(30000));
+                System.out.println("[INFO] Site " + label + " loaded.");
+
+                // Scroll the full page to force all lazy-loaded components (images, feeds) to resolve
+                try {
+                    page.evaluate("() => new Promise(resolve => {" +
+                        "let pos = 0;" +
+                        "const step = () => {" +
+                        "  window.scrollBy(0, 400);" +
+                        "  pos += 400;" +
+                        "  if (pos < document.body.scrollHeight && pos < 20000) { setTimeout(step, 80); }" +
+                        "  else { window.scrollTo(0, 0); setTimeout(resolve, 500); }" +
+                        "}; step();" +
+                    "})");
+                } catch (Exception e) {
+                    System.out.println("[WARN] Page scroll failed: " + e.getMessage());
+                }
+
+                // Create a dedicated helper page for perceptual hashing (64x64, shared across all images)
+                Page helperPage = browser.newPage();
+                helperPage.setViewportSize(64, 64);
+                helperPage.setContent("<html><body style='margin:0;padding:0;width:64px;height:64px;overflow:hidden;background:#fff;'>" +
+                        "<img id='ph' style='width:64px;height:64px;display:block;object-fit:fill;' /></body></html>");
+                helperPage.waitForLoadState();
+
+                System.out.println("[INFO] Extracting content from Site " + label + "...");
+                cleanDom(page);
+                String rawText = extractText(page);
+                List<ImageData> images = extractImages(page, helperPage, label);
+                List<LinkData> links = extractLinks(page, label);
+                Map<String, String> metadata = extractMetadata(page, label);
+                Map<String, String> dataLayer = extractDataLayer(page, label);
+
+                page.close();
+                helperPage.close();
+
+                long elapsed = System.currentTimeMillis() - startTime;
+                System.out.println("[INFO] Site " + label + " extraction complete (" + elapsed + " ms).");
+                return new SiteData(label, url, rawText, images, links, metadata, dataLayer, elapsed);
+
+            } catch (Exception e) {
+                System.out.println("[WARN] Site " + label + " attempt " + attempt + " failed: " + e.getMessage());
+                if (attempt == maxRetries) {
+                    System.out.println("[ERROR] Site " + label + " failed after " + maxRetries + " attempts.");
+                    return new SiteData(label, url, "", List.of(), List.of(), Map.of(), Map.of(), 0);
+                }
+            }
+        }
+        return new SiteData(label, url, "", List.of(), List.of(), Map.of(), Map.of(), 0);
     }
 
     // -------------------------------------------------------
@@ -125,22 +149,7 @@ public class ContentExtractor {
     // IMAGES — deterministic via full-page load + binary download + perceptual hash
     // -------------------------------------------------------
     private List<ImageData> extractImages(Page page, Page helperPage, String siteLabel) {
-        // Step 1: Scroll the full page to force all lazy-loaded images to resolve
-        try {
-            page.evaluate("() => new Promise(resolve => {" +
-                "let pos = 0;" +
-                "const step = () => {" +
-                "  window.scrollBy(0, 400);" +
-                "  pos += 400;" +
-                "  if (pos < document.body.scrollHeight && pos < 20000) { setTimeout(step, 80); }" +
-                "  else { window.scrollTo(0, 0); setTimeout(resolve, 500); }" +
-                "}; step();" +
-            "})");
-        } catch (Exception e) {
-            System.out.println("[WARN] Page scroll failed: " + e.getMessage());
-        }
-
-        // Step 2: Wait for every img on the page to reach a 'complete' state
+        // Step 1: Wait for every img on the page to reach a 'complete' state
         try {
             page.evaluate("() => Promise.all(" +
                 "  Array.from(document.images)" +
@@ -186,7 +195,7 @@ public class ContentExtractor {
                 String hash = md5(imageBytes);
                 // Secondary: render at fixed 64x64 for visual fingerprint
                 String perceptualHash = computePerceptualHash(currentSrc, helperPage);
-                images.add(new ImageData(index, src.isBlank() ? currentSrc : src, imageBytes, hash, perceptualHash));
+                images.add(new ImageData(index, src.isBlank() ? currentSrc : src, hash, perceptualHash));
                 index++;
             } catch (Exception e) {
                 System.out.println("[WARN] Site " + siteLabel + " - skipped image " + index + " (" + currentSrc + "): " + e.getMessage());
@@ -471,8 +480,6 @@ public class ContentExtractor {
     // SLUG EXTRACTION
     // -------------------------------------------------------
     private String extractSlug(String href) {
-        Set<String> generic = new HashSet<>(Arrays.asList(
-                "index", "index.html", "home", "default", "main", "..", "."));
         try {
             String path = href.startsWith("http")
                     ? new URI(href).getPath()
@@ -484,22 +491,12 @@ public class ContentExtractor {
                 if (part.isEmpty())
                     continue;
                 String slug = part.replaceAll("\\.[a-zA-Z0-9]+$", "");
-                if (!slug.isBlank() && !generic.contains(slug.toLowerCase()))
+                if (!slug.isBlank() && !GENERIC_SLUGS.contains(slug.toLowerCase()))
                     return slug;
             }
         } catch (Exception ignored) {
         }
         return "";
-    }
-
-    // -------------------------------------------------------
-    // NORMALIZE TEXT
-    // -------------------------------------------------------
-    private String normalize(String raw) {
-        return raw.toLowerCase()
-                .replaceAll("\\s+", " ")
-                .replaceAll("[^a-z0-9 ]", "")
-                .trim();
     }
 
     // -------------------------------------------------------
