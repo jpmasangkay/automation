@@ -10,6 +10,8 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Playwright;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,8 +21,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     private static class UrlPair {
         final String urlA;
@@ -33,28 +37,25 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        printBanner();
+        logger.info("════════════════════════════════════════════════════════");
+        logger.info(" SITE CONTENT COMPARATOR");
+        logger.info(" Automated Web Page Comparison Tool");
+        logger.info("════════════════════════════════════════════════════════");
 
-        // ── Resolve Excel file path ──────────────────────────────────────
         File excelFile = resolveExcelFile(args);
         if (excelFile == null) {
             System.exit(1);
         }
 
-        System.out.println("  Input  : " + excelFile.getAbsolutePath());
-        System.out.println();
-
+        logger.info("Input: {}", excelFile.getAbsolutePath());
         List<UrlPair> pairs = readUrlPairs(excelFile);
 
         if (pairs.isEmpty()) {
-            System.out.println("  [!] No valid URL pairs found in the Excel file.");
-            System.out.println("      Make sure Column A has Site A URLs and Column B has Site B URLs.");
-            System.out.println("      Both must start with http:// or https://");
+            logger.error("No valid URL pairs found in the Excel file. Make sure Column A has Site A URLs and Column B has Site B URLs.");
             return;
         }
 
-        System.out.println("  Found  : " + pairs.size() + " URL pair(s) to compare");
-        System.out.println();
+        logger.info("Found {} URL pair(s) to compare", pairs.size());
 
         try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.chromium().launch(
@@ -64,129 +65,117 @@ public class Main {
             SiteComparator comparator = new SiteComparator();
             ReportFormatter reportFormatter = new ReportFormatter(browser);
 
-            ExecutorService pool = Executors.newFixedThreadPool(2);
-            int passed = 0, failed = 0;
+            int threads = Config.getThreads();
+            logger.info("Starting thread pool with {} workers for parallel pair processing", threads);
+            ExecutorService pool = Executors.newFixedThreadPool(threads);
+            
+            AtomicInteger passed = new AtomicInteger(0);
+            AtomicInteger failed = new AtomicInteger(0);
+            AtomicInteger count = new AtomicInteger(1);
 
-        try {
-            int count = 1;
-            for (UrlPair pair : pairs) {
-                System.out.println("  ┌─ Pair " + count + " / " + pairs.size()
-                        + " ──────────────────────────────────────────");
-                System.out.println("  │  Site A : " + pair.urlA);
-                System.out.println("  │  Site B : " + pair.urlB);
-                System.out.println("  │");
-                System.out.println("  │  [1/3] Loading both pages (this may take 30-60 sec)...");
+            List<Future<?>> futures = new ArrayList<>();
 
-                try {
-                    Future<SiteData> futureA = pool.submit(() -> extractor.extractSiteData(pair.urlA, "A"));
-                    Future<SiteData> futureB = pool.submit(() -> extractor.extractSiteData(pair.urlB, "B"));
+            try {
+                for (UrlPair pair : pairs) {
+                    futures.add(pool.submit(() -> {
+                        int currentCount = count.getAndIncrement();
+                        logger.info("┌─ Pair {} / {} ──────────────────────────────────────────", currentCount, pairs.size());
+                        logger.info("│  Site A : {}", pair.urlA);
+                        logger.info("│  Site B : {}", pair.urlB);
+                        
+                        try {
+                            logger.info("│  [1/3] Loading both pages for Pair {}...", currentCount);
+                            SiteData dataA = extractor.extractSiteData(pair.urlA, "A-Pair" + currentCount);
+                            SiteData dataB = extractor.extractSiteData(pair.urlB, "B-Pair" + currentCount);
 
-                    SiteData dataA = futureA.get();
-                    SiteData dataB = futureB.get();
+                            logger.info("│  [2/3] Comparing content for Pair {}...", currentCount);
+                            ComparisonResult result = comparator.compare(dataA, dataB);
 
-                    System.out.println("  │  [2/3] Comparing content...");
-                    ComparisonResult result = comparator.compare(dataA, dataB);
+                            logger.info("│  [3/3] Generating PDF report for Pair {}...", currentCount);
+                            reportFormatter.generateReport(result);
 
-                    System.out.println("  │  [3/3] Generating PDF report...");
-                    reportFormatter.generateReport(result);
+                            if (result.isAllMatch()) {
+                                logger.info("└─ Result for Pair {}: PASS ✓", currentCount);
+                                passed.incrementAndGet();
+                            } else {
+                                logger.info("└─ Result for Pair {}: MISMATCH ✗", currentCount);
+                                failed.incrementAndGet();
+                            }
 
-                    String verdict = result.isAllMatch() ? "PASS ✓" : "MISMATCH ✗";
-                    System.out.println("  │");
-                    System.out.println("  └─ Result: " + verdict);
-
-                    if (result.isAllMatch()) passed++;
-                    else failed++;
-
-                } catch (Exception e) {
-                    System.out.println("  └─ [ERROR] " + e.getMessage());
-                    failed++;
+                        } catch (Exception e) {
+                            logger.error("└─ [ERROR] Pair {} failed: {}", currentCount, e.getMessage(), e);
+                            failed.incrementAndGet();
+                        }
+                    }));
                 }
 
-                System.out.println();
-                count++;
-            }
-        } finally {
-            pool.shutdown();
-        }
+                for (Future<?> f : futures) {
+                    f.get();
+                }
 
-        // ── Final summary ────────────────────────────────────────────────
-        System.out.println("  ════════════════════════════════════════════════════════");
-        System.out.println("   DONE!   Passed: " + passed + "   Mismatches: " + failed
-                + "   Total: " + (passed + failed));
-        System.out.println("   Reports saved to:  reports\\");
-        System.out.println("  ════════════════════════════════════════════════════════");
-        System.out.println();
+            } finally {
+                pool.shutdown();
+            }
+
+            logger.info("════════════════════════════════════════════════════════");
+            logger.info(" DONE! Passed: {}   Mismatches: {}   Total: {}", passed.get(), failed.get(), (passed.get() + failed.get()));
+            logger.info(" Reports saved to: reports\\");
+            logger.info("════════════════════════════════════════════════════════");
         }
     }
 
-    /** Resolves the Excel file: from arg, from data/ folder, or fallback. */
     private static File resolveExcelFile(String[] args) {
-        // 1. Explicit argument (e.g. from run.bat drag-and-drop)
         if (args.length > 0) {
             File f = new File(args[0]);
             if (f.exists()) return f;
-            System.err.println("  [ERROR] File not found: " + f.getAbsolutePath());
+            logger.error("File not found: {}", f.getAbsolutePath());
             return null;
         }
 
-        // 2. Scan the dedicated data/ folder
         File inputDir = new File("data");
         if (inputDir.isDirectory()) {
             File[] xlsxFiles = inputDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".xlsx"));
             if (xlsxFiles != null && xlsxFiles.length == 1) {
-                System.out.println("  [AUTO] Detected Excel file in data/ folder: " + xlsxFiles[0].getName());
+                logger.info("Detected Excel file in data/ folder: {}", xlsxFiles[0].getName());
                 return xlsxFiles[0];
             }
             if (xlsxFiles != null && xlsxFiles.length > 1) {
                 java.util.Arrays.sort(xlsxFiles, java.util.Comparator.comparingLong(File::lastModified).reversed());
-                System.out.println("  [INFO] Multiple files in data/ folder — using the newest: " + xlsxFiles[0].getName());
+                logger.info("Multiple files in data/ folder — using the newest: {}", xlsxFiles[0].getName());
                 return xlsxFiles[0];
             }
         }
 
-        // 3. Fallback to test_comparisons.xlsx in the working directory
         File fallback = new File("test_comparisons.xlsx");
         if (fallback.exists()) {
-            System.out.println("  [AUTO] Using default file: test_comparisons.xlsx");
+            logger.info("Using default file: test_comparisons.xlsx");
             return fallback;
         }
 
-        System.err.println("  [ERROR] No Excel file found.");
-        System.err.println("          Place your .xlsx file in the  data\\  folder and try again.");
+        logger.error("No Excel file found. Place your .xlsx file in the data\\ folder and try again.");
         return null;
-    }
-
-    private static void printBanner() {
-        System.out.println();
-        System.out.println("  ════════════════════════════════════════════════════════");
-        System.out.println("   SITE CONTENT COMPARATOR");
-        System.out.println("   Automated Web Page Comparison Tool");
-        System.out.println("  ════════════════════════════════════════════════════════");
-        System.out.println();
     }
 
     private static List<UrlPair> readUrlPairs(File file) {
         List<UrlPair> pairs = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(file);
-                Workbook workbook = new XSSFWorkbook(fis)) {
+             Workbook workbook = new XSSFWorkbook(fis)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
                 Cell cellA = row.getCell(0);
                 Cell cellB = row.getCell(1);
-                if (cellA == null || cellB == null)
-                    continue;
+                if (cellA == null || cellB == null) continue;
 
                 String valA = getCellStringValue(cellA);
                 String valB = getCellStringValue(cellB);
 
-                if (valA == null || valB == null)
-                    continue;
+                if (valA == null || valB == null) continue;
+
+                if (valA.isBlank() || valB.isBlank()) continue;
 
                 valA = valA.trim();
                 valB = valB.trim();
 
-                // Skip rows containing titles or non-HTTP links (e.g. headers: "Site A", "Site
-                // B")
                 if (!valA.toLowerCase().startsWith("http") || !valB.toLowerCase().startsWith("http")) {
                     continue;
                 }
@@ -194,14 +183,13 @@ public class Main {
                 pairs.add(new UrlPair(valA, valB));
             }
         } catch (IOException e) {
-            System.err.println("[ERROR] Failed to read Excel file: " + e.getMessage());
+            logger.error("Failed to read Excel file: {}", e.getMessage(), e);
         }
         return pairs;
     }
 
     private static String getCellStringValue(Cell cell) {
-        if (cell == null)
-            return null;
+        if (cell == null) return null;
         switch (cell.getCellType()) {
             case STRING:
                 return cell.getStringCellValue();

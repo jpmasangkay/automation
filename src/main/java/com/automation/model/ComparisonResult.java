@@ -11,7 +11,8 @@ public record ComparisonResult(
     LinkDiff linkDiff,
     MapDiff metadataDiff,
     MapDiff dataLayerDiff,
-    long comparisonTimeMillis
+    long comparisonTimeMillis,
+    byte[] heatmapImage
 ) {
     public boolean isAllMatch() {
         return textDiff.matches() && imageDiff.matches() && linkDiff.matches()

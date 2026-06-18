@@ -11,12 +11,15 @@ public class SiteData {
     private final List<LinkData> links;
     private final Map<String, String> metadata;
     private final Map<String, String> dataLayer;
+    private final Map<String, String> dataLayer;
     private final long extractionTimeMillis;
+    private final byte[] fullPageScreenshot;
 
     public SiteData(String label, String url, String rawText,
                     List<ImageData> images, List<LinkData> links,
                     Map<String, String> metadata, Map<String, String> dataLayer,
-                    long extractionTimeMillis) {
+                    Map<String, String> metadata, Map<String, String> dataLayer,
+                    long extractionTimeMillis, byte[] fullPageScreenshot) {
         this.label = label;
         this.url = url;
         this.rawText = rawText;
@@ -25,6 +28,7 @@ public class SiteData {
         this.metadata = metadata;
         this.dataLayer = dataLayer;
         this.extractionTimeMillis = extractionTimeMillis;
+        this.fullPageScreenshot = fullPageScreenshot;
     }
 
     public String getLabel()                  { return label; }
@@ -35,4 +39,5 @@ public class SiteData {
     public Map<String, String> getMetadata()  { return metadata; }
     public Map<String, String> getDataLayer() { return dataLayer; }
     public long getExtractionTimeMillis()     { return extractionTimeMillis; }
+    public byte[] getFullPageScreenshot()     { return fullPageScreenshot; }
 }

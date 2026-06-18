@@ -4,8 +4,12 @@ import com.automation.model.ComparisonResult;
 import com.automation.model.ComparisonResult.*;
 import com.automation.model.LinkData;
 import com.automation.model.SiteData;
+import com.github.difflib.text.DiffRow;
+import com.github.difflib.text.DiffRowGenerator;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.Margin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +25,7 @@ import java.util.*;
 
 public class ReportFormatter {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReportFormatter.class);
     private final Browser browser;
 
     public ReportFormatter(Browser browser) {
@@ -36,7 +41,7 @@ public class ReportFormatter {
                 Files.createDirectories(reportsDir);
             }
         } catch (IOException e) {
-            System.out.println("[WARN] Failed to create reports directory: " + e.getMessage());
+            logger.warn("Failed to create reports directory: {}", e.getMessage());
             reportsDir = Paths.get(".");
         }
         
@@ -48,14 +53,14 @@ public class ReportFormatter {
         try {
             Files.writeString(htmlPath, html);
         } catch (IOException e) {
-            System.out.println("[ERROR] Failed to write HTML: " + e.getMessage());
+            logger.error("Failed to write HTML: {}", e.getMessage());
             return;
         }
         
         generateCsv(result, csvPath);
 
-        try {
-            Page page = browser.newPage();
+        try (BrowserContext context = browser.newContext();
+             Page page = context.newPage()) {
             page.navigate("file:///" + htmlPath.toAbsolutePath().toString().replace("\\", "/"));
             page.waitForLoadState();
             page.pdf(new Page.PdfOptions()
@@ -65,10 +70,9 @@ public class ReportFormatter {
                     .setMargin(new Margin()
                             .setTop("18mm").setBottom("18mm")
                             .setLeft("16mm").setRight("16mm")));
-            page.close();
-            System.out.println("[INFO] Reports saved: " + pdfPath.toAbsolutePath());
+            logger.info("Reports saved: {}", pdfPath.toAbsolutePath());
         } catch (Exception e) {
-            System.out.println("[ERROR] PDF generation failed: " + e.getMessage());
+            logger.error("PDF generation failed: {}", e.getMessage());
         }
     }
 
@@ -83,7 +87,7 @@ public class ReportFormatter {
         try {
             Files.writeString(csvPath, csv.toString());
         } catch (IOException e) {
-            System.out.println("[WARN] Failed to write CSV: " + e.getMessage());
+            logger.warn("Failed to write CSV: {}", e.getMessage());
         }
     }
 
@@ -134,7 +138,7 @@ public class ReportFormatter {
         // ── Section 2: DataLayer
         sb.append(renderMapDiff("2. Site Data Layer", result.dataLayerDiff(), a.getDataLayer(), b.getDataLayer()));
 
-        // ── Section 3: Text
+        // ── Section 3: Text (Inline Diffing)
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>3. Text Content <span class='result-inline ")
           .append(result.textDiff().matches() ? "pass" : "fail").append("'>")
@@ -160,26 +164,35 @@ public class ReportFormatter {
             }
             sb.append("</tbody></table>");
         } else {
-            sb.append("<table><thead><tr><th>Site</th><th>Text Node Content</th></tr></thead><tbody>");
-            int countA = 0;
-            for (String line : result.textDiff().onlyInA()) {
-                if (line.isBlank()) continue;
-                if (countA++ > 50) {
-                    sb.append("<tr class='row-fail'><td class='status-cell fail'>...</td><td><i>and " + (result.textDiff().onlyInA().size() - 50) + " more only in A</i></td></tr>");
-                    break;
+            sb.append("<table><thead><tr><th style='width:50%'>Site A Text (Old)</th><th style='width:50%'>Site B Text (New)</th></tr></thead><tbody>");
+            try {
+                DiffRowGenerator generator = DiffRowGenerator.create()
+                        .showInlineDiffs(true)
+                        .inlineDiffByWord(true)
+                        .oldTag(f -> f ? "<del style='background:#ffebe9;color:#24292f;text-decoration:none;font-weight:bold;'>" : "</del>")
+                        .newTag(f -> f ? "<ins style='background:#e6ffec;color:#24292f;text-decoration:none;font-weight:bold;'>" : "</ins>")
+                        .build();
+
+                List<String> aLines = Arrays.stream(a.getRawText().split("\\n")).map(String::trim).filter(s -> !s.isEmpty()).toList();
+                List<String> bLines = Arrays.stream(b.getRawText().split("\\n")).map(String::trim).filter(s -> !s.isEmpty()).toList();
+                
+                List<DiffRow> rows = generator.generateDiffRows(aLines, bLines);
+                int diffsShown = 0;
+                for (DiffRow row : rows) {
+                    if (row.getTag() != DiffRow.Tag.EQUAL) {
+                        if (diffsShown++ > 100) {
+                            sb.append("<tr><td colspan='2' style='text-align:center;'><i>and more differences...</i></td></tr>");
+                            break;
+                        }
+                        sb.append("<tr>")
+                          .append("<td>").append(row.getOldLine()).append("</td>")
+                          .append("<td>").append(row.getNewLine()).append("</td>")
+                          .append("</tr>");
+                    }
                 }
-                sb.append("<tr class='row-fail'><td class='status-cell fail' style='white-space:nowrap'>Only in A</td>")
-                  .append("<td>").append(esc(line)).append("</td></tr>");
-            }
-            int countB = 0;
-            for (String line : result.textDiff().onlyInB()) {
-                if (line.isBlank()) continue;
-                if (countB++ > 50) {
-                    sb.append("<tr class='row-fail'><td class='status-cell fail'>...</td><td><i>and " + (result.textDiff().onlyInB().size() - 50) + " more only in B</i></td></tr>");
-                    break;
-                }
-                sb.append("<tr class='row-fail'><td class='status-cell fail' style='white-space:nowrap'>Only in B</td>")
-                  .append("<td>").append(esc(line)).append("</td></tr>");
+            } catch (Exception e) {
+                logger.error("Failed to generate inline text diff", e);
+                sb.append("<tr><td colspan='2'>Failed to generate inline text diff</td></tr>");
             }
             sb.append("</tbody></table>");
         }
@@ -252,6 +265,18 @@ public class ReportFormatter {
             sb.append("</tr>");
         }
         sb.append("</tbody></table></div>");
+
+        // ── Section 6: Visual Heatmap
+        if (result.heatmapImage() != null && result.heatmapImage().length > 0) {
+            sb.append("<div class='block'>");
+            sb.append("<div class='section-title'>6. Visual Heatmap Diff</div>");
+            sb.append("<p class='note'>Red highlights denote layout shifts or visual differences.</p>");
+            String base64Image = Base64.getEncoder().encodeToString(result.heatmapImage());
+            sb.append("<div style='text-align: center;'>");
+            sb.append("<img src='data:image/png;base64,").append(base64Image).append("' style='max-width: 100%; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);' />");
+            sb.append("</div>");
+            sb.append("</div>");
+        }
 
         sb.append("</body></html>");
         return sb.toString();
