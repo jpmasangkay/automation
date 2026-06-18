@@ -279,20 +279,24 @@ public class ReportFormatter {
         sb.append("</tbody></table>");
 
         // Full links table
-        Map<String, String> slugToHrefA = new LinkedHashMap<>();
-        for (LinkData l : a.getLinks()) slugToHrefA.put(l.getSlug(), l.getOriginalHref());
-        Map<String, String> slugToHrefB = new LinkedHashMap<>();
-        for (LinkData l : b.getLinks()) slugToHrefB.put(l.getSlug(), l.getOriginalHref());
+        Map<String, LinkData> slugToLinkA = new LinkedHashMap<>();
+        for (LinkData l : a.getLinks()) slugToLinkA.put(l.getSlug(), l);
+        Map<String, LinkData> slugToLinkB = new LinkedHashMap<>();
+        for (LinkData l : b.getLinks()) slugToLinkB.put(l.getSlug(), l);
         Set<String> allSlugs = new TreeSet<>();
-        allSlugs.addAll(slugToHrefA.keySet());
-        allSlugs.addAll(slugToHrefB.keySet());
+        allSlugs.addAll(slugToLinkA.keySet());
+        allSlugs.addAll(slugToLinkB.keySet());
 
-        sb.append("<table><thead><tr><th style='width:30%'>Slug</th><th style='width:30%'>Site A Href</th><th style='width:30%'>Site B Href</th><th style='width:10%'>Status</th></tr></thead><tbody>");
+        sb.append("<table><thead><tr><th style='width:20%'>Link Text</th><th style='width:20%'>Slug</th><th style='width:25%'>Site A Href</th><th style='width:25%'>Site B Href</th><th style='width:10%'>Status</th></tr></thead><tbody>");
         for (String slug : allSlugs) {
-            String hA = slugToHrefA.get(slug);
-            String hB = slugToHrefB.get(slug);
+            LinkData lA = slugToLinkA.get(slug);
+            LinkData lB = slugToLinkB.get(slug);
+            String hA = lA != null ? lA.getOriginalHref() : null;
+            String hB = lB != null ? lB.getOriginalHref() : null;
+            String linkText = lA != null ? lA.getLinkText() : (lB != null ? lB.getLinkText() : "");
             boolean match = hA != null && hB != null;
             sb.append("<tr").append(match ? "" : " class='row-fail'").append(">");
+            sb.append("<td class='src-cell'>").append(esc(linkText)).append("</td>");
             sb.append("<td class='hash-cell'>").append(esc(slug)).append("</td>");
             sb.append("<td class='src-cell'>").append(hA != null ? esc(hA) : "<em class='na'>not present</em>").append("</td>");
             sb.append("<td class='src-cell'>").append(hB != null ? esc(hB) : "<em class='na'>not present</em>").append("</td>");

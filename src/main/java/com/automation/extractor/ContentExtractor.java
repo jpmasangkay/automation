@@ -224,42 +224,57 @@ public class ContentExtractor {
     // -------------------------------------------------------
     private List<LinkData> extractLinks(Page page, String siteLabel) {
         @SuppressWarnings("unchecked")
-        List<String> hrefs = (List<String>) page.evaluate("""
+        List<Map<String, String>> extracted = (List<Map<String, String>>) page.evaluate("""
                     () => {
-                        const links = new Set();
+                        const linksMap = new Map();
+                        const addLink = (href, el) => {
+                            if (!href) return;
+                            const text = (el.innerText || el.textContent || "").trim();
+                            if (!linksMap.has(href) || (linksMap.get(href) === "" && text !== "")) {
+                                linksMap.set(href, text);
+                            }
+                        };
+
                         document.querySelectorAll('a[href]').forEach(a => {
-                            links.add(a.getAttribute('href'));
+                            addLink(a.getAttribute('href'), a);
                         });
                         document.querySelectorAll('button[onclick]').forEach(btn => {
                             const onclick = btn.getAttribute('onclick');
                             const sq = onclick.split("'");
                             for (let i = 1; i < sq.length; i += 2) {
                                 const v = sq[i].trim();
-                                if (v.startsWith('/') || v.includes('/')) links.add(v);
+                                if (v.startsWith('/') || v.includes('/')) addLink(v, btn);
                             }
                             const dq = onclick.split('"');
                             for (let i = 1; i < dq.length; i += 2) {
                                 const v = dq[i].trim();
-                                if (v.startsWith('/') || v.includes('/')) links.add(v);
+                                if (v.startsWith('/') || v.includes('/')) addLink(v, btn);
                             }
                         });
                         document.querySelectorAll('[data-href]').forEach(el =>
-                            links.add(el.getAttribute('data-href')));
+                            addLink(el.getAttribute('data-href'), el));
                         document.querySelectorAll('[data-url]').forEach(el =>
-                            links.add(el.getAttribute('data-url')));
-                        return Array.from(links);
+                            addLink(el.getAttribute('data-url'), el));
+
+                        const result = [];
+                        linksMap.forEach((text, href) => {
+                            result.push({ href: href, text: text });
+                        });
+                        return result;
                     }
                 """);
 
         List<LinkData> links = new ArrayList<>();
-        for (String href : hrefs) {
+        for (Map<String, String> item : extracted) {
+            String href = item.get("href");
+            String text = item.get("text");
             if (href == null || href.isBlank())
                 continue;
             if (href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:"))
                 continue;
             String slug = extractSlug(href);
             if (!slug.isBlank())
-                links.add(new LinkData(href, slug));
+                links.add(new LinkData(href, slug, text != null ? text : ""));
         }
 
         List<LinkData> unique = links.stream().distinct().collect(Collectors.toList());

@@ -5,14 +5,17 @@ import java.util.Objects;
 public class LinkData {
     private final String originalHref;
     private final String slug;
+    private final String linkText;
 
-    public LinkData(String originalHref, String slug) {
+    public LinkData(String originalHref, String slug, String linkText) {
         this.originalHref = originalHref;
         this.slug = slug;
+        this.linkText = linkText;
     }
 
     public String getOriginalHref() { return originalHref; }
     public String getSlug() { return slug; }
+    public String getLinkText() { return linkText; }
 
     @Override
     public boolean equals(Object o) {
@@ -29,6 +32,6 @@ public class LinkData {
 
     @Override
     public String toString() {
-        return slug + " (from: " + originalHref + ")";
+        return slug + " (text: " + linkText + ", from: " + originalHref + ")";
     }
 }
