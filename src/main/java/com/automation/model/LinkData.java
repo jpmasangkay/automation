@@ -3,9 +3,9 @@ package com.automation.model;
 import java.util.Objects;
 
 public class LinkData {
-    private final String originalHref;
-    private final String slug;
-    private final String linkText;
+    private String originalHref;
+    private String slug;
+    private String linkText;
 
     public LinkData(String originalHref, String slug, String linkText) {
         this.originalHref = originalHref;

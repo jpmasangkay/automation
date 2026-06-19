@@ -1,10 +1,10 @@
 package com.automation.model;
 
 public class ImageData {
-    private final int index;
-    private final String src;
-    private final String hash;           // MD5 of raw downloaded bytes (exact binary match)
-    private final String perceptualHash; // MD5 of fixed-size visual render (same-image-different-path match)
+    private int index;
+    private String src;
+    private String hash;           // MD5 of raw downloaded bytes (exact binary match)
+    private String perceptualHash; // MD5 of fixed-size visual render (same-image-different-path match)
 
     public ImageData(int index, String src, String hash, String perceptualHash) {
         this.index = index;

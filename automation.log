@@ -1,28 +1,29 @@
-2026-06-19 15:06:17.966 [main] INFO  com.automation.Main - ========================================================
-2026-06-19 15:06:17.968 [main] INFO  com.automation.Main -  SITE CONTENT COMPARATOR
-2026-06-19 15:06:17.968 [main] INFO  com.automation.Main -  Automated Web Page Comparison Tool
-2026-06-19 15:06:17.968 [main] INFO  com.automation.Main - ========================================================
-2026-06-19 15:06:17.968 [main] INFO  com.automation.Main - Input: D:\Programming\Automation\data\test_comparisons.xlsx
-2026-06-19 15:06:18.313 [main] INFO  com.automation.Main - Found 1 URL pair(s) to compare
-2026-06-19 15:06:22.566 [main] INFO  com.automation.Config - Loaded configuration from D:\Programming\Automation\config.properties
-2026-06-19 15:06:22.577 [main] DEBUG c.a.extractor.FingerprintCache - Cache loaded: 1 page(s) from previous run.
-2026-06-19 15:06:22.580 [main] INFO  com.automation.Main - Starting thread pool with 4 workers for parallel pair processing
-2026-06-19 15:06:22.582 [pool-1-thread-1] INFO  com.automation.Main - --- Pair 1 / 1 ------------------------------------------
-2026-06-19 15:06:22.582 [pool-1-thread-1] INFO  com.automation.Main -    Site A : https://www.campus.sanofi/ph
-2026-06-19 15:06:22.582 [pool-1-thread-1] INFO  com.automation.Main -    Site B : https://www.campus.sanofi/ph
-2026-06-19 15:06:22.582 [pool-1-thread-1] INFO  com.automation.Main -    [1/3] Loading both pages for Pair 1...
-2026-06-19 15:06:24.354 [pool-1-thread-1] DEBUG c.a.extractor.FingerprintCache - Page has changed since last run for https://www.campus.sanofi/ph - loading fresh.
-2026-06-19 15:06:24.411 [pool-1-thread-1] INFO  c.a.extractor.ContentExtractor -    Loading page: https://www.campus.sanofi/ph
-2026-06-19 15:06:27.304 [pool-1-thread-1] DEBUG c.a.extractor.ContentExtractor - Image completion wait timed out for A-Pair1 — proceeding with partial load.
-2026-06-19 15:06:27.304 [pool-1-thread-1] INFO  c.a.extractor.ContentExtractor -    Extracting content...
-2026-06-19 15:06:28.715 [pool-1-thread-1] INFO  c.a.extractor.ContentExtractor -    Done in 6131ms — 26 image(s), 11 link(s) found.
-2026-06-19 15:06:28.721 [pool-1-thread-1] INFO  com.automation.Main -    [SAME URL] Identical URLs detected — reusing Site A data for Site B (no double load).
-2026-06-19 15:06:28.721 [pool-1-thread-1] INFO  com.automation.Main -    [2/3] Comparing content for Pair 1...
-2026-06-19 15:06:28.727 [pool-1-thread-1] INFO  com.automation.Main -    [3/3] Generating PDF report for Pair 1...
-2026-06-19 15:06:29.545 [pool-1-thread-1] INFO  c.automation.report.ReportFormatter - Report saved: D:\Programming\Automation\reports\www.campus.sanofi_vs_www.campus.sanofi_82b8dfb9_20260619_150628.pdf
-2026-06-19 15:06:29.548 [pool-1-thread-1] INFO  com.automation.Main - --- Result for Pair 1: PASS
-2026-06-19 15:06:29.558 [main] INFO  c.a.extractor.FingerprintCache - Cache saved: 1 page(s) stored.
-2026-06-19 15:06:29.558 [main] INFO  com.automation.Main - ========================================================
-2026-06-19 15:06:29.558 [main] INFO  com.automation.Main -  DONE! Passed: 1   Mismatches: 0   Total: 1
-2026-06-19 15:06:29.558 [main] INFO  com.automation.Main -  Reports saved to: reports\
-2026-06-19 15:06:29.558 [main] INFO  com.automation.Main - ========================================================
+2026-06-19 16:52:47.150 [main] INFO  com.automation.Main - ========================================================
+2026-06-19 16:52:47.155 [main] INFO  com.automation.Main -  SITE CONTENT COMPARATOR
+2026-06-19 16:52:47.156 [main] INFO  com.automation.Main -  Automated Web Page Comparison Tool
+2026-06-19 16:52:47.156 [main] INFO  com.automation.Main - ========================================================
+2026-06-19 16:52:47.156 [main] INFO  com.automation.Main - Input: C:\Users\HRBPO\Content Comparator\automation\data\test_comparisons.xlsx
+2026-06-19 16:52:47.623 [main] INFO  com.automation.Main - Found 1 URL pair(s) to compare
+2026-06-19 16:52:51.734 [main] INFO  com.automation.Config - Loaded configuration from C:\Users\HRBPO\Content Comparator\automation\config.properties
+2026-06-19 16:52:51.760 [main] DEBUG c.a.extractor.FingerprintCache - Cache loaded: 1 page(s) from previous run.
+2026-06-19 16:52:51.765 [main] INFO  com.automation.Main - Starting thread pool with 4 workers for parallel pair processing
+2026-06-19 16:52:51.770 [pool-1-thread-1] INFO  com.automation.Main - --- Pair 1 / 1 ------------------------------------------
+2026-06-19 16:52:51.771 [pool-1-thread-1] INFO  com.automation.Main -    Site A : https://www.campus.sanofi/ph
+2026-06-19 16:52:51.771 [pool-1-thread-1] INFO  com.automation.Main -    Site B : https://www.campus.sanofi/ph
+2026-06-19 16:52:51.771 [pool-1-thread-1] INFO  com.automation.Main -    [1/3] Loading both pages for Pair 1...
+2026-06-19 16:52:55.073 [pool-1-thread-1] DEBUG c.a.extractor.FingerprintCache - Page has changed since last run for https://www.campus.sanofi/ph - loading fresh.
+2026-06-19 16:52:55.274 [pool-1-thread-1] INFO  c.a.extractor.ContentExtractor -    Loading page: https://www.campus.sanofi/ph
+2026-06-19 16:53:05.188 [pool-1-thread-1] DEBUG c.a.extractor.ContentExtractor -    Network idle wait timed out for A-Pair1 (proceeding with parsed DOM): Timeout 8000ms exceeded
+2026-06-19 16:53:06.223 [pool-1-thread-1] DEBUG c.a.extractor.ContentExtractor - Image completion wait timed out for A-Pair1 — proceeding with partial load.
+2026-06-19 16:53:06.235 [pool-1-thread-1] INFO  c.a.extractor.ContentExtractor -    Extracting content...
+2026-06-19 16:53:07.720 [pool-1-thread-1] INFO  c.a.extractor.ContentExtractor -    Done in 15948ms — 26 image(s), 19 link(s) found.
+2026-06-19 16:53:07.736 [pool-1-thread-1] INFO  com.automation.Main -    [SAME URL] Identical URLs detected — reusing Site A data for Site B (no double load).
+2026-06-19 16:53:07.738 [pool-1-thread-1] INFO  com.automation.Main -    [2/3] Comparing content for Pair 1...
+2026-06-19 16:53:07.748 [pool-1-thread-1] INFO  com.automation.Main -    [3/3] Generating PDF report for Pair 1...
+2026-06-19 16:53:08.795 [pool-1-thread-1] INFO  c.automation.report.ReportFormatter - Report saved: C:\Users\HRBPO\Content Comparator\automation\reports\www.campus.sanofi_vs_www.campus.sanofi_82b8dfb9_20260619_165307.pdf
+2026-06-19 16:53:08.802 [pool-1-thread-1] INFO  com.automation.Main - --- Result for Pair 1: PASS
+2026-06-19 16:53:08.818 [main] INFO  c.a.extractor.FingerprintCache - Cache saved: 1 page(s) stored.
+2026-06-19 16:53:08.819 [main] INFO  com.automation.Main - ========================================================
+2026-06-19 16:53:08.819 [main] INFO  com.automation.Main -  DONE! Passed: 1   Mismatches: 0   Total: 1
+2026-06-19 16:53:08.819 [main] INFO  com.automation.Main -  Reports saved to: reports\
+2026-06-19 16:53:08.820 [main] INFO  com.automation.Main - ========================================================

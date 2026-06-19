@@ -120,7 +120,7 @@ public class ReportFormatter {
         sb.append("<table><thead><tr><th>Check</th><th>Site A</th><th>Site B</th><th>Similarity</th><th>Result</th></tr></thead><tbody>");
         summaryRow(sb, "Metadata",  a.getMetadata().size() + " tag(s)",           b.getMetadata().size() + " tag(s)",           s.metadataScore(),   result.metadataDiff().matches());
         summaryRow(sb, "DataLayer", a.getDataLayer().size() + " property(ies)",   b.getDataLayer().size() + " property(ies)",   s.dataLayerScore(),  result.dataLayerDiff().matches());
-        summaryRow(sb, "Text",      result.textDiff().totalLinesA() + " node(s)", result.textDiff().totalLinesB() + " node(s)", s.textScore(),       result.textDiff().matches());
+        summaryRow(sb, "Text",      result.textDiff().totalLinesA() + " line(s)", result.textDiff().totalLinesB() + " line(s)", s.textScore(),       result.textDiff().matches());
         summaryRow(sb, "Images",    a.getImages().size() + " image(s)",           b.getImages().size() + " image(s)",           s.imageScore(),      result.imageDiff().matches());
         summaryRow(sb, "Links",     a.getLinks().size() + " link(s)",             b.getLinks().size() + " link(s)",             s.linkScore(),       result.linkDiff().matches());
         sb.append("</tbody></table>");
@@ -139,13 +139,13 @@ public class ReportFormatter {
           .append(result.textDiff().matches() ? "pass" : "fail").append("'>")
           .append(result.textDiff().matches() ? "PASS" : "MISMATCH").append("</span></div>");
         sb.append("<table class='stat-table'><tbody>");
-        sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.textDiff().matchedLineCount()).append(" text node(s)</td></tr>");
+        sb.append("<tr><td class='stat-label'>Matched</td><td>").append(result.textDiff().matchedLineCount()).append(" text line(s)</td></tr>");
         sb.append("<tr><td class='stat-label'>Differences</td><td>")
-          .append(result.textDiff().onlyInA().size() + result.textDiff().onlyInB().size()).append(" text node(s)</td></tr>");
+          .append(result.textDiff().onlyInA().size() + result.textDiff().onlyInB().size()).append(" text line(s)</td></tr>");
         sb.append("</tbody></table>");
 
         if (result.textDiff().matches()) {
-            sb.append("<p class='note'>Content is identical. Showing first 60 text nodes from each site.</p>");
+            sb.append("<p class='note'>Content is identical. Showing first 60 text lines from each site.</p>");
             sb.append("<table><thead><tr><th style='width:50%'>Site A Text</th><th style='width:50%'>Site B Text</th></tr></thead><tbody>");
             String[] tlA = a.getRawText().split("\\n");
             String[] tlB = b.getRawText().split("\\n");
@@ -354,33 +354,31 @@ public class ReportFormatter {
 
     private String extraCss() {
         return """
-.score-banner { background: linear-gradient(135deg, #0f172a 0%, #1e2a4a 100%); }
-.score-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-.score-card { flex: 1; min-width: 100px; padding: 14px 16px; border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.1); text-align: center; }
-.score-card.score-excellent { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.3); }
-.score-card.score-good      { background: rgba(132,204,22,.12); border-color: rgba(132,204,22,.3); }
-.score-card.score-fair      { background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.3); }
-.score-card.score-poor      { background: rgba(239,68,68,.12);  border-color: rgba(239,68,68,.3); }
-.score-val { font-size: 1.4rem; font-weight: 700; }
-.score-lbl { font-size: .72rem; color: #8892a4; text-transform: uppercase; letter-spacing: .07em; margin-top: 4px; }
-.score-card.score-excellent .score-val { color: #4ade80; }
-.score-card.score-good      .score-val { color: #a3e635; }
-.score-card.score-fair      .score-val { color: #fbbf24; }
-.score-card.score-poor      .score-val { color: #f87171; }
-.overall-score-row { margin-top: 6px; }
-.overall-pill { display: inline-block; padding: 6px 18px; border-radius: 99px;
-  font-weight: 600; font-size: .9rem; }
-.overall-pill.score-excellent { background: rgba(34,197,94,.15); color: #4ade80; }
-.overall-pill.score-good      { background: rgba(132,204,22,.15); color: #a3e635; }
-.overall-pill.score-fair      { background: rgba(245,158,11,.15); color: #fbbf24; }
-.overall-pill.score-poor      { background: rgba(239,68,68,.15);  color: #f87171; }
-.score-inline { display: inline-block; padding: 1px 8px; border-radius: 99px;
-  font-size: .78rem; font-weight: 600; }
-.score-inline.score-excellent { background: rgba(34,197,94,.1); color: #4ade80; }
-.score-inline.score-good      { background: rgba(132,204,22,.1); color: #a3e635; }
-.score-inline.score-fair      { background: rgba(245,158,11,.1); color: #fbbf24; }
-.score-inline.score-poor      { background: rgba(239,68,68,.1);  color: #f87171; }
+.block.score-banner { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px; }
+.score-banner .section-title { color: #0f172a !important; font-size: 11pt !important; font-weight: 700 !important; letter-spacing: 0.05em !important; margin-bottom: 12px !important; text-transform: uppercase !important; }
+.score-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; margin-bottom: 16px; }
+.score-card { flex: 1; min-width: 100px; padding: 12px 14px; border-radius: 8px; border: 1px solid transparent; text-align: center; }
+.score-card.score-excellent { background: #f0fdf4; border-color: #bbf7d0; }
+.score-card.score-good      { background: #f7fee7; border-color: #d9f99d; }
+.score-card.score-fair      { background: #fffbeb; border-color: #fde68a; }
+.score-card.score-poor      { background: #fef2f2; border-color: #fecaca; }
+.score-val { font-size: 1.35rem; font-weight: 700; line-height: 1.2; }
+.score-lbl { font-size: .75rem; color: #475569; text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; font-weight: 600; }
+.score-card.score-excellent .score-val { color: #16a34a; }
+.score-card.score-good      .score-val { color: #4d7c0f; }
+.score-card.score-fair      .score-val { color: #d97706; }
+.score-card.score-poor      .score-val { color: #dc2626; }
+.overall-score-row { margin-top: 8px; }
+.overall-pill { display: inline-block; padding: 6px 16px; border-radius: 99px; font-weight: 600; font-size: .85rem; border: 1px solid transparent; }
+.overall-pill.score-excellent { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+.overall-pill.score-good      { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+.overall-pill.score-fair      { background: #fef3c7; color: #d97706; border-color: #fde68a; }
+.overall-pill.score-poor      { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
+.score-inline { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: .78rem; font-weight: 600; border: 1px solid transparent; }
+.score-inline.score-excellent { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+.score-inline.score-good      { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+.score-inline.score-fair      { background: #fef3c7; color: #d97706; border-color: #fde68a; }
+.score-inline.score-poor      { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
 """;
     }
 }

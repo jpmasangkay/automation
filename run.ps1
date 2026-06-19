@@ -171,7 +171,7 @@ if (-not (Test-Path $JarPath)) {
 # ============================================================
 #  STEP 4 -- Install Playwright Chromium (first run only)
 # ============================================================
-$pwCache     = "$env:USERPROFILE\.cache\ms-playwright"
+$pwCache     = if ($env:LOCALAPPDATA) { Join-Path $env:LOCALAPPDATA "ms-playwright" } else { "$env:USERPROFILE\.cache\ms-playwright" }
 $chromiumDir = Get-ChildItem $pwCache -Directory -Filter "chromium*" -ErrorAction SilentlyContinue | Select-Object -First 1
 
 if (-not $chromiumDir) {

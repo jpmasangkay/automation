@@ -72,11 +72,19 @@ public class ContentExtractor {
 
                 logger.info("   Loading page: {}", url);
                 page.navigate(url, new Page.NavigateOptions().setTimeout(timeoutMs));
-                // DOMContentLoaded is much faster than NETWORKIDLE and sufficient for content
-                page.waitForLoadState(LoadState.DOMCONTENTLOADED,
-                        new Page.WaitForLoadStateOptions().setTimeout(timeoutMs));
-                // Wait a short fixed time for JS-driven content to settle, instead of NETWORKIDLE
-                page.waitForTimeout(800);
+                try {
+                    // Wait for network requests to settle (dynamic content/AJAX)
+                    page.waitForLoadState(LoadState.NETWORKIDLE,
+                            new Page.WaitForLoadStateOptions().setTimeout(8000));
+                } catch (Exception e) {
+                    logger.debug("   Network idle wait timed out for {} (proceeding with parsed DOM): {}", label, e.getMessage());
+                    try {
+                        page.waitForLoadState(LoadState.DOMCONTENTLOADED,
+                                new Page.WaitForLoadStateOptions().setTimeout(2000));
+                    } catch (Exception ignored) {}
+                }
+                // Wait an extra short buffer for layout shifts to settle
+                page.waitForTimeout(500);
 
                 // Quick scroll to trigger lazy-loaded images, then wait for them to settle
                 try {
@@ -148,7 +156,8 @@ public class ContentExtractor {
                 // Remove scripts, styles, noscripts
                 document.querySelectorAll('script, style, noscript').forEach(el => el.remove());
 
-                // Remove hidden elements (only inside the body, to avoid deleting <head> metadata)
+                // Keep hidden elements (commented out to avoid removing inactive accordion/tabs/carousel texts)
+                /*
                 document.querySelectorAll('body *').forEach(el => {
                     try {
                         const s = window.getComputedStyle(el);
@@ -157,6 +166,7 @@ public class ContentExtractor {
                         }
                     } catch(_) {}
                 });
+                */
 
                 // Remove structural chrome and cookie banners
                 const selectors = [
@@ -344,9 +354,19 @@ public class ContentExtractor {
                 };
 
                 if (window.dataLayer && Array.isArray(window.dataLayer)) {
-                    window.dataLayer.forEach((item, idx) => {
-                        if (item && typeof item === 'object') scan(item, `dataLayer[${idx}].`);
-                    });
+                    const isMetadataObject = (item) => {
+                        if (!item || typeof item !== 'object') return false;
+                        if (item.event === 'metadata') return true;
+                        const keys = ['brand', 'brand_id', 'country', 'pageName'];
+                        return keys.some(k => k in item);
+                    };
+                    let metaObj = window.dataLayer.find(isMetadataObject);
+                    if (!metaObj && window.dataLayer.length > 1) {
+                        metaObj = window.dataLayer[1];
+                    }
+                    if (metaObj && typeof metaObj === 'object') {
+                        scan(metaObj, 'dataLayer.');
+                    }
                 }
                 if (window.digitalData) scan(window.digitalData, 'digitalData.');
                 if (window.siteData) scan(window.siteData, 'siteData.');
