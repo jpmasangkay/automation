@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Generates a single {@code reports/dashboard.html} after all comparison pairs have completed.
  * The dashboard provides a sortable, filterable, at-a-glance summary with links to each
- * individual HTML report. Individual PDFs are unaffected.
+ * individual HTML report.
  */
 public class DashboardGenerator {
 
@@ -56,7 +56,7 @@ public class DashboardGenerator {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comparison Run Dashboard</title>
+<title>Dashboard</title>
 <style>
 """);
         sb.append(css());
@@ -69,27 +69,26 @@ public class DashboardGenerator {
         // ── Header ────────────────────────────────────────────────────────────
         sb.append("<header class=\"dash-header\">\n");
         sb.append("  <div class=\"header-inner\">\n");
-        sb.append("    <div class=\"brand\"><span class=\"brand-icon\">⚡</span> Site Content Comparator</div>\n");
-        sb.append("    <div class=\"run-meta\">Run completed: <strong>").append(esc(ts)).append("</strong></div>\n");
+        sb.append("    <div class=\"brand\">Comparator</div>\n");
+        sb.append("    <div class=\"run-meta\">").append(esc(ts)).append("</div>\n");
         sb.append("  </div>\n</header>\n");
 
         // ── KPI cards ─────────────────────────────────────────────────────────
         sb.append("<main class=\"dash-main\">\n");
         sb.append("<section class=\"kpi-row\">\n");
-        kpiCard(sb, "Total Pairs",  String.valueOf(entries.size()), "kpi-neutral");
-        kpiCard(sb, "Passed",       String.valueOf(passed),         "kpi-pass");
-        kpiCard(sb, "Failed",       String.valueOf(failed),         failed > 0 ? "kpi-fail" : "kpi-neutral");
-        kpiCard(sb, "Avg Similarity", String.format("%.1f%%", avgScore), scoreClass(avgScore));
+        kpiCard(sb, "Total",  String.valueOf(entries.size()), "kpi-neutral");
+        kpiCard(sb, "Pass",       String.valueOf(passed),         "kpi-pass");
+        kpiCard(sb, "Fail",       String.valueOf(failed),         failed > 0 ? "kpi-fail" : "kpi-neutral");
+        kpiCard(sb, "Score", String.format("%.1f%%", avgScore), scoreClass(avgScore));
         sb.append("</section>\n");
 
         // ── Filter bar ────────────────────────────────────────────────────────
         sb.append("""
 <section class="filter-bar">
-  <span class="filter-label">Filter:</span>
   <button class="filter-btn active" data-filter="all"  onclick="applyFilter('all')">All</button>
-  <button class="filter-btn"        data-filter="pass" onclick="applyFilter('pass')">✅ Pass</button>
-  <button class="filter-btn"        data-filter="fail" onclick="applyFilter('fail')">❌ Fail</button>
-  <input  class="search-box" type="search" placeholder="Search URL…" oninput="applySearch(this.value)" />
+  <button class="filter-btn"        data-filter="pass" onclick="applyFilter('pass')">Pass</button>
+  <button class="filter-btn"        data-filter="fail" onclick="applyFilter('fail')">Fail</button>
+  <input  class="search-box" type="search" placeholder="Search…" oninput="applySearch(this.value)" />
 </section>
 """);
 
@@ -100,14 +99,14 @@ public class DashboardGenerator {
 <thead>
 <tr>
   <th class="col-num sortable" onclick="sortBy('num')">#</th>
-  <th class="sortable" onclick="sortBy('siteA')">Site A <span class="sort-icon">⇅</span></th>
-  <th class="sortable" onclick="sortBy('siteB')">Site B <span class="sort-icon">⇅</span></th>
-  <th class="col-score sortable" onclick="sortBy('text')">Text <span class="sort-icon">⇅</span></th>
-  <th class="col-score sortable" onclick="sortBy('img')">Images <span class="sort-icon">⇅</span></th>
-  <th class="col-score sortable" onclick="sortBy('links')">Links <span class="sort-icon">⇅</span></th>
-  <th class="col-score sortable" onclick="sortBy('meta')">Meta <span class="sort-icon">⇅</span></th>
-  <th class="col-score sortable" onclick="sortBy('dl')">DataLayer <span class="sort-icon">⇅</span></th>
-  <th class="col-overall sortable" onclick="sortBy('overall')">Overall <span class="sort-icon">⇅</span></th>
+  <th class="sortable" onclick="sortBy('siteA')">Site A <span class="sort-icon"></span></th>
+  <th class="sortable" onclick="sortBy('siteB')">Site B <span class="sort-icon"></span></th>
+  <th class="col-score sortable" onclick="sortBy('text')">Text <span class="sort-icon"></span></th>
+  <th class="col-score sortable" onclick="sortBy('img')">Images <span class="sort-icon"></span></th>
+  <th class="col-score sortable" onclick="sortBy('links')">Links <span class="sort-icon"></span></th>
+  <th class="col-score sortable" onclick="sortBy('meta')">Metadata <span class="sort-icon"></span></th>
+  <th class="col-score sortable" onclick="sortBy('dl')">DataLayer <span class="sort-icon"></span></th>
+  <th class="col-overall sortable" onclick="sortBy('overall')">Overall <span class="sort-icon"></span></th>
   <th>Verdict</th>
   <th>Report</th>
 </tr>
@@ -123,7 +122,7 @@ public class DashboardGenerator {
             String verdict  = pass ? "<span class=\"badge badge-pass\">PASS</span>"
                                    : "<span class=\"badge badge-fail\">FAIL</span>";
             String reportLink = "<a class=\"btn-open-pdf\" href=\"" + esc(entry.reportBasename()) +
-                    ".pdf\"  target=\"_blank\">📄 Open PDF</a>";
+                    ".pdf\"  target=\"_blank\">PDF</a>";
 
             sb.append("<tr class=\"").append(rowClass).append("\"")
               .append(" data-verdict=\"").append(pass ? "pass" : "fail").append("\"")
@@ -169,8 +168,8 @@ public class DashboardGenerator {
 
     private static void kpiCard(StringBuilder sb, String label, String value, String cls) {
         sb.append("<div class=\"kpi-card ").append(cls).append("\">\n");
+        sb.append("<div class=\"kpi-label\">").append(label).append("</div>\n");
         sb.append("  <div class=\"kpi-value\">").append(value).append("</div>\n");
-        sb.append("  <div class=\"kpi-label\">").append(label).append("</div>\n");
         sb.append("</div>\n");
     }
 
@@ -207,47 +206,40 @@ public class DashboardGenerator {
 
     private static String css() {
         return """
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg:        #080d18;
-  --surface:   #0f1629;
-  --surface2:  #151d35;
-  --border:    rgba(99,130,255,.15);
-  --text:      #e2e8f0;
-  --muted:     #8892a4;
-  --accent:    #6382ff;
-  --pass:      #22c55e;
-  --fail:      #ef4444;
-  --warn:      #f59e0b;
-  --excellent: #22c55e;
-  --good:      #84cc16;
-  --fair:      #f59e0b;
-  --poor:      #ef4444;
-  --radius:    12px;
+  --bg:        #fafafa;
+  --surface:   #ffffff;
+  --surface2:  #f5f5f5;
+  --border:    #e5e5e5;
+  --text:      #171717;
+  --muted:     #737373;
+  --accent:    #000000;
+  --pass:      #16a34a;
+  --fail:      #dc2626;
+  --excellent: #16a34a;
+  --good:      #65a30d;
+  --fair:      #d97706;
+  --poor:      #dc2626;
+  --radius:    4px;
 }
-body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
 /* Header */
-.dash-header { background: linear-gradient(135deg, #0f1629 0%, #1a2444 100%);
-  border-bottom: 1px solid var(--border); padding: 0 32px; height: 64px; display: flex; align-items: center; }
+.dash-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; height: 60px; display: flex; align-items: center; }
 .header-inner { width: 100%; display: flex; justify-content: space-between; align-items: center; }
-.brand { font-size: 1.1rem; font-weight: 700; letter-spacing: -.02em; color: var(--text);
-  display: flex; align-items: center; gap: 8px; }
-.brand-icon { font-size: 1.3rem; }
+.brand { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
 .run-meta { font-size: .8rem; color: var(--muted); }
-.run-meta strong { color: var(--text); }
 
 /* Main */
-.dash-main { max-width: 1600px; margin: 0 auto; padding: 28px 32px 48px; }
+.dash-main { max-width: 1600px; margin: 0 auto; padding: 24px 32px 48px; }
 
 /* KPI cards */
-.kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
-.kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 20px 24px; transition: transform .2s, box-shadow .2s; }
-.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
-.kpi-value { font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: 6px; }
-.kpi-label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
+.kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+.kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; }
+.kpi-value { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
+.kpi-label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
 .kpi-pass .kpi-value { color: var(--pass); }
 .kpi-fail .kpi-value { color: var(--fail); }
 .kpi-neutral .kpi-value { color: var(--accent); }
@@ -257,71 +249,66 @@ body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color
 .score-poor      .kpi-value { color: var(--poor); }
 
 /* Filter bar */
-.filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
-.filter-label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
-.filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted);
-  padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: .82rem; font-family: inherit;
-  transition: all .2s; }
-.filter-btn.active, .filter-btn:hover { background: var(--accent); border-color: var(--accent);
-  color: #fff; }
+.filter-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  padding: 5px 12px; border-radius: 16px; cursor: pointer; font-size: .78rem; font-family: inherit; font-weight: 500;
+  transition: all .1s; }
+.filter-btn.active, .filter-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 .search-box { margin-left: auto; background: var(--surface); border: 1px solid var(--border);
-  color: var(--text); padding: 6px 14px; border-radius: 8px; font-size: .82rem;
-  font-family: inherit; width: 240px; outline: none; transition: border-color .2s; }
+  color: var(--text); padding: 5px 12px; border-radius: var(--radius); font-size: .78rem;
+  font-family: inherit; width: 220px; outline: none; transition: border-color .1s; }
 .search-box:focus { border-color: var(--accent); }
 
 /* Table wrapper */
-.table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  overflow: hidden; }
-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+table { width: 100%; border-collapse: collapse; font-size: .8rem; }
 thead { background: var(--surface2); }
-th { padding: 12px 14px; text-align: left; font-size: .72rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .07em; color: var(--muted);
+th { padding: 10px 12px; text-align: left; font-size: .72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
   border-bottom: 1px solid var(--border); white-space: nowrap; }
 th.sortable { cursor: pointer; user-select: none; }
 th.sortable:hover { color: var(--accent); }
 .sort-icon { opacity: .5; font-size: .7rem; }
-td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-tbody tr { transition: background .15s; }
-tbody tr:hover { background: rgba(99,130,255,.05); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 tbody tr:last-child td { border-bottom: none; }
-.row-fail { background: rgba(239,68,68,.03); }
+.row-fail { background: rgba(220,38,38,.01); }
 .col-num { width: 40px; color: var(--muted); text-align: center; }
 .col-score { width: 80px; text-align: center; }
-.col-overall { width: 140px; }
+.col-overall { width: 130px; }
 .url-cell { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  color: var(--muted); font-size: .78rem; font-family: monospace; }
+  color: var(--muted); font-size: .75rem; font-family: monospace; }
 
 /* Score badges */
-.score-badge { display: inline-block; padding: 2px 8px; border-radius: 99px;
+.score-badge { display: inline-block; padding: 2px 6px; border-radius: 2px;
   font-size: .74rem; font-weight: 600; }
-.score-excellent { background: rgba(34,197,94,.15);  color: #4ade80; }
-.score-good      { background: rgba(132,204,22,.15); color: #a3e635; }
-.score-fair      { background: rgba(245,158,11,.15); color: #fbbf24; }
-.score-poor      { background: rgba(239,68,68,.15);  color: #f87171; }
+.score-excellent { background: rgba(22,163,74,.08);  color: var(--excellent); }
+.score-good      { background: rgba(101,163,13,.08); color: var(--good); }
+.score-fair      { background: rgba(217,119,6,.08);  color: var(--fair); }
+.score-poor      { background: rgba(220,38,38,.08);   color: var(--poor); }
 
 /* Overall cell */
 .overall-wrap { display: flex; flex-direction: column; gap: 4px; }
-.score-label { font-size: .8rem; font-weight: 600; }
-.progress-bar { height: 4px; background: rgba(255,255,255,.08); border-radius: 2px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 2px; transition: width .6s ease; }
+.score-label { font-size: .78rem; font-weight: 600; }
+.progress-bar { height: 3px; background: rgba(0,0,0,.05); border-radius: 1px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 1px; }
 .progress-fill.score-excellent { background: var(--excellent); }
 .progress-fill.score-good      { background: var(--good); }
 .progress-fill.score-fair      { background: var(--fair); }
 .progress-fill.score-poor      { background: var(--poor); }
 
 /* Verdict badges */
-.badge { display: inline-block; padding: 3px 10px; border-radius: 99px;
-  font-size: .74rem; font-weight: 700; letter-spacing: .04em; }
-.badge-pass { background: rgba(34,197,94,.15); color: #4ade80; }
-.badge-fail { background: rgba(239,68,68,.15); color: #f87171; }
+.badge { display: inline-block; padding: 2px 6px; border-radius: 2px;
+  font-size: .72rem; font-weight: 700; letter-spacing: .02em; }
+.badge-pass { background: rgba(22,163,74,.08); color: var(--pass); }
+.badge-fail { background: rgba(220,38,38,.08); color: var(--fail); }
 
 /* Report links */
-.btn-open-pdf { display: inline-block; padding: 6px 14px; border-radius: 6px;
-  font-size: .78rem; font-weight: 600; text-decoration: none;
-  background: var(--accent); color: #fff;
-  border: 1px solid var(--accent); transition: all .2s;
-  box-shadow: 0 2px 4px rgba(99,130,255,.2); }
-.btn-open-pdf:hover { background: #4f6be5; border-color: #4f6be5; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(99,130,255,.3); }
+.btn-open-pdf { display: inline-block; padding: 4px 10px; border-radius: var(--radius);
+  font-size: .74rem; font-weight: 600; text-decoration: none;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border);
+  transition: all .1s; }
+.btn-open-pdf:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 
 /* Hidden */
 .hidden { display: none !important; }

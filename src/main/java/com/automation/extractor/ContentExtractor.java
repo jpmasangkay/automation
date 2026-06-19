@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class ContentExtractor {
@@ -21,6 +22,9 @@ public class ContentExtractor {
     private final FingerprintCache cache;
     private static final Set<String> GENERIC_SLUGS = new HashSet<>(Arrays.asList(
             "index", "index.html", "home", "default", "main", "..", "."));
+    private final java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
+            .followRedirects(java.net.http.HttpClient.Redirect.ALWAYS)
+            .build();
 
     public ContentExtractor(Browser browser, FingerprintCache cache) {
         this.browser = browser;
@@ -33,14 +37,20 @@ public class ContentExtractor {
         int timeoutMs  = Config.getTimeoutSeconds() * 1000;
         int maxRetries = Config.getRetries();
 
-        // ── HEAD pre-check (also extracts fingerprint headers) ────────────────
+        // ── HEAD pre-check via native lightweight HttpClient (takes ~150ms instead of 1.5s) ──
         String etag    = null;
         String lastMod = null;
-        try (BrowserContext preCtx = browser.newContext()) {
-            APIResponse head = preCtx.request().head(url,
-                    com.microsoft.playwright.options.RequestOptions.create().setTimeout(8_000));
-            etag    = head.headers().get("etag");
-            lastMod = head.headers().get("last-modified");
+        try {
+            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                    .uri(java.net.URI.create(url))
+                    .method("HEAD", java.net.http.HttpRequest.BodyPublishers.noBody())
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+                    .timeout(java.time.Duration.ofSeconds(4))
+                    .build();
+            java.net.http.HttpResponse<Void> response = httpClient.send(request, 
+                    java.net.http.HttpResponse.BodyHandlers.discarding());
+            etag = response.headers().firstValue("etag").orElse(null);
+            lastMod = response.headers().firstValue("last-modified").orElse(null);
         } catch (Exception e) {
             logger.debug("Site {} HEAD check skipped: {}", label, e.getMessage());
         }
@@ -66,49 +76,39 @@ public class ContentExtractor {
                 page.route("**/*tealiumiq.com**",         Route::abort);
                 page.route("**/*google-analytics.com**",  Route::abort);
                 page.route("**/*googletagmanager.com**",  Route::abort);
-                // Also block fonts/ads which add network idle delay
                 page.route("**/*.woff2",                  Route::abort);
                 page.route("**/*.woff",                   Route::abort);
 
                 logger.info("   Loading page: {}", url);
                 page.navigate(url, new Page.NavigateOptions().setTimeout(timeoutMs));
                 try {
-                    // Wait for network requests to settle (dynamic content/AJAX)
-                    page.waitForLoadState(LoadState.NETWORKIDLE,
-                            new Page.WaitForLoadStateOptions().setTimeout(8000));
+                    // Wait for initial DOM load state (LOAD state is highly sufficient)
+                    page.waitForLoadState(LoadState.LOAD,
+                            new Page.WaitForLoadStateOptions().setTimeout(4000));
                 } catch (Exception e) {
-                    logger.debug("   Network idle wait timed out for {} (proceeding with parsed DOM): {}", label, e.getMessage());
-                    try {
-                        page.waitForLoadState(LoadState.DOMCONTENTLOADED,
-                                new Page.WaitForLoadStateOptions().setTimeout(2000));
-                    } catch (Exception ignored) {}
+                    logger.debug("   Load state wait timed out: {}", e.getMessage());
                 }
-                // Wait an extra short buffer for layout shifts to settle
-                page.waitForTimeout(500);
 
-                // Quick scroll to trigger lazy-loaded images, then wait for them to settle
+                // Short sleep buffer for page elements to settle (0.3s)
+                page.waitForTimeout(300);
+ 
+                // Quick scroll to trigger lazy-loaded images
                 try {
                     page.evaluate(
                         "() => new Promise(resolve => {" +
                         "  let pos = 0;" +
                         "  const step = () => {" +
                         "    window.scrollBy(0, 600); pos += 600;" +
-                        "    if (pos < document.body.scrollHeight && pos < 8000) { setTimeout(step, 60); }" +
+                        "    if (pos < document.body.scrollHeight && pos < 8000) { setTimeout(step, 40); }" +
                         "    else { window.scrollTo(0, 0); resolve(); }" +
                         "  }; step();" +
                         "})");
                 } catch (Exception e) {
                     logger.debug("Scroll skipped for {}: {}", label, e.getMessage());
                 }
-
-                // Wait for all lazy images to finish loading before extracting
-                try {
-                    page.waitForFunction(
-                        "() => Array.from(document.images).every(img => img.complete)",
-                        new Page.WaitForFunctionOptions().setTimeout(6_000));
-                } catch (Exception e) {
-                    logger.debug("Image completion wait timed out for {} — proceeding with partial load.", label);
-                }
+ 
+                // Wait very briefly for final layout elements
+                page.waitForTimeout(200);
 
                 logger.info("   Extracting content...");
                 cleanDom(page);
@@ -210,25 +210,53 @@ public class ContentExtractor {
             ".map(img => ({ src: img.getAttribute('src')||'', currentSrc: img.currentSrc||img.src||'' }))" +
             ".filter(info => info.currentSrc.toLowerCase().startsWith('http'))");
 
-        List<ImageData> images = new ArrayList<>();
-        int index = 0;
-        for (Map<String, String> info : imgInfoList) {
-            String src        = info.get("src");
-            String currentSrc = info.get("currentSrc");
-            // Strip CDN cache-busting query params so the same image always produces the same hash
-            String downloadUrl = stripCacheBustingParams(currentSrc);
-            try {
-                // Download image bytes once via the existing context's request API (no new page)
-                byte[] imageBytes = context.request().get(downloadUrl,
-                        com.microsoft.playwright.options.RequestOptions.create().setTimeout(8_000)).body();
-                String hash = md5(imageBytes);
-                images.add(new ImageData(index, src.isBlank() ? currentSrc : src, hash, hash));
-                index++;
-            } catch (Exception e) {
-                logger.debug("Skipped image {}: {}", downloadUrl, e.getMessage());
+        List<ImageData> images = java.util.Collections.synchronizedList(new ArrayList<>());
+        
+        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            List<Future<?>> futures = new ArrayList<>();
+            for (Map<String, String> info : imgInfoList) {
+                futures.add(executor.submit(() -> {
+                    String src        = info.get("src");
+                    String currentSrc = info.get("currentSrc");
+                    String downloadUrl = stripCacheBustingParams(currentSrc);
+                    try {
+                        // Native HTTP request to download image bytes concurrently
+                        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                                .uri(java.net.URI.create(downloadUrl))
+                                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+                                .timeout(java.time.Duration.ofSeconds(4))
+                                .build();
+                        
+                        java.net.http.HttpResponse<byte[]> response = this.httpClient.send(request, 
+                                java.net.http.HttpResponse.BodyHandlers.ofByteArray());
+                        
+                        if (response.statusCode() == 200) {
+                            byte[] imageBytes = response.body();
+                            String hash = md5(imageBytes);
+                            images.add(new ImageData(0, src.isBlank() ? currentSrc : src, hash, hash));
+                        } else {
+                            logger.debug("Failed to download image {}, status code: {}", downloadUrl, response.statusCode());
+                        }
+                    } catch (Exception e) {
+                        logger.debug("Skipped image {}: {}", downloadUrl, e.getMessage());
+                    }
+                }));
+            }
+            // Wait for all downloads to finish
+            for (Future<?> f : futures) {
+                try {
+                    f.get();
+                } catch (Exception ignored) {}
             }
         }
-        return images;
+
+        // Re-index images sequentially
+        List<ImageData> sortedImages = new ArrayList<>();
+        int index = 0;
+        for (ImageData img : images) {
+            sortedImages.add(new ImageData(index++, img.getSrc(), img.getHash(), img.getPerceptualHash()));
+        }
+        return sortedImages;
     }
 
     /**

@@ -31,6 +31,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    
+    private static final ThreadLocal<Playwright> playwrightThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<Browser> browserThreadLocal = new ThreadLocal<>();
+
+    private static Browser getThreadLocalBrowser() {
+        Browser browser = browserThreadLocal.get();
+        if (browser == null) {
+            Playwright playwright = Playwright.create();
+            browser = playwright.chromium().launch(
+                    new BrowserType.LaunchOptions().setHeadless(true).setArgs(java.util.List.of("--headless=new")));
+            playwrightThreadLocal.set(playwright);
+            browserThreadLocal.set(browser);
+        }
+        return browser;
+    }
 
     private static class UrlPair {
         final String urlA;
@@ -84,9 +99,8 @@ public class Main {
                     logger.info("   Site A : {}", pair.urlA);
                     logger.info("   Site B : {}", pair.urlB);
                     
-                    try (Playwright playwright = Playwright.create();
-                         Browser browser = playwright.chromium().launch(
-                                 new BrowserType.LaunchOptions().setHeadless(true).setArgs(java.util.List.of("--headless=new")))) {
+                    try {
+                        Browser browser = getThreadLocalBrowser();
                         
                         ContentExtractor extractor = new ContentExtractor(browser, cache);
                         ReportFormatter reportFormatter = new ReportFormatter(browser);
@@ -142,6 +156,25 @@ public class Main {
             cache.persist();
 
         } finally {
+            // Gracefully close all thread-local browser instances
+            List<Future<?>> cleanups = new ArrayList<>();
+            for (int i = 0; i < threads; i++) {
+                cleanups.add(pool.submit(() -> {
+                    Browser browser = browserThreadLocal.get();
+                    if (browser != null) {
+                        try { browser.close(); } catch (Exception ignored) {}
+                        browserThreadLocal.remove();
+                    }
+                    Playwright playwright = playwrightThreadLocal.get();
+                    if (playwright != null) {
+                        try { playwright.close(); } catch (Exception ignored) {}
+                        playwrightThreadLocal.remove();
+                    }
+                }));
+            }
+            for (Future<?> f : cleanups) {
+                try { f.get(2, java.util.concurrent.TimeUnit.SECONDS); } catch (Exception ignored) {}
+            }
             pool.shutdown();
         }
         

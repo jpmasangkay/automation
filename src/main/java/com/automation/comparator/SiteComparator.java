@@ -45,37 +45,36 @@ public class SiteComparator {
         int visualMatchImagesCount = 0;
         int mismatchCount = 0;
 
-        // Build lookup maps for efficient hash-first and filename-first matching
-        // Key: MD5 hash → ImageData from B
-        Map<String, ImageData> hashMapB = new LinkedHashMap<>();
-        // Key: filename slug → ImageData from B
-        Map<String, ImageData> fileMapB = new LinkedHashMap<>();
-        for (ImageData imgB : imagesB) {
-            hashMapB.putIfAbsent(imgB.getHash(), imgB);
-            String slug = extractFilename(imgB.getSrc());
-            if (!slug.isEmpty())
-                fileMapB.putIfAbsent(slug, imgB);
-        }
-
-        Set<ImageData> usedFromB = new LinkedHashSet<>();
+        // Keep a list of all images in B that are available to be matched
+        List<ImageData> availableB = new ArrayList<>(imagesB);
 
         for (ImageData imgA : imagesA) {
-            // 1. Exact MD5 hash match (same binary content, any URL)
             ImageData matchB = null;
-            if (hashMapB.containsKey(imgA.getHash()) && !usedFromB.contains(hashMapB.get(imgA.getHash()))) {
-                matchB = hashMapB.get(imgA.getHash());
-            }
-            // 2. Filename slug match (same filename, possibly different CDN path)
-            if (matchB == null) {
-                String slugA = extractFilename(imgA.getSrc());
-                if (!slugA.isEmpty() && fileMapB.containsKey(slugA) && !usedFromB.contains(fileMapB.get(slugA))) {
-                    matchB = fileMapB.get(slugA);
+
+            // 1. First try exact MD5 hash match
+            for (ImageData imgB : availableB) {
+                if (imgA.getHash().equals(imgB.getHash())) {
+                    matchB = imgB;
+                    break;
                 }
             }
-            // 3. No match found — mark as MISSING IN B (never use positional fallback)
+
+            // 2. If no hash match, try filename slug match
+            if (matchB == null) {
+                String slugA = extractFilename(imgA.getSrc());
+                if (!slugA.isEmpty()) {
+                    for (ImageData imgB : availableB) {
+                        String slugB = extractFilename(imgB.getSrc());
+                        if (slugA.equals(slugB)) {
+                            matchB = imgB;
+                            break;
+                        }
+                    }
+                }
+            }
 
             if (matchB != null) {
-                usedFromB.add(matchB);
+                availableB.remove(matchB);
                 boolean hashMatch = imgA.getHash().equals(matchB.getHash());
                 if (hashMatch) {
                     matchedImagesCount++;
@@ -100,13 +99,13 @@ public class SiteComparator {
                 matchesList.add(new ImageMatch(imgA, null, "MISSING IN B"));
             }
         }
-        // Images in B that were never matched
-        for (ImageData imgB : imagesB) {
-            if (!usedFromB.contains(imgB)) {
-                mismatchCount++;
-                matchesList.add(new ImageMatch(null, imgB, "MISSING IN A"));
-            }
+
+        // Remaining images in availableB are missing in A
+        for (ImageData imgB : availableB) {
+            mismatchCount++;
+            matchesList.add(new ImageMatch(null, imgB, "MISSING IN A"));
         }
+
         boolean imagesMatch = mismatchCount == 0;
         ImageDiff imageDiff = new ImageDiff(imagesMatch, matchesList, matchedImagesCount, visualMatchImagesCount,
                 mismatchCount);

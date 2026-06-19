@@ -1,164 +1,725 @@
 {
+  "https://www.campus.sanofi/in": {
+    "url": "https://www.campus.sanofi/in",
+    "cachedAtEpochMs": 1781883132591,
+    "rawText": "Skip To Main Content\n\nThis website is intended exclusively for Registered Medical Practitioners (RMP’s) registered with the National Medical Commission (NMC) and their respective State Medical Councils/statutory authorities in India.\n\nWelcome To Campus Sanofi India\n\nThe online portal for healthcare professionals where science, knowledge, and education meet\n\nSign up\nLog in\nWhat\u0027s new in Sanofi Campus\n\nDiabetes\n\nRead More\n\nInfectious Diseases and Vaccines\n\nRead More\n\nKidney Transplant\n\nRead More\nMore about science\n\nChoose a therapeutic area to find related scientific content\n\nDiabetes\n\nRead More\n\nKidney Transplant\n\nRead More\n\nInfectious Diseases and Vaccines\n\nRead More\nLatest trends\n\nExplore the most popular scientific content among Sanofi Campus users\n\nSoli-CGM study\n\nEffect of iGlarLixi on continuous glucose monitoring measured time in range in insulin-naive adults with suboptimally controlled type 2 diabetes\n\nLearn more\nFixed Ratio Combination in Diabetes Care Webinar Key Takeaway\n\nFixed Ratio Combination (FRC) simplify diabetes management by combining complementary agents in a single injection. Our webinar explored the clinical evidence and practical applications of FRC therapies in managing type 2 diabetes. Watch this exclusive video to explore the key highlights from the Fixed Ratio Combination in Diabetes Care Webinar\n\nLearn more\nCONGRESS-HIGHLIGHTS\nATTD 2026\n\nAdvanced Technologies \u0026 Treatments for Diabetes\n\nLearn more\nInsulinToolKit\n\nAre you looking for a simplification tool for insulin initiation and titration in your patients? The wait is over. \nInsulinToolKit is a Decision Support tool designed to support patients with initiation and titration of their insulin regimes in a simplified manner to help optimize glycemic control.\n\nLearn more\nGLOBAL \u0026 INDIAN BURDEN OF DIABETES WITH ITS PATHOPHYSIOLOGY \u0026 PROGRESSION OF THE DISEASE\nLearn more\nCOMPLICATIONS OF DIABETES IF NOT CONTROLLED\nLearn more\nGLOBAL \u0026 INDIAN BURDEN OF DIABETES WITH ITS PATHOPHYSIOLOGY \u0026 PROGRESSION OF THE DISEASE\nLearn more\nCONGRESS-HIGHLIGHTS\nEASD 2025: European Association for the study of Diabetes\nLearn more\nSupport for your patients\n\nDiscover the selection of support materials for patients from different therapeutic areas\n\nView all\nMEET-OUR-RARE-DISEASE-FIGHTERS\nFrom Diagnosis to Recovery: Akash Prasad’s Battle with MPS I\nLearn more\nMEET-OUR-RARE-DISEASE-FIGHTERS\nLiving Well with Gaucher: Alka Singh’s Testimony of Early Diagnosis and Treatment\nLearn more\nMULTIPLE-SCLEROSIS\nWhat you should know about LEMTRADA® (alemtuzumab)\n\nCall your neurologist right away to report these symptoms no matter if they are new, worsening or returning symptoms. Seek medical attention if you cannot reach your own doctor, and make sure you show them this card.\n\nLearn more\nMULTIPLE-SCLEROSIS\nLemtrada Treatment Guide\n\nImportant safety information you should know when starting therapy with LEMTRADA (alemtuzumab)\n\nLearn more\nA healthcare professional’s guide\nLearn more\nHealthcare professional checklist\nLearn more\nDiscover Easy Diabetes Management Tips\nLearn more\nAccess all premium content\n\nEnjoy scientific studies, courses, events, clinical cases and much more on Campus.\n\nFor healthcare professionals only.\n\nDo you already have a Campus account? Sign in\n\nCreate your account in 2 minutes\n\nThis website is intended exclusively for Registered Medical Practitioners (RMP’s) registered with the National Medical Commission (NMC) and their respective State Medical Councils/statutory authorities in India.",
+    "images": [
+      {
+        "index": 0,
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Infectious-Diseases-Vaccines.jpg/jcr:content.jpg",
+        "hash": "a1f1900dedc977afe8d0861bd9d190ce",
+        "perceptualHash": "a1f1900dedc977afe8d0861bd9d190ce"
+      },
+      {
+        "index": 1,
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/test-img-4.jpg/jcr:content.jpg",
+        "hash": "bb49da456540f93da28dbd39365da3e4",
+        "perceptualHash": "bb49da456540f93da28dbd39365da3e4"
+      },
+      {
+        "index": 2,
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Kidney-Transplant.jpg/jcr:content.jpg",
+        "hash": "5bd97170abb11bb0faf52e2c36e04393",
+        "perceptualHash": "5bd97170abb11bb0faf52e2c36e04393"
+      },
+      {
+        "index": 3,
+        "src": "/dam/jcr:d887e836-c3a8-4bae-b8f8-6a7a85f1519d/thumbnail.2025-11-10-11-31-05.svg",
+        "hash": "0dd6e468766661ee684e04b65d7144ed",
+        "perceptualHash": "0dd6e468766661ee684e04b65d7144ed"
+      },
+      {
+        "index": 4,
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/test-img-4.jpg/jcr:content.jpg",
+        "hash": "bb49da456540f93da28dbd39365da3e4",
+        "perceptualHash": "bb49da456540f93da28dbd39365da3e4"
+      },
+      {
+        "index": 5,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/Diabetes/webinar/thumb-img.png/jcr:content/thumb-img.jpg",
+        "hash": "e2fa6cf7d22fd101093d30e96d9bbd96",
+        "perceptualHash": "e2fa6cf7d22fd101093d30e96d9bbd96"
+      },
+      {
+        "index": 6,
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Infectious-Diseases-Vaccines.jpg/jcr:content.jpg",
+        "hash": "a1f1900dedc977afe8d0861bd9d190ce",
+        "perceptualHash": "a1f1900dedc977afe8d0861bd9d190ce"
+      },
+      {
+        "index": 7,
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Kidney-Transplant.jpg/jcr:content.jpg",
+        "hash": "5bd97170abb11bb0faf52e2c36e04393",
+        "perceptualHash": "5bd97170abb11bb0faf52e2c36e04393"
+      },
+      {
+        "index": 8,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/Diabetes/2026-attd-postcongress-highlights/web-banner.jpg/jcr:content/web-banner.jpg",
+        "hash": "c6deb3b905e81865f49ee53f5294a431",
+        "perceptualHash": "c6deb3b905e81865f49ee53f5294a431"
+      },
+      {
+        "index": 9,
+        "src": "/dam/jcr:d97a7aee-7e5e-409a-bcb1-0c1543e446cb/lemtrada-thumbnail-v1.2025-11-14-06-19-37.svg",
+        "hash": "73fe94d4f19d5990638cee3879fade86",
+        "perceptualHash": "73fe94d4f19d5990638cee3879fade86"
+      },
+      {
+        "index": 10,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "c95ec182800d9344b722d1a4dc8eb4e4",
+        "perceptualHash": "c95ec182800d9344b722d1a4dc8eb4e4"
+      },
+      {
+        "index": 11,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/insulin-toolkit/insulin-toolkit.jpg/jcr:content/insulin-toolkit.jpg",
+        "hash": "3dabe6ae37ebb2e642cde23aaeb147b9",
+        "perceptualHash": "3dabe6ae37ebb2e642cde23aaeb147b9"
+      },
+      {
+        "index": 12,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "1530d8d18445a8792c63b4c3295bcc8e",
+        "perceptualHash": "1530d8d18445a8792c63b4c3295bcc8e"
+      },
+      {
+        "index": 13,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/article-image/soli-cgm-study/webinar-thumbnail.png/jcr:content/webinar-thumbnail.png",
+        "hash": "309d23316659bb9b5f449f8004ec7c6d",
+        "perceptualHash": "309d23316659bb9b5f449f8004ec7c6d"
+      },
+      {
+        "index": 14,
+        "src": "/dam/jcr:5cd83aea-e6bc-41a3-b93b-b92717f88f8f/image-3.2023-09-22-14-07-26.webp",
+        "hash": "f191985476b479f7925e49f29d344694",
+        "perceptualHash": "f191985476b479f7925e49f29d344694"
+      },
+      {
+        "index": 15,
+        "src": "/dam/jcr:7587e2a2-2e46-4008-978c-5e2ccb239855/Main%20Banner_Campus%20Site%2001-01.2024-05-08-07-55-45.svg",
+        "hash": "a16fcdfbda418d1fd19a60d2e2822ca8",
+        "perceptualHash": "a16fcdfbda418d1fd19a60d2e2822ca8"
+      },
+      {
+        "index": 16,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "a4eb8f1f8d5a240daa4a1d718db6c74b",
+        "perceptualHash": "a4eb8f1f8d5a240daa4a1d718db6c74b"
+      },
+      {
+        "index": 17,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "4ba39d53f9d854289e724d5149bdd47e",
+        "perceptualHash": "4ba39d53f9d854289e724d5149bdd47e"
+      },
+      {
+        "index": 18,
+        "src": "/dam/jcr:c22e053f-0af5-4b69-96ec-de27d14a54ee/alka-singh-gaucher-mobile-banner.2025-11-14-07-04-18.svg",
+        "hash": "cf693234ea08fb50b3b8d02189d19120",
+        "perceptualHash": "cf693234ea08fb50b3b8d02189d19120"
+      },
+      {
+        "index": 19,
+        "src": "/dam/jcr:7f4187ac-3a42-4af8-8ec2-84848426b0ca/akash-thumb-abhishek-banerjee.2025-11-28-06-33-42.svg",
+        "hash": "c6af649a525030e1a1697cac8e700d80",
+        "perceptualHash": "c6af649a525030e1a1697cac8e700d80"
+      },
+      {
+        "index": 20,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "eca147b3cb3f345432fb40317187d305",
+        "perceptualHash": "eca147b3cb3f345432fb40317187d305"
+      },
+      {
+        "index": 21,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "520806c17cc1861adbb67a88c4048ffd",
+        "perceptualHash": "520806c17cc1861adbb67a88c4048ffd"
+      },
+      {
+        "index": 22,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "697a9f029b0dbc651e35026089c68c3c",
+        "perceptualHash": "697a9f029b0dbc651e35026089c68c3c"
+      }
+    ],
+    "links": [
+      {
+        "originalHref": "https://www.google.com/search?q\u003dNational+Medical+Commission+%28NMC%29\u0026safe\u003dactive\u0026sca_esv\u003dcee9d4942178ca18\u0026ei\u003dwpvkaLSaHN6gnesPrcXUoQc\u0026ved\u003d2ahUKEwjMibHUpJGQAxWnUGwGHTc6G6gQgK4QegQIARAC\u0026uact\u003d5\u0026oq\u003ddoctors+in+india+are+registered+with\u0026gs_lp\u003dEgxnd3Mtd2l6LXNlcnAiJGRvY3RvcnMgaW4gaW5kaWEgYXJlIHJlZ2lzdGVyZWQgd2l0aDIFECEYoAFIxzBQAFjOKnAAeAGQAQCYAcsBoAGGKKoBBjAuMzUuMbgBA8gBAPgBAZgCJKACjSnCAgoQABiABBhDGIoFwgILEAAYgAQYsQMYgwHCAg4QABiABBixAxiDARiKBcICCBAAGIAEGLEDwgIREC4YgAQYsQMY0QMYgwEYxwHCAhAQABiABBixAxhDGIMBGIoFwgIEEAAYA8ICCBAuGIAEGLEDwgILEAAYgAQYkgMYigXCAhAQABiABBixAxhDGMkDGIoFwgINEAAYgAQYsQMYQxiKBcICCxAAGIAEGJECGIoFwgIFEAAYgATCAgYQABgWGB7CAggQABgWGAoYHsICCxAAGIAEGIYDGIoFwgIIEAAYgAQYogTCAgUQABjvBcICBRAhGJ8FwgIEECEYFcICBxAhGKABGAqYAwCSBwYwLjM1LjGgB7fwAbIHBjAuMzUuMbgHjSnCBwYxLjI4LjfIB14\u0026sclient\u003dgws-wiz-serp\u0026mstk\u003dAUtExfBFf7cqEC440Djhh5rP4tV6kwEhMsUNG4rsWiLK9_uVpO69NTtf71mCKkf2fNLNmcRe9yVnHctFBD8ZlV6yOuZhj4f-QYvbS_atqJ5dNCvh-Z3JWdyKGj9UzMiLCvvqJPU\u0026csui\u003d3",
+        "slug": "search",
+        "linkText": "Registered Medical Practitioners (RMP’s)"
+      },
+      {
+        "originalHref": "/in/registration",
+        "slug": "registration",
+        "linkText": "Sign up"
+      },
+      {
+        "originalHref": "/in/login",
+        "slug": "login",
+        "linkText": "Log in"
+      },
+      {
+        "originalHref": "/in/science/diabetes",
+        "slug": "diabetes",
+        "linkText": "Read More"
+      },
+      {
+        "originalHref": "/in/science/Infectious-Diseases-and-Vaccines",
+        "slug": "Infectious-Diseases-and-Vaccines",
+        "linkText": "Read More"
+      },
+      {
+        "originalHref": "/in/science/kidney-transplant",
+        "slug": "kidney-transplant",
+        "linkText": "Read More"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/soli-cgm-study",
+        "slug": "soli-cgm-study",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/fixed-ratio-combination-type2-diabetes-webinar",
+        "slug": "fixed-ratio-combination-type2-diabetes-webinar",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/2026-attd-postcongress-highlights",
+        "slug": "2026-attd-postcongress-highlights",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/insulintoolkit",
+        "slug": "insulintoolkit",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/global-indian-statistics-diabetes-prevalence",
+        "slug": "global-indian-statistics-diabetes-prevalence",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/uncontrolled-diabetes-complications",
+        "slug": "uncontrolled-diabetes-complications",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/global-indian-statistics-diabetes-prevalence-Dr-Mangesh-Tiwaskar",
+        "slug": "global-indian-statistics-diabetes-prevalence-Dr-Mangesh-Tiwaskar",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/easd-guidelines-2025",
+        "slug": "easd-guidelines-2025",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/patient-support",
+        "slug": "patient-support",
+        "linkText": "View all"
+      },
+      {
+        "originalHref": "/in/patient-support/Rare-disease/ar/mps-type-i-hernia-treatment-v1",
+        "slug": "mps-type-i-hernia-treatment-v1",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/patient-support/Rare-disease/ar/can-gaucher-disease-be-treated",
+        "slug": "can-gaucher-disease-be-treated",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/patient-support/Rare-disease/ar/lemtrada-alemtuzumab-symptoms",
+        "slug": "lemtrada-alemtuzumab-symptoms",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/patient-support/Rare-disease/ar/side-effects-of-lemtrada",
+        "slug": "side-effects-of-lemtrada",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/patient-support/Rare-disease/ar/lemtrada-in-rrms",
+        "slug": "lemtrada-in-rrms",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/patient-support/Rare-disease/ar/lemtrada-alemtuzumab-hcp-checklist",
+        "slug": "lemtrada-alemtuzumab-hcp-checklist",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/patient-support/diabetes/ar/how-to-manage-diabetes",
+        "slug": "how-to-manage-diabetes",
+        "linkText": "Learn more"
+      }
+    ],
+    "metadata": {
+      "Title": "Home",
+      "viewport": "width\u003ddevice-width, initial-scale\u003d1.0",
+      "og:url": "https://www.campus.sanofi/in/",
+      "og:locale": "en_IN",
+      "og:site_name": "",
+      "twitter:card": "summary_large_image",
+      "twitter:url": "https://www.campus.sanofi/in/",
+      "google-site-verification": "0Id2nz1zBfdVlhtsf7giBHNEhlfFkQukxwa_Xj2R_PY",
+      "algo:security": "UNLOCKED",
+      "algo:id": "dfc25d4e-3a0e-4104-96b7-04a12c01b30c_en-IN"
+    },
+    "dataLayer": {
+      "dataLayer.event": "metadata",
+      "dataLayer.device": "desktop",
+      "dataLayer.platform": "magnolia",
+      "dataLayer.language": "en",
+      "dataLayer.siteType": "advise",
+      "dataLayer.brandWebsiteType": "multibrand",
+      "dataLayer.region": "apac",
+      "dataLayer.country": "india",
+      "dataLayer.target": "hcp",
+      "dataLayer.brand": "Multi-Brand",
+      "dataLayer.gbu": "GBU - Specialty care",
+      "dataLayer.pageName": "Home",
+      "dataLayer.gtm.uniqueEventId": "12"
+    },
+    "functionalityComponents": {
+      "Buttons": "27|link for, link for, link for, link for, link for, link for, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for View all, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more",
+      "CTA Links (Button-styled)": "4|Skip To Main Content -\u003e #mainContent, Sign up -\u003e /in/registration, Log in -\u003e /in/login, Create your account in 2 minutes -\u003e /in/registration",
+      "Clickable Images": "0|[empty]",
+      "Zoomable Images": "0|[empty]",
+      "Modals": "0|[empty]",
+      "Popups": "0|[empty]",
+      "Carousels": "4|.carousel, .carousel, .carousel, .carousel",
+      "Sliders": "0|[empty]",
+      "Accordions": "0|[empty]",
+      "Toggles": "0|[empty]",
+      "Video Players": "0|[empty]",
+      "Audio Players": "0|[empty]",
+      "Dropdowns": "0|[empty]",
+      "Selects": "0|[empty]",
+      "Forms": "0|[empty]",
+      "Inputs": "0|[empty]",
+      "Tabs": "0|[empty]",
+      "Tooltips": "3|Sign up, Log in, Create your account in 2 minutes",
+      "Iframes": "0|[empty]"
+    },
+    "extractionTimeMillis": 8845
+  },
+  "https://www.campus.sanofi/mx": {
+    "url": "https://www.campus.sanofi/mx",
+    "cachedAtEpochMs": 1781883131931,
+    "rawText": "Skip To Main Content\nEste sitio es exclusivo para profesionales de la salud en México.\nBienvenido a Campus Sanofi México\n\nRecursos médicos y educación continua para profesionales de la salud en México.\n\nObtén acceso completo al sitio.\nAcceda a un soporte líder a nivel mundial para su área terapéutica.\n\nElija su área terapéutica a continuación para aprovechar nuestros amplios recursos.\n\nCardiovascular Diabetes Enfermedades raras Esclerosis Múltiple Hematología Inmunología Oncología Osteoartritis Trasplantes Vacunas\n\n\nNo te pierdas estos enlaces clave.\n\nAcademia Sanofi Productos Sanofi \n\nContenido destacado\nRol inmunológico\n\nEsta infografía proporciona una visión detallada de por qué todos los lactantes menores de 12 meses están en mayor riesgo.\n\nObtén más información\nRegístrate para obtener acceso completo.\n\n¿Eres un profesional de la salud registrado? Regístrate en menos de un minuto para acceder a las últimas actualizaciones y recursos que apoyarán tu práctica y te ayudarán a ofrecer mejores resultados para tus pacientes.\n\nObtén acceso completo.\n¿Necesitas reportar un efecto indeseable con un medicamento?\n\nEstimado usuario, te informamos que por ley, en México, los efectos indeseables y reacciones secundarias de los medicamentos deben ser notificados a la autoridad sanitaria, por lo que te solicitamos atentamente que para atender tu caso, te comuniques al teléfono 01 800 123 41 41 (gratuito) o, bien, al (55)54844965, o vía correo electrónico: fv-imed@sanofi.com\n\nVía correo electrónico\nLo más reciente en ciencia y educación.\nVer todo\nVACUNAS\n\n5 jun 2026\n\nVacunación contra Influenza en Adultos Mayores\n\nLa ciencia acaba de mostrarnos un camino claro. FLUNITY High Dose analizó a más de 466,000 adultos ≥60 años en Dinamarca y España. El resultado: contundente.\n\nLeer más\nVACUNAS\n\n4 jun 2026\n\nInfluenza y el Corazón: Protección Cardiovascular con Alta Dosis\n\nHoy sabemos que la influenza no solo afecta a los pulmones, también puede desencadenar eventos cardiovasculares graves en adultos mayores. El estudio FLUNITY High Dose, con más de 466,000 adultos de edad ≥60 años, analizó cómo la vacuna contra la influenza de alta dosis puede reducir estos riesgos.\n\nLeer más\nVACUNAS\n\n4 jun 2026\n\nImpacto del nirsevimab luego de dos temporadas en la prevención de la hospitalización por VSR\n\nEl estudio NIRSE-GAL evaluó la efectividad del nirsevimab en Galicia tras su incorporación universal para todos los recién nacidos desde 2023. Este estudio longitudinal, de base poblacional y prospectivo, demostró un impacto sustancial en la salud pública infantil con reducciones significativas en hospitalizaciones por VSR.\n\nLeer más\nVACUNAS\n\n3 jun 2026\n\nVacunación Universal contra Influenza en México\n\nLa influenza representa un desafío importante para la salud pública en México. Ampliar la cobertura de vacunación más allá de los grupos de alto riesgo podría contribuir a una mayor protección a nivel poblacional.\n\nLeer más\nVACUNAS\n\n3 jun 2026\n\nHipertensión + Influenza: Una Combinación de Alto Riesgo\n\nEn México, millones de adultos viven con hipertensión. Durante la temporada de influenza, ese diagnóstico se vuelve un riesgo crítico: la hipertensión aumenta significativamente el riesgo de eventos cardiovasculares agudos en pacientes infectados por influenza.\n\nLeer más\nVACUNAS\n\n28 may 2026\n\nEstudio NIRSE-CL: lecciones de salud pública en la prevención del VSR a escala nacional\n\nEl estudio NIRSE-CL documenta la implementación del primer programa nacional de prevención del VSR en América Latina, realizado en Chile con más de 145,000 lactantes. Sus resultados ofrecen evidencia de efectividad a escala poblacional y lecciones operativas sobre cobertura, oportunidad de administración e integración al sistema de inmunizaciones, con implicaciones relevantes para el diseño de políticas sanitarias en México y la región.\n\nLeer más\nVACUNAS\n\n28 may 2026\n\nEstudio BEAR: impacto de anticuerpos monoclonales contra VSR en el uso de recursos de salud\n\nEl estudio BEAR evaluó el impacto de anticuerpos monoclonales de acción prolongada en el uso de recursos del sistema de salud durante la temporada de VSR 2023-2024, en una cohorte de más de 15,000 lactantes sanos. Los hallazgos documentan reducciones significativas en consultas ambulatorias, visitas a urgencias y hospitalizaciones relacionadas con VSR. Acceda a los resultados desagregados por nivel de atención y sus implicaciones para la práctica clínica en contextos de alta cobertura.\n\nLeer más\nVACUNAS\n\n27 may 2026\n\nSeguridad de anticuerpos monoclonales contra VSR en neonatos prematuros hospitalizados: evidencia del mundo real\n\nLa seguridad de los anticuerpos monoclonales de acción prolongada para la prevención del VSR en neonatos prematuros ha sido evaluada en condiciones reales de uso hospitalario. Un estudio observacional prospectivo en 103 neonatos con edad gestacional ≤37 semanas caracteriza el perfil de seguridad en unidades neonatales, con foco en los eventos adversos más relevantes y las consideraciones de monitoreo según grado de prematuridad.\n\nLeer más\n¿Por qué\nSanofi Campus México?\n\nCampus Sanofi México también se adapta a los desafíos actuales de la práctica médica, como el manejo de enfermedades crónicas, la implementación de terapias innovadoras y la actualización constante frente a las nuevas investigaciones. Al utilizar esta plataforma, los médicos tienen acceso a contenido creado para apoyar decisiones clínicas informadas, promoviendo un mejor cuidado de sus pacientes y resultados más efectivos.\n\nExplora Sanofi México\n\nContenido médico actualizado para profesionales de la salud.\n\nCampus Sanofi México reúne áreas terapéuticas, recursos científicos y materiales educativos para apoyar la práctica clínica basada en evidencia.",
+    "images": [
+      {
+        "index": 0,
+        "src": "/dam/jcr:2d8ab801-7181-4930-a870-c8d277b07125/Group%203361906.2025-11-07-18-40-26.png",
+        "hash": "532c847c25cdceed8444038b4384d604",
+        "perceptualHash": "532c847c25cdceed8444038b4384d604"
+      },
+      {
+        "index": 1,
+        "src": "/.imaging/webp/sanofi-templates/w1080-16-9/dam/campus-sanofi-mx/new-layout/homepage/logout/images/Group-3362294.png/jcr:content/Group%203362294.png",
+        "hash": "e32e6e6cb42377c8bbe7efdac423646f",
+        "perceptualHash": "e32e6e6cb42377c8bbe7efdac423646f"
+      },
+      {
+        "index": 2,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "5a6a21e17caa64a16115e17e52667c46",
+        "perceptualHash": "5a6a21e17caa64a16115e17e52667c46"
+      },
+      {
+        "index": 3,
+        "src": "/dam/jcr:30b09791-3841-4596-a7b2-719eb0176637/Isolation_Mode.2025-11-07-16-33-26.png",
+        "hash": "90361c7569b9cddbff5848a71e707b77",
+        "perceptualHash": "90361c7569b9cddbff5848a71e707b77"
+      },
+      {
+        "index": 4,
+        "src": "/.imaging/webp/sanofi-templates/w1080-16-9/dam/campus-sanofi-mx/new-layout/homepage/logout/images/Frame-1000006714.png/jcr:content/Frame%201000006717.png",
+        "hash": "cc4a38d0179673f3800aaf19b3c66480",
+        "perceptualHash": "cc4a38d0179673f3800aaf19b3c66480"
+      },
+      {
+        "index": 5,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-mx/article/ciencia/Vacunas/influenza/vacunacion-influenza-adultos-mayores/Thumbnail.jpg/jcr:content/Thumbnail.jpg",
+        "hash": "fb6654a9cb76fba825d5cdffd76f7f75",
+        "perceptualHash": "fb6654a9cb76fba825d5cdffd76f7f75"
+      },
+      {
+        "index": 6,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-mx/article/ciencia/Vacunas/influenza/influenza-corazon-proteccion-cardiovascular/Imagen-externa.jpg/jcr:content/Imagen%20externa.jpg",
+        "hash": "e87917640bbf4fd8345b35d75c365fde",
+        "perceptualHash": "e87917640bbf4fd8345b35d75c365fde"
+      },
+      {
+        "index": 7,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-mx/article/ciencia/Vacunas/vsr/Impacto-del-nirsevimab-dos-temporadas/Thumbnail.jpg/jcr:content/Thumbnail.jpg",
+        "hash": "8115d892753a206aaf335a7e309d1dfc",
+        "perceptualHash": "8115d892753a206aaf335a7e309d1dfc"
+      },
+      {
+        "index": 8,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "45ceef91445faf2b1d487b883ddf5638",
+        "perceptualHash": "45ceef91445faf2b1d487b883ddf5638"
+      },
+      {
+        "index": 9,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "f0d6c3043cf0815c2ff694b374c39b9f",
+        "perceptualHash": "f0d6c3043cf0815c2ff694b374c39b9f"
+      },
+      {
+        "index": 10,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "11c775eeac03c6e2023743a3291554be",
+        "perceptualHash": "11c775eeac03c6e2023743a3291554be"
+      },
+      {
+        "index": 11,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-mx/article/ciencia/Vacunas/influenza/vacunacion-universal-contra-influenza/IMG-EXTERNA-MP4_Daana-Chavez.jpg/jcr:content/IMG%20EXTERNA%20MP4_Daana%20Chavez.jpg",
+        "hash": "4bdc53d6456ca1518fe1b0428dfd2714",
+        "perceptualHash": "4bdc53d6456ca1518fe1b0428dfd2714"
+      },
+      {
+        "index": 12,
+        "src": "/.imaging/default/dam/campus-sanofi-mx/new-layout/homepage/login/images/1cd797a340b204432d8e193ccf6846caa224ddb7-(4).jpg/jcr:content.jpg",
+        "hash": "914c7c808abdfe09c5b96ef00152c652",
+        "perceptualHash": "914c7c808abdfe09c5b96ef00152c652"
+      },
+      {
+        "index": 13,
+        "src": "https://siteintercept.qualtrics.com/static/q-siteintercept/~/img/svg-close-btn-black-1.svg",
+        "hash": "7a60c821f354b7733cd27bbaf9bddca8",
+        "perceptualHash": "7a60c821f354b7733cd27bbaf9bddca8"
+      }
+    ],
+    "links": [
+      {
+        "originalHref": "/mx/login",
+        "slug": "login",
+        "linkText": "Obtén acceso completo al sitio."
+      },
+      {
+        "originalHref": "/mx/ciencia/cardiovascular",
+        "slug": "cardiovascular",
+        "linkText": "Cardiovascular"
+      },
+      {
+        "originalHref": "/mx/ciencia/diabetes",
+        "slug": "diabetes",
+        "linkText": "Diabetes"
+      },
+      {
+        "originalHref": "/mx/ciencia/enfermedades-raras",
+        "slug": "enfermedades-raras",
+        "linkText": "Enfermedades raras"
+      },
+      {
+        "originalHref": "/mx/ciencia/esclerosis-multiple",
+        "slug": "esclerosis-multiple",
+        "linkText": "Esclerosis Múltiple"
+      },
+      {
+        "originalHref": "/mx/ciencia/hematologia",
+        "slug": "hematologia",
+        "linkText": "Hematología"
+      },
+      {
+        "originalHref": "/mx/ciencia/inmunologia",
+        "slug": "inmunologia",
+        "linkText": "Inmunología"
+      },
+      {
+        "originalHref": "/mx/ciencia/oncologia",
+        "slug": "oncologia",
+        "linkText": "Oncología"
+      },
+      {
+        "originalHref": "/mx/ciencia/osteoartritis",
+        "slug": "osteoartritis",
+        "linkText": "Osteoartritis"
+      },
+      {
+        "originalHref": "/mx/ciencia/trasplantes",
+        "slug": "trasplantes",
+        "linkText": "Trasplantes"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas",
+        "slug": "vacunas",
+        "linkText": "Vacunas"
+      },
+      {
+        "originalHref": "/mx/academia",
+        "slug": "academia",
+        "linkText": "Academia Sanofi"
+      },
+      {
+        "originalHref": "/mx/producto",
+        "slug": "producto",
+        "linkText": "Productos Sanofi"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/vsr/ar/rol-inmunologico",
+        "slug": "rol-inmunologico",
+        "linkText": "Obtén más información"
+      },
+      {
+        "originalHref": "mailto:fv-imed@sanofi.com",
+        "slug": "mailto:fv-imed@sanofi",
+        "linkText": "fv-imed@sanofi.com"
+      },
+      {
+        "originalHref": "/mx/ciencia",
+        "slug": "ciencia",
+        "linkText": "Ver todo"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/influenza/ar/vacunacion-influenza-adultos-mayores",
+        "slug": "vacunacion-influenza-adultos-mayores",
+        "linkText": "Leer más"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/influenza/ar/influenza-corazon-proteccion-cardiovascular",
+        "slug": "influenza-corazon-proteccion-cardiovascular",
+        "linkText": "Leer más"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/vsr/ar/impacto-del-nirsevimab-dos-temporadas",
+        "slug": "impacto-del-nirsevimab-dos-temporadas",
+        "linkText": "Leer más"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/influenza/ar/vacunacion-universal-contra-influenza",
+        "slug": "vacunacion-universal-contra-influenza",
+        "linkText": "Leer más"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/influenza/ar/hipertension-influenza-combinacion-de-alto-riesgo",
+        "slug": "hipertension-influenza-combinacion-de-alto-riesgo",
+        "linkText": "Leer más"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/vsr/ar/prevencion-del-vrs-lecciones-de-salud-publica",
+        "slug": "prevencion-del-vrs-lecciones-de-salud-publica",
+        "linkText": "Leer más"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/vsr/ar/estudio-bear-nirsevimab-mejora-el-uso-de-recursos",
+        "slug": "estudio-bear-nirsevimab-mejora-el-uso-de-recursos",
+        "linkText": "Leer más"
+      },
+      {
+        "originalHref": "/mx/ciencia/vacunas/vsr/ar/seguridad-de-nirsevimab-en-niños-prematuros",
+        "slug": "seguridad-de-nirsevimab-en-niños-prematuros",
+        "linkText": "Leer más"
+      },
+      {
+        "originalHref": "https://www.sanofi.com/es/mexico",
+        "slug": "mexico",
+        "linkText": "Explora Sanofi México"
+      }
+    ],
+    "metadata": {
+      "Title": "Inicio",
+      "viewport": "width\u003ddevice-width, initial-scale\u003d1.0",
+      "og:url": "https://www.campus.sanofi/mx/",
+      "og:locale": "es_MX",
+      "og:site_name": "",
+      "twitter:card": "summary_large_image",
+      "twitter:url": "https://www.campus.sanofi/mx/",
+      "title": "Educación médica para HCPs | Sanofi México",
+      "description": "Accede a recursos, cursos y materiales científicos en Campus Sanofi México. Educación médica continua para profesionales de la salud.",
+      "keywords": "Sanofi México, campus sanofi méxico, educación médica, sanofi méxico, formación médica continua, profesionales de la salud en mexico, sanofi méxico",
+      "algo:security": "UNLOCKED",
+      "algo:id": "08792d67-fbc3-4b19-bb53-510da74c5007_es-MX"
+    },
+    "dataLayer": {
+      "dataLayer.event": "metadata",
+      "dataLayer.device": "desktop",
+      "dataLayer.platform": "magnolia",
+      "dataLayer.language": "es",
+      "dataLayer.siteType": "advise",
+      "dataLayer.brandWebsiteType": "multibrand",
+      "dataLayer.country": "mexico",
+      "dataLayer.target": "hcp \u0026amp; consumers / patients",
+      "dataLayer.gbu": "Cross bu",
+      "dataLayer.pageName": "Inicio",
+      "dataLayer.gtm.uniqueEventId": "12"
+    },
+    "functionalityComponents": {
+      "Buttons": "15|link for Ver todo, link for Leer más, link for Leer más, link for Leer más, link for Leer más, link for Leer más, link for Leer más, link for Leer más, link for Leer más, página anterior, página siguiente, Contenido médico actualizado para profesionales de la salud.",
+      "CTA Links (Button-styled)": "18|Skip To Main Content -\u003e #mainContent, Obtén acceso completo al sitio. -\u003e /mx/login, Cardiovascular -\u003e /mx/ciencia/cardiovascular, Diabetes -\u003e /mx/ciencia/diabetes, Enfermedades raras -\u003e /mx/ciencia/enfermedades-raras, Esclerosis Múltiple -\u003e /mx/ciencia/esclerosis-multiple, Hematología -\u003e /mx/ciencia/hematologia, Inmunología -\u003e /mx/ciencia/inmunologia, Oncología -\u003e /mx/ciencia/oncologia, Osteoartritis -\u003e /mx/ciencia/osteoartritis, Trasplantes -\u003e /mx/ciencia/trasplantes, Vacunas -\u003e /mx/ciencia/vacunas, Academia Sanofi -\u003e /mx/academia, Productos Sanofi -\u003e /mx/producto, Obtén más información -\u003e /mx/ciencia/vacunas/vsr/ar/rol-inmunologico, Obtén acceso completo. -\u003e /mx/login, Vía correo electrónico -\u003e mailto:fv-imed@sanofi.com, Explora Sanofi México -\u003e https://www.sanofi.com/es/mexico",
+      "Clickable Images": "0|[empty]",
+      "Zoomable Images": "0|[empty]",
+      "Modals": "0|[empty]",
+      "Popups": "0|[empty]",
+      "Carousels": "1|.carousel",
+      "Sliders": "0|[empty]",
+      "Accordions": "1|.accordion",
+      "Toggles": "0|[empty]",
+      "Video Players": "0|[empty]",
+      "Audio Players": "0|[empty]",
+      "Dropdowns": "0|[empty]",
+      "Selects": "0|[empty]",
+      "Forms": "0|[empty]",
+      "Inputs": "0|[empty]",
+      "Tabs": "0|[empty]",
+      "Tooltips": "5|Obtén acceso completo al sitio., Obtén más información, Obtén acceso completo., Vía correo electrónico, Explora Sanofi México",
+      "Iframes": "1|iframe"
+    },
+    "extractionTimeMillis": 8144
+  },
   "https://www.campus.sanofi/ph": {
     "url": "https://www.campus.sanofi/ph",
-    "cachedAtEpochMs": 1781878948111,
+    "cachedAtEpochMs": 1781883131421,
     "rawText": "Skip To Main Content\nWelcome To Campus Sanofi PH\n\nDo you already have an account on Campus Sanofi Philippines?\nSign in to receive personalized recommendations\n\nRegister\nLog in\nBrowse the latest medical information\nDIABETES\nLEARN\n\nMay 18, 2026\n\nE-learning Course – Foundations of Diabetes Management\nLearn more\nCARDIOLOGY\nREAD\n\nMay 12, 2026\n\nAntihypertensive Adherence \u0026 Persistence with ARBs\n\nExplore how ARBs improve adherence and persistence in hypertension treatment vs other therapies.\n\nLearn more\nCARDIOLOGY\nREAD\n\nApr 22, 2026\n\nHypertension Management Updates\n\nLatest ACC 2026 congress insights on hypertension management, single-pill combinations, blood pressure variability, and cardiovascular outcomes\n\nLearn more\nINFLUENZA\n\nMar 19, 2026\n\nHow to Use: Pre-filled Syringe with Luer lock and soft tip cap\n\nWatch step-by-step video guide on using pre-filled syringe with Luer Lock adapter for influenza vaccine administration. Proper technique tutorial.\n\nLearn more\nINFLUENZA\nREAD\n\nMar 19, 2026\n\nOver 70 Years of Leadership in Influenza Vaccines\n\nSanofi has been at the forefront of influenza vaccine development for over 70 years, delivering more than 5 billion doses across 100+ countries and immunizing over 250 million people annually. With a robust global network of production sites spanning Canada, France, Mexico, the United States, Australia, and China, Sanofi continues to invest in cutting-edge R\u0026D across egg-based, recombinant, and mRNA platforms — ensuring the world gets the right shot against flu\n\nLearn more\nCARDIOLOGY\nREAD\n\nMar 10, 2026\n\nManaging Nocturnal Hypertension: Key Insights from the Asian Expert Consensus\n\nExplore key recommendations from the Asian Expert Consensus on Nocturnal Hypertension Management, covering diagnosis, epidemiology, cardiovascular risks, and treatment strategies — including lifestyle modifications and long-acting antihypertensive agents — to guide optimal nighttime blood pressure control in clinical practice.\n\nLearn more\nDIABETES\n\nJan 6, 2026\n\nMedical-on-the-Go:\n\nPeriodontitis: the oft-overlooked complication of diabetes\n\nLearn more\nDIABETES\nREAD\n\nDec 29, 2025\n\nMedical-On-The-Go: The Soli-SWITCH study\n\nSwitching from premixed insulin to iGlarLixi in people with Type 2 diabetes\n\nLearn more\nWhat\u0027s new in Campus?\nStart Learning Now\nGo to Facebook Page\nMore about Science\nDiabetes\nCardiology\nNephrology\nThrombosis\nDiphtheria\nHaemophilus Influenza Type B\nInfluenza\nInvasive Meningococcal Disease\nPertussis\nPoliomyelitis\nTetanus\nFor General Inquires – Contact us\n \n\nAdverse events \u0026 product safety\n\nIf you experience any adverse event, i.e., any unfavorable and unintended sign (an abnormal laboratory finding), symptom, or disease temporarily associated with the use of a medical product, please email it to PV.Philippines@sanofi.com \n\n\n \n\nTo report a product technical complaint, please contact our Quality Affairs team:\n\n \n\nVoicemail (non-business hours): +632-8859-5555 extension #1\nEmail: Philippines.PTC@sanofi.com\n\n \n\n \n\nFor Pharma Medical inquiries, click HERE to submit a question. \n\nFor Vaccine Medical inquiries, send an email to: medinfo.vaccines.ph@sanofi.com\n\n \n\n \n\nFor Data Privacy requests and concerns:\n \n\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.)\nData Privacy: privacy.PH@sanofi.com\n \nFor Data subject requests:\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.): OneTrust\nFor General Inquires – Contact us\n \n\nAdverse events \u0026 product safety\n\nIf you experience any adverse event, i.e., any unfavorable and unintended sign (an abnormal laboratory finding), symptom, or disease temporarily associated with the use of a medical product, please email it to PV.Philippines@sanofi.com \n\n\n \n\nTo report a product technical complaint, please contact our Quality Affairs team:\n\n \n\nVoicemail (non-business hours): +632-8859-5555 extension #1\nEmail: Philippines.PTC@sanofi.com\n\n \n\n \n\nFor Pharma Medical inquiries, click HERE to submit a question. \n\nFor Vaccine Medical inquiries, send an email to: medinfo.vaccines.ph@sanofi.com\n\n \n\n \n\nFor Data Privacy requests and concerns:\n \n\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.)\nData Privacy: privacy.PH@sanofi.com\n \nFor Data subject requests:\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.): OneTrust",
     "images": [
       {
         "index": 0,
-        "src": "/.imaging/default/dam/campus-sanofi-ph/Home/Banner-Home.png/jcr:content.png",
-        "hash": "42d15fd98d32a05ef408905c44335513",
-        "perceptualHash": "42d15fd98d32a05ef408905c44335513"
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/2026_W_Medical_on_the_go/thumb-mary-clestelyn-anne-1-1080-810.jpg/jcr:content/thumb-mary-clestelyn-anne-1-1080-810.jpg",
+        "hash": "7b8e062eb6e68af1b986d489ab59620e",
+        "perceptualHash": "7b8e062eb6e68af1b986d489ab59620e"
       },
       {
         "index": 1,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/e-learning-course-foundation-of-diabetes-management/thumbnail-v1.png/jcr:content/thumbnail-v1.png",
-        "hash": "52cde896c680abaa4dc91e1b3006a644",
-        "perceptualHash": "52cde896c680abaa4dc91e1b3006a644"
-      },
-      {
-        "index": 2,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Cardiology/persistence-thumbnail.png/jcr:content/persistence-thumbnail.png",
-        "hash": "b7acbb236d3f526a2e6bd1cc6a442488",
-        "perceptualHash": "b7acbb236d3f526a2e6bd1cc6a442488"
-      },
-      {
-        "index": 3,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/articles/Acc-2026-American-College-of-Cardiology/thumbnail.jpg/jcr:content/thumbnail.jpg",
-        "hash": "107c9447ecb4aaabac1d3df23bd52b5d",
-        "perceptualHash": "107c9447ecb4aaabac1d3df23bd52b5d"
-      },
-      {
-        "index": 4,
         "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Influenza/how-to-use/thumbnail.png/jcr:content/thumbnail.png",
         "hash": "28409b4f971f55a78bf27d0827584959",
         "perceptualHash": "28409b4f971f55a78bf27d0827584959"
       },
       {
-        "index": 5,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Influenza/flu-vaccines-legacy/influenza-thumbnail.png/jcr:content/influenza-thumbnail.png",
-        "hash": "cbfe16defed9c692fdbc3a02e1b8dc77",
-        "perceptualHash": "cbfe16defed9c692fdbc3a02e1b8dc77"
-      },
-      {
-        "index": 6,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Cardiology/thumbnail-mgmt-nocturnal-hypertension.png/jcr:content/thumbnail-mgmt-nocturnal-hypertension.png",
-        "hash": "74c06eb4e06da3ea025f305d8b536b68",
-        "perceptualHash": "74c06eb4e06da3ea025f305d8b536b68"
-      },
-      {
-        "index": 7,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/2026_W_Medical_on_the_go/thumb-mary-clestelyn-anne-1-1080-810.jpg/jcr:content/thumb-mary-clestelyn-anne-1-1080-810.jpg",
-        "hash": "ef18c96864391cebaf3a9d10724cdd3c",
-        "perceptualHash": "ef18c96864391cebaf3a9d10724cdd3c"
-      },
-      {
-        "index": 8,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/2025_The_Soli_SWITCH_study/soil-switch-thumbnail.webp/jcr:content/soil-switch-thumbnail.webp",
-        "hash": "bb4589881e4fb7ad280b3a39e74b752d",
-        "perceptualHash": "bb4589881e4fb7ad280b3a39e74b752d"
-      },
-      {
-        "index": 9,
-        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Science/Diabetes/e-learning-course-foundation-of-diabetes-management/diabetes-management-e-learning.png/jcr:content/diabetes-management-e-learning.jpg",
-        "hash": "115d195fb5bb1012ac054d29119d8a86",
-        "perceptualHash": "115d195fb5bb1012ac054d29119d8a86"
-      },
-      {
-        "index": 10,
+        "index": 2,
         "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Home/Campus-Flu-Banner-2_Jenny-Batocabe.jpg/jcr:content/Campus%20Flu%20Banner%202_Jenny%20Batocabe.jpg",
         "hash": "df37206cf95442356c5f88b266594137",
         "perceptualHash": "df37206cf95442356c5f88b266594137"
       },
       {
-        "index": 11,
-        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Home/202504_Diabetes_FB.png/jcr:content/202504_Diabetes_FB.png",
-        "hash": "71711963b46167c5c8bcb490d0182031",
-        "perceptualHash": "71711963b46167c5c8bcb490d0182031"
+        "index": 3,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Influenza/flu-vaccines-legacy/influenza-thumbnail.png/jcr:content/influenza-thumbnail.png",
+        "hash": "16fa7b46f23e42540cbb1118bec31949",
+        "perceptualHash": "16fa7b46f23e42540cbb1118bec31949"
       },
       {
-        "index": 12,
+        "index": 4,
         "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Diabetes.png/jcr:content/Science-Diabetes.png",
         "hash": "255fcecc0e048a7d01dd2912c9eb95e3",
         "perceptualHash": "255fcecc0e048a7d01dd2912c9eb95e3"
       },
       {
-        "index": 13,
+        "index": 5,
         "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Cardiology.png/jcr:content/Science-Cardiology.png",
         "hash": "91f21d1460fb9f13ea3e0bd702f29f0b",
         "perceptualHash": "91f21d1460fb9f13ea3e0bd702f29f0b"
       },
       {
-        "index": 14,
+        "index": 6,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Cardiology/thumbnail-mgmt-nocturnal-hypertension.png/jcr:content/thumbnail-mgmt-nocturnal-hypertension.png",
+        "hash": "91616380ef452dfa824d10603cb00c23",
+        "perceptualHash": "91616380ef452dfa824d10603cb00c23"
+      },
+      {
+        "index": 7,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/articles/Acc-2026-American-College-of-Cardiology/thumbnail.jpg/jcr:content/thumbnail.jpg",
+        "hash": "107c9447ecb4aaabac1d3df23bd52b5d",
+        "perceptualHash": "107c9447ecb4aaabac1d3df23bd52b5d"
+      },
+      {
+        "index": 8,
         "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-CKD.png/jcr:content/Science-CKD.png",
         "hash": "6a9c3769935bfb0caa5c02c0eb6e57a3",
         "perceptualHash": "6a9c3769935bfb0caa5c02c0eb6e57a3"
       },
       {
-        "index": 15,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Thrombosis.png/jcr:content/Science-Thrombosis.png",
-        "hash": "e9738c7da5474c38f5e9c609f1ca4070",
-        "perceptualHash": "e9738c7da5474c38f5e9c609f1ca4070"
-      },
-      {
-        "index": 16,
+        "index": 9,
         "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Diphtheria.png/jcr:content/Science-Diphtheria.png",
         "hash": "84efeefa2e4fa7885910388b95c29c7c",
         "perceptualHash": "84efeefa2e4fa7885910388b95c29c7c"
       },
       {
-        "index": 17,
+        "index": 10,
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Thrombosis.png/jcr:content/Science-Thrombosis.png",
+        "hash": "e9738c7da5474c38f5e9c609f1ca4070",
+        "perceptualHash": "e9738c7da5474c38f5e9c609f1ca4070"
+      },
+      {
+        "index": 11,
         "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-HIB.png/jcr:content/Science-HIB.png",
         "hash": "3f36d777b7c4195177ec2dc63ce13d61",
         "perceptualHash": "3f36d777b7c4195177ec2dc63ce13d61"
       },
       {
-        "index": 18,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Influenza.png/jcr:content/Science-Influenza.png",
-        "hash": "a1255ba949194561b98101792aee509e",
-        "perceptualHash": "a1255ba949194561b98101792aee509e"
+        "index": 12,
+        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Science/Diabetes/e-learning-course-foundation-of-diabetes-management/diabetes-management-e-learning.png/jcr:content/diabetes-management-e-learning.jpg",
+        "hash": "115d195fb5bb1012ac054d29119d8a86",
+        "perceptualHash": "115d195fb5bb1012ac054d29119d8a86"
       },
       {
-        "index": 19,
+        "index": 13,
         "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-IMD.png/jcr:content/Science-IMD.png",
         "hash": "8a1e77b944a318d11417404e4b118410",
         "perceptualHash": "8a1e77b944a318d11417404e4b118410"
       },
       {
-        "index": 20,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Perstussis.png/jcr:content/Science-Perstussis.png",
-        "hash": "43ae9dbf5b6f3d0111f6aeeea91586ab",
-        "perceptualHash": "43ae9dbf5b6f3d0111f6aeeea91586ab"
+        "index": 14,
+        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Home/202504_Diabetes_FB.png/jcr:content/202504_Diabetes_FB.png",
+        "hash": "71711963b46167c5c8bcb490d0182031",
+        "perceptualHash": "71711963b46167c5c8bcb490d0182031"
       },
       {
-        "index": 21,
+        "index": 15,
         "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Polio.png/jcr:content/Science-Polio.png",
         "hash": "c1b34d53b9bb3cd03392b4d947fb2483",
         "perceptualHash": "c1b34d53b9bb3cd03392b4d947fb2483"
       },
       {
-        "index": 22,
+        "index": 16,
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Influenza.png/jcr:content/Science-Influenza.png",
+        "hash": "a1255ba949194561b98101792aee509e",
+        "perceptualHash": "a1255ba949194561b98101792aee509e"
+      },
+      {
+        "index": 17,
         "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
         "hash": "c446646a95cd43c36d25583fdaea3dbc",
         "perceptualHash": "c446646a95cd43c36d25583fdaea3dbc"
+      },
+      {
+        "index": 18,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/2025_The_Soli_SWITCH_study/soil-switch-thumbnail.webp/jcr:content/soil-switch-thumbnail.webp",
+        "hash": "53389c867c15dd23049164920bb58c8f",
+        "perceptualHash": "53389c867c15dd23049164920bb58c8f"
+      },
+      {
+        "index": 19,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Cardiology/persistence-thumbnail.png/jcr:content/persistence-thumbnail.png",
+        "hash": "b7acbb236d3f526a2e6bd1cc6a442488",
+        "perceptualHash": "b7acbb236d3f526a2e6bd1cc6a442488"
+      },
+      {
+        "index": 20,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/e-learning-course-foundation-of-diabetes-management/thumbnail-v1.png/jcr:content/thumbnail-v1.png",
+        "hash": "52cde896c680abaa4dc91e1b3006a644",
+        "perceptualHash": "52cde896c680abaa4dc91e1b3006a644"
+      },
+      {
+        "index": 21,
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Perstussis.png/jcr:content/Science-Perstussis.png",
+        "hash": "43ae9dbf5b6f3d0111f6aeeea91586ab",
+        "perceptualHash": "43ae9dbf5b6f3d0111f6aeeea91586ab"
+      },
+      {
+        "index": 22,
+        "src": "/.imaging/default/dam/campus-sanofi-ph/Home/Banner-Home.png/jcr:content.png",
+        "hash": "42d15fd98d32a05ef408905c44335513",
+        "perceptualHash": "42d15fd98d32a05ef408905c44335513"
       },
       {
         "index": 23,
         "src": "https://siteintercept.qualtrics.com/static/q-siteintercept/~/img/svg-close-btn-black-1.svg",
         "hash": "7a60c821f354b7733cd27bbaf9bddca8",
         "perceptualHash": "7a60c821f354b7733cd27bbaf9bddca8"
-      },
-      {
-        "index": 24,
-        "src": "https://siteintercept.qualtrics.com/WRSiteInterceptEngine/../WRQualtricsShared/Graphics/siteintercept/remove_screen_capture.png",
-        "hash": "3a8ecf5dff4233d9b9b8df806533fdc6",
-        "perceptualHash": "3a8ecf5dff4233d9b9b8df806533fdc6"
-      },
-      {
-        "index": 25,
-        "src": "https://siteintercept.qualtrics.com/WRSiteInterceptEngine/../WRQualtricsShared/Graphics/siteintercept/building_preview.gif",
-        "hash": "3c3ba37130de5fe15faf97c18908283e",
-        "perceptualHash": "3c3ba37130de5fe15faf97c18908283e"
       }
     ],
     "links": [
@@ -296,7 +857,7 @@
     "functionalityComponents": {
       "Buttons": "12|link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, link for Learn more, expand",
       "CTA Links (Button-styled)": "5|Skip To Main Content -\u003e #mainContent, Register -\u003e /ph/registration, Log in -\u003e /ph/login, Start Learning Now -\u003e https://campusphilippines-sanofieducation.talentlms.com/plus/login, Go to Facebook Page -\u003e https://www.facebook.com/stepupfordiabetesph",
-      "Clickable Images": "1|remove_screen_capture.png (\"Cancel\")",
+      "Clickable Images": "0|[empty]",
       "Zoomable Images": "1|202504_Diabetes_FB.png",
       "Modals": "0|[empty]",
       "Popups": "0|[empty]",
@@ -311,14 +872,14 @@
       "Forms": "0|[empty]",
       "Inputs": "0|[empty]",
       "Tabs": "0|[empty]",
-      "Tooltips": "16|Register, Log in, Start Learning Now, Step Up for Diabetes PH, Diabetes, Cardiology, Nephrology, Thrombosis, Diphtheria, Haemophilus Influenza Type B, Influenza, Invasive Meningococcal Disease, Pertussis, Poliomyelitis, Tetanus, Cancel Capturing Screen",
+      "Tooltips": "15|Register, Log in, Start Learning Now, Step Up for Diabetes PH, Diabetes, Cardiology, Nephrology, Thrombosis, Diphtheria, Haemophilus Influenza Type B, Influenza, Invasive Meningococcal Disease, Pertussis, Poliomyelitis, Tetanus",
       "Iframes": "1|iframe"
     },
-    "extractionTimeMillis": 21910
+    "extractionTimeMillis": 7671
   },
   "https://www.campus.sanofi/ph/login": {
     "url": "https://www.campus.sanofi/ph/login",
-    "cachedAtEpochMs": 1781878939440,
+    "cachedAtEpochMs": 1781883128818,
     "rawText": "Skip To Main Content\nPhilippines Preference Center Login\nEmail address *\nPassword *\n\nThe password is not visible\n\nRemember me\nForgot your password?\nLogin\nStill don\u0027t have an account? Register\nFor General Inquires – Contact us\n \n\nAdverse events \u0026 product safety\n\nIf you experience any adverse event, i.e., any unfavorable and unintended sign (an abnormal laboratory finding), symptom, or disease temporarily associated with the use of a medical product, please email it to PV.Philippines@sanofi.com \n\n\n \n\nTo report a product technical complaint, please contact our Quality Affairs team:\n\n \n\nVoicemail (non-business hours): +632-8859-5555 extension #1\nEmail: Philippines.PTC@sanofi.com\n\n \n\n \n\nFor Pharma Medical inquiries, click HERE to submit a question. \n\nFor Vaccine Medical inquiries, send an email to: medinfo.vaccines.ph@sanofi.com\n\n \n\n \n\nFor Data Privacy requests and concerns:\n \n\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.)\nData Privacy: privacy.PH@sanofi.com\n \nFor Data subject requests:\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.): OneTrust\nFor General Inquires – Contact us\n \n\nAdverse events \u0026 product safety\n\nIf you experience any adverse event, i.e., any unfavorable and unintended sign (an abnormal laboratory finding), symptom, or disease temporarily associated with the use of a medical product, please email it to PV.Philippines@sanofi.com \n\n\n \n\nTo report a product technical complaint, please contact our Quality Affairs team:\n\n \n\nVoicemail (non-business hours): +632-8859-5555 extension #1\nEmail: Philippines.PTC@sanofi.com\n\n \n\n \n\nFor Pharma Medical inquiries, click HERE to submit a question. \n\nFor Vaccine Medical inquiries, send an email to: medinfo.vaccines.ph@sanofi.com\n\n \n\n \n\nFor Data Privacy requests and concerns:\n \n\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.)\nData Privacy: privacy.PH@sanofi.com\n \nFor Data subject requests:\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.): OneTrust",
     "images": [],
     "links": [
@@ -432,6 +993,6 @@
       "Tooltips": "0|[empty]",
       "Iframes": "0|[empty]"
     },
-    "extractionTimeMillis": 13238
+    "extractionTimeMillis": 5060
   }
 }
