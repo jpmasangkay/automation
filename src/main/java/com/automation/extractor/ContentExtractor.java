@@ -111,6 +111,7 @@ public class ContentExtractor {
                 }
 
                 logger.info("   Extracting content...");
+                Map<String, String> funcComponents = extractFunctionalityComponents(page);
                 cleanDom(page);
                 String rawText              = extractText(page);
                 List<ImageData> images      = extractImages(page, context, label);
@@ -122,7 +123,7 @@ public class ContentExtractor {
                 logger.info("   Done in {}ms — {} image(s), {} link(s) found.", elapsed, images.size(), links.size());
 
                 SiteData result = new SiteData(label, url, rawText, images, links,
-                        metadata, dataLayer, elapsed);
+                        metadata, dataLayer, funcComponents, elapsed);
 
                 // Store in cache
                 if (Config.isCacheEnabled() && cache != null) {
@@ -137,11 +138,11 @@ public class ContentExtractor {
                 } else {
                     logger.error("   Failed to load {} after {} attempts: {}", url, maxRetries, e.getMessage());
                     return new SiteData(label, url, "", List.of(), List.of(),
-                            Map.of(), Map.of(), 0);
+                            Map.of(), Map.of(), Map.of(), 0);
                 }
             }
         }
-        return new SiteData(label, url, "", List.of(), List.of(), Map.of(), Map.of(), 0);
+        return new SiteData(label, url, "", List.of(), List.of(), Map.of(), Map.of(), Map.of(), 0);
     }
 
     // ── DOM Cleaning ─────────────────────────────────────────────────────────
@@ -379,6 +380,36 @@ public class ContentExtractor {
         Map<String, String> dataLayer = new LinkedHashMap<>();
         if (raw != null) raw.forEach((k, v) -> { if (v != null) dataLayer.put(k, v.toString()); });
         return dataLayer;
+    }
+
+    // ── Functionality Components ──────────────────────────────────────────────
+
+    private Map<String, String> extractFunctionalityComponents(Page page) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> raw = (Map<String, Object>) page.evaluate("""
+            () => {
+                const count = (selectors) => document.querySelectorAll(selectors).length.toString();
+                
+                return {
+                    'Buttons': count('button, input[type="button"], input[type="submit"], .btn, [role="button"]'),
+                    'Clickable Images': count('a img, img[onclick], img[style*="cursor: pointer"], img[style*="cursor:pointer"]'),
+                    'Zoomable Images': count('img[data-zoom], img.zoom, img.zoomable'),
+                    'Modals / Popups': count('[data-toggle="modal"], [data-bs-toggle="modal"], .modal, dialog'),
+                    'Carousels / Sliders': count('.carousel, .swiper, .slick-slider'),
+                    'Accordions / Toggles': count('details, .accordion'),
+                    'Video/Audio Players': count('video, audio, iframe[src*="youtube.com"], iframe[src*="vimeo.com"]'),
+                    'Dropdowns / Selects': count('select, .dropdown, [data-toggle="dropdown"], [data-bs-toggle="dropdown"]'),
+                    'Forms / Inputs': count('form, input[type="text"], input[type="checkbox"], input[type="radio"], textarea'),
+                    'Tabs': count('[role="tab"], .nav-tabs'),
+                    'Tooltips': count('[data-toggle="tooltip"], [data-bs-toggle="tooltip"], [title]'),
+                    'Iframes': count('iframe')
+                };
+            }
+        """);
+
+        Map<String, String> components = new LinkedHashMap<>();
+        if (raw != null) raw.forEach((k, v) -> { if (v != null) components.put(k, v.toString()); });
+        return components;
     }
 
     // ── Utilities ─────────────────────────────────────────────────────────────

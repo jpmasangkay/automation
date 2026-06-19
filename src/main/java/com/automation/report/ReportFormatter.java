@@ -123,6 +123,15 @@ public class ReportFormatter {
         summaryRow(sb, "Text",      result.textDiff().totalLinesA() + " line(s)", result.textDiff().totalLinesB() + " line(s)", s.textScore(),       result.textDiff().matches());
         summaryRow(sb, "Images",    a.getImages().size() + " image(s)",           b.getImages().size() + " image(s)",           s.imageScore(),      result.imageDiff().matches());
         summaryRow(sb, "Links",     a.getLinks().size() + " link(s)",             b.getLinks().size() + " link(s)",             s.linkScore(),       result.linkDiff().matches());
+        
+        double funcScore = 100.0;
+        if (!result.functionalityDiff().matches()) {
+            int fu = a.getFunctionalityComponents().size() + result.functionalityDiff().onlyInB().size();
+            int fm = result.functionalityDiff().onlyInA().size() + result.functionalityDiff().onlyInB().size() + result.functionalityDiff().valueDiffs().size();
+            funcScore = fu == 0 ? 100.0 : Math.max(0.0, (fu - fm) * 100.0 / fu);
+        }
+        summaryRow(sb, "Functionality", a.getFunctionalityComponents().size() + " type(s)", b.getFunctionalityComponents().size() + " type(s)", funcScore, result.functionalityDiff().matches());
+        
         sb.append("</tbody></table>");
         sb.append("<div class='final-result ").append(result.isAllMatch() ? "final-pass" : "final-fail").append("'>");
         sb.append("Overall: ").append(result.isAllMatch() ? "PASS" : "MISMATCH");
@@ -239,10 +248,13 @@ public class ReportFormatter {
         }
         sb.append("</tbody></table></div>");
 
-        // ── Section 6: Additional Plugin Rule Results
+        // ── Section 6: Functionality Components
+        sb.append(renderMapDiff("6. Functionality Components", result.functionalityDiff(), a.getFunctionalityComponents(), b.getFunctionalityComponents()));
+
+        // ── Section 7: Additional Plugin Rule Results
         if (!result.additionalRuleResults().isEmpty()) {
             sb.append("<div class='block'>");
-            sb.append("<div class='section-title'>6. Custom Rule Results</div>");
+            sb.append("<div class='section-title'>7. Custom Rule Results</div>");
             sb.append("<table><thead><tr><th>Rule</th><th>Site A</th><th>Site B</th><th>Similarity</th><th>Status</th></tr></thead><tbody>");
             for (var cr : result.additionalRuleResults()) {
                 String cls = cr.matches() ? "pass" : "fail";

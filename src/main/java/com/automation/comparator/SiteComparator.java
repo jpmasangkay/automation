@@ -149,6 +149,7 @@ public class SiteComparator {
         // ── METADATA & DATALAYER ───────────────────────────────────────────────
         MapDiff metaDiff = compareMaps(a.getMetadata(), b.getMetadata());
         MapDiff dlDiff = compareMaps(a.getDataLayer(), b.getDataLayer());
+        MapDiff funcDiff = compareMaps(a.getFunctionalityComponents(), b.getFunctionalityComponents());
 
         double metaScore = computeMapScore(a.getMetadata(), b.getMetadata(), metaDiff);
         double dlScore = computeMapScore(a.getDataLayer(), b.getDataLayer(), dlDiff);
@@ -169,7 +170,7 @@ public class SiteComparator {
         }
 
         long elapsed = System.currentTimeMillis() - startTime;
-        return new ComparisonResult(a, b, textDiff, imageDiff, linkDiff, metaDiff, dlDiff,
+        return new ComparisonResult(a, b, textDiff, imageDiff, linkDiff, metaDiff, dlDiff, funcDiff,
                 elapsed, scores, additionalResults);
     }
 

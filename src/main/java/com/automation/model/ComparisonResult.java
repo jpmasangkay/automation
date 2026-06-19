@@ -13,13 +13,14 @@ public record ComparisonResult(
     LinkDiff linkDiff,
     MapDiff metadataDiff,
     MapDiff dataLayerDiff,
+    MapDiff functionalityDiff,
     long comparisonTimeMillis,
     SimilarityScores similarityScores,
     List<CheckResult> additionalRuleResults
 ) {
     public boolean isAllMatch() {
         return textDiff.matches() && imageDiff.matches() && linkDiff.matches()
-            && metadataDiff.matches() && dataLayerDiff.matches();
+            && metadataDiff.matches() && dataLayerDiff.matches() && functionalityDiff.matches();
     }
 
     public record TextDiff(boolean matches, int totalLinesA, int totalLinesB,
