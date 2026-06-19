@@ -3,9 +3,9 @@ $Host.UI.RawUI.WindowTitle = "Rebuild - Site Content Comparator"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 Write-Host ""
-Write-Host "  ============================================================"
-Write-Host "    REBUILD -- Site Content Comparator"
-Write-Host "  ============================================================"
+Write-Host "  ============================================================" -ForegroundColor Cyan
+Write-Host "    REBUILD -- Site Content Comparator" -ForegroundColor Cyan
+Write-Host "  ============================================================" -ForegroundColor Cyan
 Write-Host ""
 
 function Get-JavaMajorVersion($javaExe) {
@@ -21,7 +21,10 @@ $JavaExe = $null
 
 if (Get-Command java -ErrorAction SilentlyContinue) {
     $ver = Get-JavaMajorVersion "java"
-    if ($ver -ge 21) { $JavaExe = "java"; Write-Host "  [OK] Java $ver found on PATH." }
+    if ($ver -ge 21) { 
+        $JavaExe = "java"
+        Write-Host "  [OK] Java $ver found on PATH." -ForegroundColor Green
+    }
 }
 
 if (-not $JavaExe) {
@@ -48,38 +51,42 @@ if (-not $JavaExe) {
                 if ($v -ge 21) { return [pscustomobject]@{Exe=$c; Ver=$v} }
             }
         } | Select-Object -First 1
-        if ($found) { $JavaExe = $found.Exe; Write-Host "  [OK] Java $($found.Ver) found."; break }
+        if ($found) { 
+            $JavaExe = $found.Exe
+            Write-Host "  [OK] Java $($found.Ver) found." -ForegroundColor Green
+            break 
+        }
     }
 }
 
 if (-not $JavaExe) {
-    Write-Host "  [ERROR] Java 21+ not found. Run run.bat first to auto-download it."
+    Write-Host "  [ERROR] Java 21+ not found. Run run.bat first to auto-download it." -ForegroundColor Red
     Read-Host "Press Enter to exit"
     exit 1
 }
 
 if ($JavaExe -ne "java") {
     $env:JAVA_HOME = Split-Path (Split-Path $JavaExe -Parent) -Parent
-    Write-Host "  [OK] JAVA_HOME set to: $($env:JAVA_HOME)"
+    Write-Host "  [OK] JAVA_HOME set to: $($env:JAVA_HOME)" -ForegroundColor Green
 }
 
 $MvnExe = Join-Path $ScriptDir "mvnw.cmd"
-Write-Host "  [OK] Using bundled Maven Wrapper."
+Write-Host "  [OK] Maven Wrapper detected." -ForegroundColor Green
 Write-Host ""
-Write-Host "  Cleaning and rebuilding automation-runner.jar..."
+Write-Host "  [BUILD] Cleaning and rebuilding project... (Please wait)" -ForegroundColor Yellow
 Write-Host ""
 
-& $MvnExe clean package --no-transfer-progress -f (Join-Path $ScriptDir "pom.xml")
+$buildOutput = & $MvnExe clean package --no-transfer-progress -f (Join-Path $ScriptDir "pom.xml") 2>&1
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host ""
-    Write-Host "  [ERROR] Build failed. See output above."
+    Write-Host "  [ERROR] Build failed! Output details:" -ForegroundColor Red
+    $buildOutput | Out-String | Write-Host -ForegroundColor DarkRed
     Read-Host "Press Enter to exit"
     exit 1
 }
 
-Write-Host ""
-Write-Host "  [OK] Build complete! automation-runner.jar is ready in target\"
-Write-Host "  Run run.bat to start the comparator."
+Write-Host "  [OK] Build complete! automation-runner.jar is ready in target/" -ForegroundColor Green
+Write-Host "  Run run.bat to start the comparator." -ForegroundColor Cyan
 Write-Host ""
 Read-Host "Press Enter to exit"
