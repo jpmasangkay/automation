@@ -18,263 +18,266 @@ public class ContentExtractor {
 
     private static final Logger logger = LoggerFactory.getLogger(ContentExtractor.class);
     private final Browser browser;
+    private final FingerprintCache cache;
     private static final Set<String> GENERIC_SLUGS = new HashSet<>(Arrays.asList(
             "index", "index.html", "home", "default", "main", "..", "."));
 
-    public ContentExtractor(Browser browser) {
+    public ContentExtractor(Browser browser, FingerprintCache cache) {
         this.browser = browser;
+        this.cache   = cache;
     }
 
     public SiteData extractSiteData(String url, String label) {
         long startTime = System.currentTimeMillis();
 
-        int timeout = Config.getTimeoutSeconds() * 1000;
+        int timeoutMs  = Config.getTimeoutSeconds() * 1000;
         int maxRetries = Config.getRetries();
 
-        try (BrowserContext preCheckContext = browser.newContext()) {
-            APIResponse response = preCheckContext.request().head(url,
-                    com.microsoft.playwright.options.RequestOptions.create().setTimeout(10000));
-            if (!response.ok() && response.status() != 405 && response.status() != 403) {
-                logger.warn("Site {} returned HTTP {} on HEAD pre-check. Proceeding anyway...", label, response.status());
-            }
+        // ── HEAD pre-check (also extracts fingerprint headers) ────────────────
+        String etag    = null;
+        String lastMod = null;
+        try (BrowserContext preCtx = browser.newContext()) {
+            APIResponse head = preCtx.request().head(url,
+                    com.microsoft.playwright.options.RequestOptions.create().setTimeout(8_000));
+            etag    = head.headers().get("etag");
+            lastMod = head.headers().get("last-modified");
         } catch (Exception e) {
-            logger.warn("Site {} HTTP pre-check failed: {}. Proceeding anyway...", label, e.getMessage());
+            logger.debug("Site {} HEAD check skipped: {}", label, e.getMessage());
         }
 
+        // ── Fingerprint cache lookup ───────────────────────────────────────────
+        if (Config.isCacheEnabled() && cache != null) {
+            SiteData cached = cache.get(url, etag, lastMod);
+            if (cached != null) {
+                logger.info("   [CACHE] {} - using saved data, no page load needed.", url);
+                return cached;
+            }
+        }
+
+        // ── Full Playwright extraction ─────────────────────────────────────────
         for (int attempt = 1; attempt <= maxRetries; attempt++) {
-            // Memory Leak Fix & Isolation: Context and Pages in try-with-resources
             try (BrowserContext context = browser.newContext();
-                 Page page = context.newPage();
-                 Page helperPage = context.newPage()) {
+                 Page page = context.newPage()) {
 
-                // Block third-party popups, surveys, and cookie banners at the network level
-                page.route("**/*qualtrics.com**", Route::abort);
-                page.route("**/*cookielaw.org**", Route::abort);
-                page.route("**/*onetrust.com**", Route::abort);
-                page.route("**/*tealiumiq.com**", Route::abort);
-                page.route("**/*google-analytics.com**", Route::abort);
-                page.route("**/*googletagmanager.com**", Route::abort); // GTM Blocking
+                // Block analytics, tag managers, and heavy 3rd-party scripts
+                page.route("**/*qualtrics.com**",        Route::abort);
+                page.route("**/*cookielaw.org**",         Route::abort);
+                page.route("**/*onetrust.com**",          Route::abort);
+                page.route("**/*tealiumiq.com**",         Route::abort);
+                page.route("**/*google-analytics.com**",  Route::abort);
+                page.route("**/*googletagmanager.com**",  Route::abort);
+                // Also block fonts/ads which add network idle delay
+                page.route("**/*.woff2",                  Route::abort);
+                page.route("**/*.woff",                   Route::abort);
 
-                logger.info("Navigating to Site {} (Attempt {}/{}): {}", label, attempt, maxRetries, url);
-                page.navigate(url, new Page.NavigateOptions().setTimeout(timeout));
-                page.waitForLoadState(LoadState.NETWORKIDLE, new Page.WaitForLoadStateOptions().setTimeout(timeout / 2));
-                logger.info("Site {} loaded.", label);
+                logger.info("   Loading page: {}", url);
+                page.navigate(url, new Page.NavigateOptions().setTimeout(timeoutMs));
+                // DOMContentLoaded is much faster than NETWORKIDLE and sufficient for content
+                page.waitForLoadState(LoadState.DOMCONTENTLOADED,
+                        new Page.WaitForLoadStateOptions().setTimeout(timeoutMs));
+                // Wait a short fixed time for JS-driven content to settle, instead of NETWORKIDLE
+                page.waitForTimeout(800);
 
-                // Scroll the full page
+                // Quick scroll to trigger lazy-loaded images, then wait for them to settle
                 try {
-                    page.evaluate("() => new Promise(resolve => {" +
-                            "let pos = 0;" +
-                            "const step = () => {" +
-                            "  window.scrollBy(0, 400);" +
-                            "  pos += 400;" +
-                            "  if (pos < document.body.scrollHeight && pos < 20000) { setTimeout(step, 80); }" +
-                            "  else { window.scrollTo(0, 0); setTimeout(resolve, 500); }" +
-                            "}; step();" +
-                            "})");
+                    page.evaluate(
+                        "() => new Promise(resolve => {" +
+                        "  let pos = 0;" +
+                        "  const step = () => {" +
+                        "    window.scrollBy(0, 600); pos += 600;" +
+                        "    if (pos < document.body.scrollHeight && pos < 8000) { setTimeout(step, 60); }" +
+                        "    else { window.scrollTo(0, 0); resolve(); }" +
+                        "  }; step();" +
+                        "})");
                 } catch (Exception e) {
-                    logger.warn("Page scroll failed for {}: {}", label, e.getMessage());
+                    logger.debug("Scroll skipped for {}: {}", label, e.getMessage());
                 }
 
-                helperPage.setViewportSize(64, 64);
-                helperPage.setContent(
-                        "<html><body style='margin:0;padding:0;width:64px;height:64px;overflow:hidden;background:#fff;'>" +
-                        "<img id='ph' style='width:64px;height:64px;display:block;object-fit:fill;' /></body></html>");
-                helperPage.waitForLoadState();
+                // Wait for all lazy images to finish loading before extracting
+                try {
+                    page.waitForFunction(
+                        "() => Array.from(document.images).every(img => img.complete)",
+                        new Page.WaitForFunctionOptions().setTimeout(6_000));
+                } catch (Exception e) {
+                    logger.debug("Image completion wait timed out for {} — proceeding with partial load.", label);
+                }
 
-                logger.info("Extracting content from Site {}...", label);
+                logger.info("   Extracting content...");
                 cleanDom(page);
-                String rawText = extractText(page);
-                List<ImageData> images = extractImages(page, helperPage, label);
-                List<LinkData> links = extractLinks(page, label);
-                Map<String, String> metadata = extractMetadata(page, label);
-                Map<String, String> dataLayer = extractDataLayer(page, label);
-                
-                // Visual Heatmap Setup: take full page screenshot
-                byte[] fullPageScreenshot = new byte[0];
-                try {
-                    fullPageScreenshot = page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
-                } catch (Exception e) {
-                    logger.warn("Failed to capture full page screenshot for Site {}: {}", label, e.getMessage());
-                }
+                String rawText              = extractText(page);
+                List<ImageData> images      = extractImages(page, context, label);
+                List<LinkData> links        = extractLinks(page, label);
+                Map<String, String> metadata  = extractMetadata(page);
+                Map<String, String> dataLayer = extractDataLayer(page);
 
                 long elapsed = System.currentTimeMillis() - startTime;
-                logger.info("Site {} extraction complete ({} ms).", label, elapsed);
-                return new SiteData(label, url, rawText, images, links, metadata, dataLayer, elapsed, fullPageScreenshot);
+                logger.info("   Done in {}ms — {} image(s), {} link(s) found.", elapsed, images.size(), links.size());
+
+                SiteData result = new SiteData(label, url, rawText, images, links,
+                        metadata, dataLayer, elapsed);
+
+                // Store in cache
+                if (Config.isCacheEnabled() && cache != null) {
+                    cache.put(url, etag, lastMod, result);
+                }
+
+                return result;
 
             } catch (Exception e) {
-                logger.warn("Site {} attempt {} failed: {}", label, attempt, e.getMessage());
-                if (attempt == maxRetries) {
-                    logger.error("Site {} failed after {} attempts.", label, maxRetries);
-                    return new SiteData(label, url, "", List.of(), List.of(), Map.of(), Map.of(), 0, new byte[0]);
+                if (attempt < maxRetries) {
+                    logger.warn("   Attempt {}/{} failed for {}. Retrying...", attempt, maxRetries, url);
+                } else {
+                    logger.error("   Failed to load {} after {} attempts: {}", url, maxRetries, e.getMessage());
+                    return new SiteData(label, url, "", List.of(), List.of(),
+                            Map.of(), Map.of(), 0);
                 }
             }
         }
-        return new SiteData(label, url, "", List.of(), List.of(), Map.of(), Map.of(), 0, new byte[0]);
+        return new SiteData(label, url, "", List.of(), List.of(), Map.of(), Map.of(), 0);
     }
+
+    // ── DOM Cleaning ─────────────────────────────────────────────────────────
 
     private void cleanDom(Page page) {
         String ignoreSelectors = Config.getIgnoreSelectors();
-        String js = String.format("""
+        String safeIgnore = ignoreSelectors != null ? ignoreSelectors.replace("'", "\\'") : "";
+        page.evaluate(String.format("""
             () => {
                 const ignoreList = '%s';
-                
-                // 1. Remove non-visible elements
+
+                // Remove scripts, styles, noscripts
                 document.querySelectorAll('script, style, noscript').forEach(el => el.remove());
-                
-                // Hidden Elements filtering
-                document.querySelectorAll('*').forEach(el => {
-                    const style = window.getComputedStyle(el);
-                    if (el.hasAttribute('hidden') || style.display === 'none' || style.visibility === 'hidden') {
-                        el.remove();
-                    }
+
+                // Remove hidden elements (only inside the body, to avoid deleting <head> metadata)
+                document.querySelectorAll('body *').forEach(el => {
+                    try {
+                        const s = window.getComputedStyle(el);
+                        if (el.hasAttribute('hidden') || s.display === 'none' || s.visibility === 'hidden') {
+                            el.remove();
+                        }
+                    } catch(_) {}
                 });
 
-                // 2. Remove standard page headers, footers, and navigation bars
+                // Remove structural chrome and cookie banners
                 const selectors = [
-                    'header', 'footer', 'nav',
-                    '#header', '#footer', '#navigation', '#navbar',
-                    '.header', '.footer', '.navigation', '.navigation__sticky',
-                    '.page-header', '.page-footer',
-                    '.site-header', '.site-footer',
-                    '.navbar', '.nav-container',
-                    '#onetrust-consent-sdk', '.cookie-banner', '#cookie-law-info-bar'
+                    'header','footer','nav','#header','#footer','#navigation','#navbar',
+                    '.header','.footer','.navigation','.navigation__sticky',
+                    '.page-header','.page-footer','.site-header','.site-footer',
+                    '.navbar','.nav-container',
+                    '#onetrust-consent-sdk','.cookie-banner','#cookie-law-info-bar'
                 ];
-                if (ignoreList) {
-                    ignoreList.split(',').forEach(s => {
-                        if (s.trim()) selectors.push(s.trim());
-                    });
+                if (ignoreList.trim()) {
+                    ignoreList.split(',').forEach(s => { if (s.trim()) selectors.push(s.trim()); });
                 }
-                
-                selectors.forEach(sel => {
-                    document.querySelectorAll(sel).forEach(el => el.remove());
-                });
+                selectors.forEach(sel => document.querySelectorAll(sel).forEach(el => el.remove()));
 
-                // 3. Freeze all animations and transitions to prevent screenshot flakiness
+                // Freeze animations
                 const style = document.createElement('style');
-                style.innerHTML = `
-                    * {
-                        transition: none !important;
-                        animation: none !important;
-                        scroll-behavior: auto !important;
-                    }
-                `;
-                document.head.appendChild(style);
+                style.innerHTML = '* { transition:none!important; animation:none!important; scroll-behavior:auto!important; }';
+                if (document.head) {
+                    document.head.appendChild(style);
+                } else if (document.documentElement) {
+                    document.documentElement.appendChild(style);
+                }
             }
-        """, ignoreSelectors != null ? ignoreSelectors : "");
-        
-        page.evaluate(js);
+        """, safeIgnore));
     }
+
+    // ── Text ─────────────────────────────────────────────────────────────────
 
     private String extractText(Page page) {
-        return (String) page.evaluate("""
-            () => document.body ? document.body.innerText : ''
-        """);
+        return (String) page.evaluate("() => document.body ? document.body.innerText : ''");
     }
 
-    private List<ImageData> extractImages(Page page, Page helperPage, String siteLabel) {
-        try {
-            page.evaluate("() => Promise.all(" +
-                    "  Array.from(document.images)" +
-                    "    .filter(img => !img.complete)" +
-                    "    .map(img => new Promise(resolve => {" +
-                    "      img.onload = resolve;" +
-                    "      img.onerror = resolve;" +
-                    "    }))" +
-                    ")");
-        } catch (Exception e) {
-            logger.warn("Image load wait failed for {}: {}", siteLabel, e.getMessage());
-        }
-        page.waitForTimeout(500);
+    // ── Images ───────────────────────────────────────────────────────────────
 
+    private List<ImageData> extractImages(Page page, BrowserContext context, String siteLabel) {
+        // Collect image URLs from the DOM in one JS call
         @SuppressWarnings("unchecked")
         List<Map<String, String>> imgInfoList = (List<Map<String, String>>) page.evaluate(
-                "() => Array.from(document.images)" +
-                        "  .map(img => ({" +
-                        "    src: img.getAttribute('src') || ''," +
-                        "    currentSrc: img.currentSrc || img.src || ''" +
-                        "  }))" +
-                        "  .filter(info => {" +
-                        "    const u = info.currentSrc.toLowerCase();" +
-                        "    return u.startsWith('http') &&" +
-                        "           !u.includes('placeholder') &&" +
-                        "           !u.includes('blank.gif') &&" +
-                        "           !u.includes('spacer') &&" +
-                        "           !u.includes('cookielaw') &&" +
-                        "           !u.includes('qualtrics') &&" +
-                        "           !u.includes('data:image');" +
-                        "  })");
+            "() => Array.from(document.images)" +
+            ".map(img => ({ src: img.getAttribute('src')||'', currentSrc: img.currentSrc||img.src||'' }))" +
+            ".filter(info => info.currentSrc.toLowerCase().startsWith('http'))");
 
         List<ImageData> images = new ArrayList<>();
         int index = 0;
         for (Map<String, String> info : imgInfoList) {
-            String src = info.get("src");
+            String src        = info.get("src");
             String currentSrc = info.get("currentSrc");
+            // Strip CDN cache-busting query params so the same image always produces the same hash
+            String downloadUrl = stripCacheBustingParams(currentSrc);
             try {
-                byte[] imageBytes = page.context().request().get(currentSrc).body();
+                // Download image bytes once via the existing context's request API (no new page)
+                byte[] imageBytes = context.request().get(downloadUrl,
+                        com.microsoft.playwright.options.RequestOptions.create().setTimeout(8_000)).body();
                 String hash = md5(imageBytes);
-                String perceptualHash = computePerceptualHash(currentSrc, helperPage);
-                images.add(new ImageData(index, src.isBlank() ? currentSrc : src, hash, perceptualHash));
+                images.add(new ImageData(index, src.isBlank() ? currentSrc : src, hash, hash));
                 index++;
             } catch (Exception e) {
-                logger.warn("Site {} - skipped image {} ({}): {}", siteLabel, index, currentSrc, e.getMessage());
+                logger.debug("Skipped image {}: {}", downloadUrl, e.getMessage());
             }
         }
-        logger.info("Site {} - captured {} image(s).", siteLabel, images.size());
         return images;
     }
 
-    private String computePerceptualHash(String imageUrl, Page helperPage) {
+    /**
+     * Strips well-known CDN cache-busting query parameters from an image URL so that
+     * the same image served with different cache tokens still yields the same MD5 hash.
+     */
+    private String stripCacheBustingParams(String url) {
+        if (url == null || !url.contains("?")) return url;
         try {
-            helperPage.evaluate(
-                    "(url) => new Promise((res, rej) => {" +
-                            "  const img = document.getElementById('ph');" +
-                            "  const load = () => res();" +
-                            "  const err  = () => rej(new Error('load failed'));" +
-                            "  img.addEventListener('load',  load, {once: true});" +
-                            "  img.addEventListener('error', err,  {once: true});" +
-                            "  img.src = ''; img.src = url;" +
-                            "})",
-                    imageUrl);
-            byte[] shot = helperPage.locator("#ph").screenshot();
-            return md5(shot);
+            java.net.URI uri = new java.net.URI(url);
+            String query = uri.getQuery();
+            if (query == null) return url;
+            // Keep only non-cache-busting params; drop known volatile keys
+            java.util.Set<String> BUST_KEYS = new java.util.HashSet<>(java.util.Arrays.asList(
+                    "v", "ver", "t", "ts", "_", "cb", "bust", "rand", "nocache",
+                    "cachebuster", "cachekey", "rev", "hash"));
+            String[] pairs = query.split("&");
+            StringBuilder kept = new StringBuilder();
+            for (String p : pairs) {
+                String key = p.split("=")[0].toLowerCase();
+                if (!BUST_KEYS.contains(key)) {
+                    if (kept.length() > 0) kept.append("&");
+                    kept.append(p);
+                }
+            }
+            String newQuery = kept.length() > 0 ? "?" + kept : "";
+            String base = url.substring(0, url.indexOf("?"));
+            return base + newQuery;
         } catch (Exception e) {
-            return "phash-error";
+            return url;
         }
     }
+
+    // ── Links ─────────────────────────────────────────────────────────────────
 
     private List<LinkData> extractLinks(Page page, String siteLabel) {
         @SuppressWarnings("unchecked")
         List<Map<String, String>> extracted = (List<Map<String, String>>) page.evaluate("""
             () => {
-                const linksMap = new Map();
-                const addLink = (href, el) => {
+                const m = new Map();
+                const add = (href, el) => {
                     if (!href) return;
-                    const text = (el.innerText || el.textContent || "").trim();
-                    if (!linksMap.has(href) || (linksMap.get(href) === "" && text !== "")) {
-                        linksMap.set(href, text);
-                    }
+                    const t = (el.innerText||el.textContent||'').trim();
+                    if (!m.has(href) || (m.get(href)==='' && t!=='')) m.set(href, t);
                 };
-
-                document.querySelectorAll('a[href]').forEach(a => addLink(a.getAttribute('href'), a));
+                document.querySelectorAll('a[href]').forEach(a => add(a.getAttribute('href'), a));
                 document.querySelectorAll('button[onclick]').forEach(btn => {
-                    const onclick = btn.getAttribute('onclick');
-                    const sq = onclick.split("'");
-                    for (let i = 1; i < sq.length; i += 2) {
-                        const v = sq[i].trim();
-                        if (v.startsWith('/') || v.includes('/')) addLink(v, btn);
-                    }
-                    const dq = onclick.split('"');
-                    for (let i = 1; i < dq.length; i += 2) {
-                        const v = dq[i].trim();
-                        if (v.startsWith('/') || v.includes('/')) addLink(v, btn);
-                    }
+                    const oc = btn.getAttribute('onclick');
+                    [oc.split("'"), oc.split('"')].forEach(parts => {
+                        for (let i=1; i<parts.length; i+=2) {
+                            const v = parts[i].trim();
+                            if (v.startsWith('/') || v.includes('/')) add(v, btn);
+                        }
+                    });
                 });
-                document.querySelectorAll('[data-href]').forEach(el => addLink(el.getAttribute('data-href'), el));
-                document.querySelectorAll('[data-url]').forEach(el => addLink(el.getAttribute('data-url'), el));
-
-                const result = [];
-                linksMap.forEach((text, href) => result.push({ href: href, text: text }));
-                return result;
+                document.querySelectorAll('[data-href]').forEach(el => add(el.getAttribute('data-href'), el));
+                document.querySelectorAll('[data-url]').forEach(el  => add(el.getAttribute('data-url'),  el));
+                const res = [];
+                m.forEach((text, href) => res.push({href, text}));
+                return res;
             }
         """);
 
@@ -282,129 +285,83 @@ public class ContentExtractor {
         for (Map<String, String> item : extracted) {
             String href = item.get("href");
             String text = item.get("text");
-            if (href == null || href.isBlank() || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:"))
-                continue;
+            if (href == null || href.isBlank() || href.startsWith("#")) continue;
             String slug = extractSlug(href);
-            if (!slug.isBlank())
-                links.add(new LinkData(href, slug, text != null ? text : ""));
+            if (!slug.isBlank()) links.add(new LinkData(href, slug, text != null ? text : ""));
         }
-
-        List<LinkData> unique = links.stream().distinct().collect(Collectors.toList());
-        logger.info("Site {} - found {} unique link slug(s).", siteLabel, unique.size());
-        return unique;
+        return links.stream().distinct().collect(Collectors.toList());
     }
 
-    private Map<String, String> extractMetadata(Page page, String siteLabel) {
+    // ── Metadata ─────────────────────────────────────────────────────────────
+
+    private Map<String, String> extractMetadata(Page page) {
         @SuppressWarnings("unchecked")
         Map<String, Object> raw = (Map<String, Object>) page.evaluate("""
             () => {
                 const meta = {};
-                const titleTag = document.querySelector('title');
-                let titleVal = titleTag ? titleTag.textContent.trim() : null;
-                if (!titleVal) { const ogTitle = document.querySelector('meta[property="og:title"]'); if (ogTitle) titleVal = ogTitle.getAttribute('content'); }
-                if (!titleVal) { const metaTitle = document.querySelector('meta[name="title"]'); if (metaTitle) titleVal = metaTitle.getAttribute('content'); }
-                if (titleVal !== null) meta['Title'] = titleVal.trim();
+                const title = document.querySelector('title');
+                if (title) {
+                    meta['Title'] = title.textContent.trim();
+                }
 
-                let descVal = null;
-                const metaDesc = document.querySelector('meta[name="description"]');
-                if (metaDesc) descVal = metaDesc.getAttribute('content');
-                if (!descVal) { const ogDesc = document.querySelector('meta[property="og:description"]'); if (ogDesc) descVal = ogDesc.getAttribute('content'); }
-                if (descVal !== null) meta['Description'] = descVal.trim();
-
-                const metaKw = document.querySelector('meta[name="keywords"]');
-                if (metaKw) { const kwVal = metaKw.getAttribute('content'); if (kwVal !== null) meta['Keywords'] = kwVal.trim(); }
-
-                let authorVal = null;
-                const metaAuthor = document.querySelector('meta[name="author"]');
-                if (metaAuthor) authorVal = metaAuthor.getAttribute('content');
-                if (!authorVal) { const ogAuthor = document.querySelector('meta[property="og:author"]') || document.querySelector('meta[property="article:author"]'); if (ogAuthor) authorVal = ogAuthor.getAttribute('content'); }
-                if (authorVal !== null) meta['Author'] = authorVal.trim();
-
-                let publisherVal = null;
-                const metaPublisher = document.querySelector('meta[name="publisher"]');
-                if (metaPublisher) publisherVal = metaPublisher.getAttribute('content');
-                if (!publisherVal) { const ogPublisher = document.querySelector('meta[property="og:publisher"]') || document.querySelector('meta[property="article:publisher"]'); if (ogPublisher) publisherVal = ogPublisher.getAttribute('content'); }
-                if (publisherVal !== null) meta['Publisher'] = publisherVal.trim();
-
+                document.querySelectorAll('meta').forEach(el => {
+                    const name = el.getAttribute('name') || el.getAttribute('property') || el.getAttribute('http-equiv');
+                    const content = el.getAttribute('content');
+                    if (name && content !== null && content !== undefined) {
+                        meta[name] = content.trim();
+                    }
+                });
                 return meta;
             }
         """);
 
         Map<String, String> metadata = new LinkedHashMap<>();
-        if (raw != null) {
-            for (Map.Entry<String, Object> entry : raw.entrySet()) {
-                metadata.put(entry.getKey(), entry.getValue() != null ? entry.getValue().toString() : "");
-            }
-        }
-        logger.info("Site {} - extracted {} metadata tag(s).", siteLabel, metadata.size());
+        if (raw != null) raw.forEach((k, v) -> { if (v != null) metadata.put(k, v.toString()); });
         return metadata;
     }
 
-    private Map<String, String> extractDataLayer(Page page, String siteLabel) {
+    // ── DataLayer ─────────────────────────────────────────────────────────────
+
+    private Map<String, String> extractDataLayer(Page page) {
         @SuppressWarnings("unchecked")
         Map<String, Object> raw = (Map<String, Object>) page.evaluate("""
             () => {
                 const result = {};
-                const targetMapping = {
-                  'sitetype': 'Site Type', 'brandwebsitetype': 'Brand Website Type',
-                  'globalbrandr360': 'Global Brand - R360', 'globalbrand': 'Global Brand - R360',
-                  'gbu': 'GBU', 'region': 'Region', 'country': 'Country',
-                  'targetenus': 'Target (en_US)', 'target': 'Target (en_US)', 'targetaudience': 'Target (en_US)', 'targetpersona': 'Target (en_US)',
-                  'franchiser360': 'Franchise - R360', 'franchise': 'Franchise - R360',
-                  'therapeuticearear360': 'Therapeutic Area - R360', 'therapeuticarear360': 'Therapeutic Area - R360', 'therapeuticarea': 'Therapeutic Area - R360',
-                  'indicationr360': 'Indication - R360', 'indication': 'Indication - R360', 'specialty': 'Specialty',
-                  'customfield1value': 'Custom Field 1 Value', 'customfield1': 'Custom Field 1 Value',
-                  'customfield2value': 'Custom Field 2 Value', 'customfield2': 'Custom Field 2 Value',
-                  'customfield3value': 'Custom Field 3 Value', 'customfield3': 'Custom Field 3 Value',
-                  'customfield4value': 'Custom Field 4 Value', 'customfield4': 'Custom Field 4 Value',
-                  'customfield5value': 'Custom Field 5 Value', 'customfield5': 'Custom Field 5 Value'
-                };
-                const normalizeKey = (key) => key.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-                if (window.dataLayer && Array.isArray(window.dataLayer)) {
-                    window.dataLayer.forEach(item => {
-                        if (item && typeof item === 'object') {
-                            Object.keys(item).forEach(k => {
-                                const nk = normalizeKey(k);
-                                if (targetMapping[nk]) result[targetMapping[nk]] = String(item[k]).trim();
-                            });
+                const scan = (obj, prefix='') => {
+                    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return;
+                    Object.keys(obj).forEach(k => {
+                        const val = obj[k];
+                        if (val === null || val === undefined) return;
+                        if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
+                            result[prefix + k] = String(val).trim();
+                        } else if (typeof val === 'object' && !Array.isArray(val)) {
+                            // Max depth of 5 to prevent infinite recursion
+                            if (prefix.split('.').length < 5) {
+                                scan(val, prefix + k + '.');
+                            }
                         }
                     });
-                }
-
-                const checkObjectRecursively = (obj, depth = 0) => {
-                    if (!obj || typeof obj !== 'object' || depth > 5) return;
-                    Object.keys(obj).forEach(k => {
-                        const nk = normalizeKey(k);
-                        if (targetMapping[nk]) result[targetMapping[nk]] = String(obj[k]).trim();
-                        else if (obj[k] && typeof obj[k] === 'object') checkObjectRecursively(obj[k], depth + 1);
-                    });
                 };
-                if (window.digitalData) checkObjectRecursively(window.digitalData);
-                if (window.siteData) checkObjectRecursively(window.siteData);
-                if (window.siteDataLayer) checkObjectRecursively(window.siteDataLayer);
 
-                document.querySelectorAll('meta').forEach(tag => {
-                    const name = tag.getAttribute('name') || tag.getAttribute('property') || tag.getAttribute('http-equiv');
-                    const content = tag.getAttribute('content');
-                    if (name && content !== null) {
-                        const nk = normalizeKey(name);
-                        if (targetMapping[nk]) result[targetMapping[nk]] = content.trim();
-                    }
-                });
+                if (window.dataLayer && Array.isArray(window.dataLayer)) {
+                    window.dataLayer.forEach((item, idx) => {
+                        if (item && typeof item === 'object') scan(item, `dataLayer[${idx}].`);
+                    });
+                }
+                if (window.digitalData) scan(window.digitalData, 'digitalData.');
+                if (window.siteData) scan(window.siteData, 'siteData.');
+                if (window.siteDataLayer) scan(window.siteDataLayer, 'siteDataLayer.');
+
                 return result;
             }
         """);
 
         Map<String, String> dataLayer = new LinkedHashMap<>();
-        if (raw != null) {
-            for (Map.Entry<String, Object> entry : raw.entrySet()) {
-                dataLayer.put(entry.getKey(), entry.getValue() != null ? entry.getValue().toString() : "");
-            }
-        }
-        logger.info("Site {} - extracted {} data layer property(ies).", siteLabel, dataLayer.size());
+        if (raw != null) raw.forEach((k, v) -> { if (v != null) dataLayer.put(k, v.toString()); });
         return dataLayer;
     }
+
+    // ── Utilities ─────────────────────────────────────────────────────────────
 
     private String extractSlug(String href) {
         try {

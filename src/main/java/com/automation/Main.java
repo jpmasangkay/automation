@@ -5,6 +5,9 @@ import com.automation.extractor.ContentExtractor;
 import com.automation.model.ComparisonResult;
 import com.automation.model.SiteData;
 import com.automation.report.ReportFormatter;
+import com.automation.extractor.FingerprintCache;
+import com.automation.report.DashboardGenerator;
+import com.automation.report.DashboardGenerator.DashboardEntry;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Playwright;
@@ -16,8 +19,11 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -37,10 +43,10 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        logger.info("════════════════════════════════════════════════════════");
+        logger.info("========================================================");
         logger.info(" SITE CONTENT COMPARATOR");
         logger.info(" Automated Web Page Comparison Tool");
-        logger.info("════════════════════════════════════════════════════════");
+        logger.info("========================================================");
 
         File excelFile = resolveExcelFile(args);
         if (excelFile == null) {
@@ -61,7 +67,8 @@ public class Main {
             Browser browser = playwright.chromium().launch(
                     new BrowserType.LaunchOptions().setHeadless(true).setArgs(java.util.List.of("--headless=new")));
 
-            ContentExtractor extractor = new ContentExtractor(browser);
+            FingerprintCache cache = new FingerprintCache(Config.getCacheTtlHours());
+            ContentExtractor extractor = new ContentExtractor(browser, cache);
             SiteComparator comparator = new SiteComparator();
             ReportFormatter reportFormatter = new ReportFormatter(browser);
 
@@ -73,54 +80,74 @@ public class Main {
             AtomicInteger failed = new AtomicInteger(0);
             AtomicInteger count = new AtomicInteger(1);
 
-            List<Future<?>> futures = new ArrayList<>();
+            List<Future<DashboardEntry>> futures = new ArrayList<>();
 
             try {
                 for (UrlPair pair : pairs) {
                     futures.add(pool.submit(() -> {
                         int currentCount = count.getAndIncrement();
-                        logger.info("┌─ Pair {} / {} ──────────────────────────────────────────", currentCount, pairs.size());
-                        logger.info("│  Site A : {}", pair.urlA);
-                        logger.info("│  Site B : {}", pair.urlB);
+                        logger.info("--- Pair {} / {} ------------------------------------------", currentCount, pairs.size());
+                        logger.info("   Site A : {}", pair.urlA);
+                        logger.info("   Site B : {}", pair.urlB);
                         
                         try {
-                            logger.info("│  [1/3] Loading both pages for Pair {}...", currentCount);
+                            logger.info("   [1/3] Loading both pages for Pair {}...", currentCount);
                             SiteData dataA = extractor.extractSiteData(pair.urlA, "A-Pair" + currentCount);
-                            SiteData dataB = extractor.extractSiteData(pair.urlB, "B-Pair" + currentCount);
-
-                            logger.info("│  [2/3] Comparing content for Pair {}...", currentCount);
-                            ComparisonResult result = comparator.compare(dataA, dataB);
-
-                            logger.info("│  [3/3] Generating PDF report for Pair {}...", currentCount);
-                            reportFormatter.generateReport(result);
-
-                            if (result.isAllMatch()) {
-                                logger.info("└─ Result for Pair {}: PASS ✓", currentCount);
-                                passed.incrementAndGet();
+                            SiteData dataB;
+                            if (normalizeUrl(pair.urlA).equals(normalizeUrl(pair.urlB))) {
+                                logger.info("   [SAME URL] Identical URLs detected — reusing Site A data for Site B (no double load).");
+                                dataB = new SiteData("B-Pair" + currentCount, pair.urlB,
+                                        dataA.getRawText(), dataA.getImages(), dataA.getLinks(),
+                                        dataA.getMetadata(), dataA.getDataLayer(), dataA.getExtractionTimeMillis());
                             } else {
-                                logger.info("└─ Result for Pair {}: MISMATCH ✗", currentCount);
-                                failed.incrementAndGet();
+                                dataB = extractor.extractSiteData(pair.urlB, "B-Pair" + currentCount);
                             }
 
+                            logger.info("   [2/3] Comparing content for Pair {}...", currentCount);
+                            ComparisonResult result = comparator.compare(dataA, dataB);
+
+                            logger.info("   [3/3] Generating PDF report for Pair {}...", currentCount);
+                            String basename = reportFormatter.generateReport(result);
+
+                            if (result.isAllMatch()) {
+                                logger.info("--- Result for Pair {}: PASS", currentCount);
+                                passed.incrementAndGet();
+                            } else {
+                                logger.info("--- Result for Pair {}: MISMATCH", currentCount);
+                                failed.incrementAndGet();
+                            }
+                            
+                            return new DashboardEntry(currentCount, result, basename);
+
                         } catch (Exception e) {
-                            logger.error("└─ [ERROR] Pair {} failed: {}", currentCount, e.getMessage(), e);
+                            logger.error("--- [ERROR] Pair {} failed: {}", currentCount, e.getMessage(), e);
                             failed.incrementAndGet();
+                            return null;
                         }
                     }));
                 }
 
-                for (Future<?> f : futures) {
-                    f.get();
+                List<DashboardEntry> entries = new ArrayList<>();
+                for (Future<DashboardEntry> f : futures) {
+                    DashboardEntry entry = f.get();
+                    if (entry != null) {
+                        entries.add(entry);
+                    }
                 }
+                
+                // Generate the consolidated dashboard HTML
+                DashboardGenerator.generate(entries, Paths.get("reports"));
+                // Persist the fingerprint cache
+                cache.persist();
 
             } finally {
                 pool.shutdown();
             }
 
-            logger.info("════════════════════════════════════════════════════════");
+            logger.info("========================================================");
             logger.info(" DONE! Passed: {}   Mismatches: {}   Total: {}", passed.get(), failed.get(), (passed.get() + failed.get()));
             logger.info(" Reports saved to: reports\\");
-            logger.info("════════════════════════════════════════════════════════");
+            logger.info("========================================================");
         }
     }
 
@@ -154,6 +181,20 @@ public class Main {
 
         logger.error("No Excel file found. Place your .xlsx file in the data\\ folder and try again.");
         return null;
+    }
+
+    /**
+     * Normalises a URL for equality comparison:
+     * lower-cases it, removes a trailing slash, and strips a leading "www.".
+     */
+    private static String normalizeUrl(String url) {
+        if (url == null) return "";
+        String u = url.trim().toLowerCase();
+        // strip trailing slash
+        if (u.endsWith("/")) u = u.substring(0, u.length() - 1);
+        // treat www.example.com same as example.com
+        u = u.replace("://www.", "://");
+        return u;
     }
 
     private static List<UrlPair> readUrlPairs(File file) {

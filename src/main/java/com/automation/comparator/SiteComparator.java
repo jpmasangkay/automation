@@ -1,9 +1,12 @@
 package com.automation.comparator;
 
+import com.automation.comparator.rules.CheckResult;
+import com.automation.comparator.rules.RuleRegistry;
 import com.automation.model.ComparisonResult;
 import com.automation.model.ComparisonResult.*;
 import com.automation.model.ImageData;
 import com.automation.model.LinkData;
+import com.automation.model.SimilarityScores;
 import com.automation.model.SiteData;
 
 import javax.imageio.ImageIO;
@@ -20,7 +23,7 @@ public class SiteComparator {
     public ComparisonResult compare(SiteData a, SiteData b) {
         long startTime = System.currentTimeMillis();
 
-        // TEXT
+        // ── TEXT ─────────────────────────────────────────────────────────────
         List<String> linesA = splitLines(a.getRawText());
         List<String> linesB = splitLines(b.getRawText());
 
@@ -33,33 +36,49 @@ public class SiteComparator {
         boolean textMatches = textOnlyInA.isEmpty() && textOnlyInB.isEmpty();
         TextDiff textDiff = new TextDiff(textMatches, linesA.size(), linesB.size(), matchedLineCount, textOnlyInA, textOnlyInB);
 
-        // IMAGES
+        // Text similarity: Jaccard = |A ∩ B| / |A ∪ B|
+        int textUnion = setA.size() + setB.size() - matchedLineCount;
+        double textScore = textUnion == 0 ? 100.0 : (matchedLineCount * 100.0 / textUnion);
+
+        // ── IMAGES ───────────────────────────────────────────────────────────
         List<ImageData> imagesA = a.getImages();
         List<ImageData> imagesB = b.getImages();
-        
+
         List<ImageMatch> matchesList = new ArrayList<>();
         int matchedImagesCount = 0;
         int visualMatchImagesCount = 0;
         int mismatchCount = 0;
 
-        List<ImageData> unmatchedB = new ArrayList<>(imagesB);
+        // Build lookup maps for efficient hash-first and filename-first matching
+        // Key: MD5 hash → ImageData from B
+        Map<String, ImageData> hashMapB = new LinkedHashMap<>();
+        // Key: filename slug → ImageData from B
+        Map<String, ImageData> fileMapB = new LinkedHashMap<>();
+        for (ImageData imgB : imagesB) {
+            hashMapB.putIfAbsent(imgB.getHash(), imgB);
+            String slug = extractFilename(imgB.getSrc());
+            if (!slug.isEmpty()) fileMapB.putIfAbsent(slug, imgB);
+        }
+
+        Set<ImageData> usedFromB = new LinkedHashSet<>();
+
         for (ImageData imgA : imagesA) {
-            String slugA = extractFilename(imgA.getSrc());
+            // 1. Exact MD5 hash match (same binary content, any URL)
             ImageData matchB = null;
-            if (!slugA.isEmpty()) {
-                for (ImageData imgB : unmatchedB) {
-                    if (extractFilename(imgB.getSrc()).equals(slugA)) {
-                        matchB = imgB;
-                        break;
-                    }
+            if (hashMapB.containsKey(imgA.getHash()) && !usedFromB.contains(hashMapB.get(imgA.getHash()))) {
+                matchB = hashMapB.get(imgA.getHash());
+            }
+            // 2. Filename slug match (same filename, possibly different CDN path)
+            if (matchB == null) {
+                String slugA = extractFilename(imgA.getSrc());
+                if (!slugA.isEmpty() && fileMapB.containsKey(slugA) && !usedFromB.contains(fileMapB.get(slugA))) {
+                    matchB = fileMapB.get(slugA);
                 }
             }
-            if (matchB == null && !unmatchedB.isEmpty()) {
-                matchB = unmatchedB.get(0);
-            }
+            // 3. No match found — mark as MISSING IN B (never use positional fallback)
 
             if (matchB != null) {
-                unmatchedB.remove(matchB);
+                usedFromB.add(matchB);
                 boolean hashMatch = imgA.getHash().equals(matchB.getHash());
                 if (hashMatch) {
                     matchedImagesCount++;
@@ -83,18 +102,24 @@ public class SiteComparator {
                 matchesList.add(new ImageMatch(imgA, null, "MISSING IN B"));
             }
         }
-        for (ImageData imgB : unmatchedB) {
-            mismatchCount++;
-            matchesList.add(new ImageMatch(null, imgB, "MISSING IN A"));
+        // Images in B that were never matched
+        for (ImageData imgB : imagesB) {
+            if (!usedFromB.contains(imgB)) {
+                mismatchCount++;
+                matchesList.add(new ImageMatch(null, imgB, "MISSING IN A"));
+            }
         }
         boolean imagesMatch = mismatchCount == 0;
         ImageDiff imageDiff = new ImageDiff(imagesMatch, matchesList, matchedImagesCount, visualMatchImagesCount, mismatchCount);
 
-        // LINKS
-        // Link Normalization: compare relative paths instead of absolute
+        // Image similarity: matched / max(|A|, |B|)
+        int maxImages = Math.max(imagesA.size(), imagesB.size());
+        double imageScore = maxImages == 0 ? 100.0 : (matchedImagesCount * 100.0 / maxImages);
+
+        // ── LINKS ─────────────────────────────────────────────────────────────
         Map<String, LinkData> normLinksA = new LinkedHashMap<>();
         Map<String, LinkData> normLinksB = new LinkedHashMap<>();
-        
+
         for (LinkData ld : a.getLinks()) normLinksA.put(normalizeLinkPath(ld.getOriginalHref()), ld);
         for (LinkData ld : b.getLinks()) normLinksB.put(normalizeLinkPath(ld.getOriginalHref()), ld);
 
@@ -103,98 +128,77 @@ public class SiteComparator {
         List<LinkData> commonLinks = new ArrayList<>();
 
         for (String pathA : normLinksA.keySet()) {
-            if (normLinksB.containsKey(pathA)) {
-                commonLinks.add(normLinksA.get(pathA));
-            } else {
-                linksOnlyInA.add(normLinksA.get(pathA));
-            }
+            if (normLinksB.containsKey(pathA)) commonLinks.add(normLinksA.get(pathA));
+            else linksOnlyInA.add(normLinksA.get(pathA));
         }
         for (String pathB : normLinksB.keySet()) {
-            if (!normLinksA.containsKey(pathB)) {
-                linksOnlyInB.add(normLinksB.get(pathB));
-            }
+            if (!normLinksA.containsKey(pathB)) linksOnlyInB.add(normLinksB.get(pathB));
         }
 
         boolean linksMatch = linksOnlyInA.isEmpty() && linksOnlyInB.isEmpty();
         LinkDiff linkDiff = new LinkDiff(linksMatch, linksOnlyInA, linksOnlyInB, commonLinks.size());
 
-        // METADATA
-        MapDiff metaDiff = compareMaps(a.getMetadata(), b.getMetadata());
-        MapDiff dlDiff = compareMaps(a.getDataLayer(), b.getDataLayer());
+        // Link similarity: Jaccard
+        int linkUnion = normLinksA.size() + normLinksB.size() - commonLinks.size();
+        double linkScore = linkUnion == 0 ? 100.0 : (commonLinks.size() * 100.0 / linkUnion);
 
-        // HEATMAP
-        byte[] heatmap = generateHeatmap(a.getFullPageScreenshot(), b.getFullPageScreenshot());
+        // ── METADATA & DATALAYER ───────────────────────────────────────────────
+        MapDiff metaDiff = compareMaps(a.getMetadata(), b.getMetadata());
+        MapDiff dlDiff   = compareMaps(a.getDataLayer(), b.getDataLayer());
+
+        double metaScore = computeMapScore(a.getMetadata(), b.getMetadata(), metaDiff);
+        double dlScore   = computeMapScore(a.getDataLayer(), b.getDataLayer(), dlDiff);
+
+        // ── SIMILARITY SCORES ─────────────────────────────────────────────────
+        double overall = (textScore + imageScore + linkScore + metaScore + dlScore) / 5.0;
+        SimilarityScores scores = new SimilarityScores(textScore, imageScore, linkScore, metaScore, dlScore, overall);
+
+        // ── PLUGIN RULES ──────────────────────────────────────────────────────
+        List<CheckResult> additionalResults = new ArrayList<>();
+        for (var rule : RuleRegistry.getInstance().getRules()) {
+            try {
+                additionalResults.add(rule.apply(a, b));
+            } catch (Exception e) {
+                additionalResults.add(new CheckResult(rule.getName(), false, 0.0,
+                        "error", "error", List.of("Rule threw exception: " + e.getMessage())));
+            }
+        }
 
         long elapsed = System.currentTimeMillis() - startTime;
-
-        return new ComparisonResult(a, b, textDiff, imageDiff, linkDiff, metaDiff, dlDiff, elapsed, heatmap);
+        return new ComparisonResult(a, b, textDiff, imageDiff, linkDiff, metaDiff, dlDiff,
+                elapsed, scores, additionalResults);
     }
 
-    private byte[] generateHeatmap(byte[] imgA, byte[] imgB) {
-        if (imgA == null || imgA.length == 0 || imgB == null || imgB.length == 0) return new byte[0];
-        try {
-            BufferedImage biA = ImageIO.read(new ByteArrayInputStream(imgA));
-            BufferedImage biB = ImageIO.read(new ByteArrayInputStream(imgB));
-            if (biA == null || biB == null) return new byte[0];
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
-            int width = Math.max(biA.getWidth(), biB.getWidth());
-            int height = Math.max(biA.getHeight(), biB.getHeight());
-
-            BufferedImage diffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            int red = new Color(255, 0, 0, 150).getRGB();
-            int highlight = new Color(255, 0, 0, 255).getRGB();
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    boolean inA = x < biA.getWidth() && y < biA.getHeight();
-                    boolean inB = x < biB.getWidth() && y < biB.getHeight();
-                    if (inA && inB) {
-                        int rgbA = biA.getRGB(x, y);
-                        int rgbB = biB.getRGB(x, y);
-                        if (rgbA == rgbB) {
-                            diffImg.setRGB(x, y, fade(rgbA));
-                        } else {
-                            diffImg.setRGB(x, y, highlight);
-                        }
-                    } else if (inA) {
-                        diffImg.setRGB(x, y, highlight);
-                    } else if (inB) {
-                        diffImg.setRGB(x, y, highlight);
-                    } else {
-                        diffImg.setRGB(x, y, Color.WHITE.getRGB());
-                    }
-                }
-            }
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(diffImg, "png", baos);
-            return baos.toByteArray();
-        } catch (Exception e) {
-            return new byte[0];
-        }
+    private double computeMapScore(Map<String, String> mapA, Map<String, String> mapB, MapDiff diff) {
+        int totalUnion = mapA.size() + diff.onlyInB().size(); // = |A| + keys only in B
+        if (totalUnion == 0) return 100.0;
+        int mismatches = diff.onlyInA().size() + diff.onlyInB().size() + diff.valueDiffs().size();
+        int matched = totalUnion - mismatches;
+        return Math.max(0.0, matched * 100.0 / totalUnion);
     }
-
-    private int fade(int rgb) {
-        Color c = new Color(rgb, true);
-        return new Color(c.getRed(), c.getGreen(), c.getBlue(), 80).getRGB();
-    }
-
     private String normalizeLinkPath(String href) {
         if (href == null) return "";
         try {
             if (href.startsWith("http")) {
                 URI uri = new URI(href);
-                String path = uri.getPath();
+                String path  = uri.getPath();
                 String query = uri.getQuery();
-                return (path == null ? "" : path) + (query == null ? "" : "?" + query);
+                String norm  = (path == null ? "" : path) + (query == null ? "" : "?" + query);
+                // treat /en/ and /en as the same path
+                if (norm.endsWith("/") && norm.length() > 1) norm = norm.substring(0, norm.length() - 1);
+                return norm;
             }
         } catch (Exception ignored) {}
-        return href;
+        String result = href;
+        if (result.endsWith("/") && result.length() > 1) result = result.substring(0, result.length() - 1);
+        return result;
     }
 
     private MapDiff compareMaps(Map<String, String> mapA, Map<String, String> mapB) {
-        Map<String, String> onlyInA = new LinkedHashMap<>();
-        Map<String, String> onlyInB = new LinkedHashMap<>();
+        Map<String, String>   onlyInA    = new LinkedHashMap<>();
+        Map<String, String>   onlyInB    = new LinkedHashMap<>();
         Map<String, String[]> valueDiffs = new LinkedHashMap<>();
 
         Set<String> allKeys = new LinkedHashSet<>();
@@ -208,7 +212,7 @@ public class SiteComparator {
                 onlyInA.put(key, mapA.get(key));
             } else if (!inA && inB) {
                 onlyInB.put(key, mapB.get(key));
-            } else if (!Objects.equals(mapA.get(key), mapB.get(key))) { // Fix: NPE Risk
+            } else if (!Objects.equals(mapA.get(key), mapB.get(key))) {
                 valueDiffs.put(key, new String[]{mapA.get(key), mapB.get(key)});
             }
         }
@@ -218,7 +222,7 @@ public class SiteComparator {
 
     private List<String> splitLines(String raw) {
         return Arrays.stream(raw.split("\\n"))
-                .map(s -> s.replace("\u00A0", " ").trim()) // Fix: Non-Breaking Spaces
+                .map(s -> s.replace("\u00A0", " ").trim())
                 .filter(s -> !s.isEmpty())
                 .distinct()
                 .collect(Collectors.toList());
@@ -230,7 +234,7 @@ public class SiteComparator {
             String path = src.startsWith("http") ? new java.net.URI(src).getPath() : src.split("\\?")[0];
             String[] parts = path.split("/");
             if (parts.length > 0) return parts[parts.length - 1];
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         return "";
     }
 }

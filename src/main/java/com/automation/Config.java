@@ -41,4 +41,12 @@ public class Config {
     public static String getIgnoreSelectors() {
         return properties.getProperty("ignore.selectors", "");
     }
+
+    public static boolean isCacheEnabled() {
+        return Boolean.parseBoolean(properties.getProperty("cache.enabled", "true"));
+    }
+
+    public static int getCacheTtlHours() {
+        return Integer.parseInt(properties.getProperty("cache.ttl.hours", "24"));
+    }
 }

@@ -1,5 +1,7 @@
 package com.automation.model;
 
+import com.automation.comparator.rules.CheckResult;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,8 @@ public record ComparisonResult(
     MapDiff metadataDiff,
     MapDiff dataLayerDiff,
     long comparisonTimeMillis,
-    byte[] heatmapImage
+    SimilarityScores similarityScores,
+    List<CheckResult> additionalRuleResults
 ) {
     public boolean isAllMatch() {
         return textDiff.matches() && imageDiff.matches() && linkDiff.matches()
