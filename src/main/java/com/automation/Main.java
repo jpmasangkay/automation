@@ -63,92 +63,92 @@ public class Main {
 
         logger.info("Found {} URL pair(s) to compare", pairs.size());
 
-        try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.chromium().launch(
-                    new BrowserType.LaunchOptions().setHeadless(true).setArgs(java.util.List.of("--headless=new")));
+        FingerprintCache cache = new FingerprintCache(Config.getCacheTtlHours());
+        SiteComparator comparator = new SiteComparator();
 
-            FingerprintCache cache = new FingerprintCache(Config.getCacheTtlHours());
-            ContentExtractor extractor = new ContentExtractor(browser, cache);
-            SiteComparator comparator = new SiteComparator();
-            ReportFormatter reportFormatter = new ReportFormatter(browser);
+        int threads = Config.getThreads();
+        logger.info("Starting thread pool with {} workers for parallel pair processing", threads);
+        ExecutorService pool = Executors.newFixedThreadPool(threads);
+        
+        AtomicInteger passed = new AtomicInteger(0);
+        AtomicInteger failed = new AtomicInteger(0);
+        AtomicInteger count = new AtomicInteger(1);
 
-            int threads = Config.getThreads();
-            logger.info("Starting thread pool with {} workers for parallel pair processing", threads);
-            ExecutorService pool = Executors.newFixedThreadPool(threads);
-            
-            AtomicInteger passed = new AtomicInteger(0);
-            AtomicInteger failed = new AtomicInteger(0);
-            AtomicInteger count = new AtomicInteger(1);
+        List<Future<DashboardEntry>> futures = new ArrayList<>();
 
-            List<Future<DashboardEntry>> futures = new ArrayList<>();
-
-            try {
-                for (UrlPair pair : pairs) {
-                    futures.add(pool.submit(() -> {
-                        int currentCount = count.getAndIncrement();
-                        logger.info("--- Pair {} / {} ------------------------------------------", currentCount, pairs.size());
-                        logger.info("   Site A : {}", pair.urlA);
-                        logger.info("   Site B : {}", pair.urlB);
+        try {
+            for (UrlPair pair : pairs) {
+                futures.add(pool.submit(() -> {
+                    int currentCount = count.getAndIncrement();
+                    logger.info("--- Pair {} / {} ------------------------------------------", currentCount, pairs.size());
+                    logger.info("   Site A : {}", pair.urlA);
+                    logger.info("   Site B : {}", pair.urlB);
+                    
+                    try (Playwright playwright = Playwright.create();
+                         Browser browser = playwright.chromium().launch(
+                                 new BrowserType.LaunchOptions().setHeadless(true).setArgs(java.util.List.of("--headless=new")))) {
                         
-                        try {
-                            logger.info("   [1/3] Loading both pages for Pair {}...", currentCount);
-                            SiteData dataA = extractor.extractSiteData(pair.urlA, "A-Pair" + currentCount);
-                            SiteData dataB;
-                            if (normalizeUrl(pair.urlA).equals(normalizeUrl(pair.urlB))) {
-                                logger.info("   [SAME URL] Identical URLs detected — reusing Site A data for Site B (no double load).");
-                                dataB = new SiteData("B-Pair" + currentCount, pair.urlB,
-                                        dataA.getRawText(), dataA.getImages(), dataA.getLinks(),
-                                        dataA.getMetadata(), dataA.getDataLayer(), dataA.getExtractionTimeMillis());
-                            } else {
-                                dataB = extractor.extractSiteData(pair.urlB, "B-Pair" + currentCount);
-                            }
+                        ContentExtractor extractor = new ContentExtractor(browser, cache);
+                        ReportFormatter reportFormatter = new ReportFormatter(browser);
 
-                            logger.info("   [2/3] Comparing content for Pair {}...", currentCount);
-                            ComparisonResult result = comparator.compare(dataA, dataB);
-
-                            logger.info("   [3/3] Generating PDF report for Pair {}...", currentCount);
-                            String basename = reportFormatter.generateReport(result);
-
-                            if (result.isAllMatch()) {
-                                logger.info("--- Result for Pair {}: PASS", currentCount);
-                                passed.incrementAndGet();
-                            } else {
-                                logger.info("--- Result for Pair {}: MISMATCH", currentCount);
-                                failed.incrementAndGet();
-                            }
-                            
-                            return new DashboardEntry(currentCount, result, basename);
-
-                        } catch (Exception e) {
-                            logger.error("--- [ERROR] Pair {} failed: {}", currentCount, e.getMessage(), e);
-                            failed.incrementAndGet();
-                            return null;
+                        logger.info("   [1/3] Loading both pages for Pair {}...", currentCount);
+                        SiteData dataA = extractor.extractSiteData(pair.urlA, "A-Pair" + currentCount);
+                        SiteData dataB;
+                        if (normalizeUrl(pair.urlA).equals(normalizeUrl(pair.urlB))) {
+                            logger.info("   [SAME URL] Identical URLs detected — reusing Site A data for Site B (no double load).");
+                            dataB = new SiteData("B-Pair" + currentCount, pair.urlB,
+                                    dataA.getRawText(), dataA.getImages(), dataA.getLinks(),
+                                    dataA.getMetadata(), dataA.getDataLayer(), dataA.getFunctionalityComponents(),
+                                    dataA.getExtractionTimeMillis());
+                        } else {
+                            dataB = extractor.extractSiteData(pair.urlB, "B-Pair" + currentCount);
                         }
-                    }));
-                }
 
-                List<DashboardEntry> entries = new ArrayList<>();
-                for (Future<DashboardEntry> f : futures) {
-                    DashboardEntry entry = f.get();
-                    if (entry != null) {
-                        entries.add(entry);
+                        logger.info("   [2/3] Comparing content for Pair {}...", currentCount);
+                        ComparisonResult result = comparator.compare(dataA, dataB);
+
+                        logger.info("   [3/3] Generating PDF report for Pair {}...", currentCount);
+                        String basename = reportFormatter.generateReport(result);
+
+                        if (result.isAllMatch()) {
+                            logger.info("--- Result for Pair {}: PASS", currentCount);
+                            passed.incrementAndGet();
+                        } else {
+                            logger.info("--- Result for Pair {}: MISMATCH", currentCount);
+                            failed.incrementAndGet();
+                        }
+                        
+                        return new DashboardEntry(currentCount, result, basename);
+
+                    } catch (Exception e) {
+                        logger.error("--- [ERROR] Pair {} failed: {}", currentCount, e.getMessage(), e);
+                        failed.incrementAndGet();
+                        return null;
                     }
-                }
-                
-                // Generate the consolidated dashboard HTML
-                DashboardGenerator.generate(entries, Paths.get("reports"));
-                // Persist the fingerprint cache
-                cache.persist();
-
-            } finally {
-                pool.shutdown();
+                }));
             }
 
-            logger.info("========================================================");
-            logger.info(" DONE! Passed: {}   Mismatches: {}   Total: {}", passed.get(), failed.get(), (passed.get() + failed.get()));
-            logger.info(" Reports saved to: reports\\");
-            logger.info("========================================================");
+            List<DashboardEntry> entries = new ArrayList<>();
+            for (Future<DashboardEntry> f : futures) {
+                DashboardEntry entry = f.get();
+                if (entry != null) {
+                    entries.add(entry);
+                }
+            }
+            
+            // Generate the consolidated dashboard HTML
+            DashboardGenerator.generate(entries, Paths.get("reports"));
+            // Persist the fingerprint cache
+            cache.persist();
+
+        } finally {
+            pool.shutdown();
         }
+        
+        logger.info("========================================================");
+        logger.info(" DONE! Passed: {}   Mismatches: {}   Total: {}", passed.get(), failed.get(), (passed.get() + failed.get()));
+        logger.info(" Reports saved to: reports\\");
+        logger.info("========================================================");
     }
 
     private static File resolveExcelFile(String[] args) {

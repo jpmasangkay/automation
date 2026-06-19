@@ -111,8 +111,8 @@ public class ContentExtractor {
                 }
 
                 logger.info("   Extracting content...");
-                Map<String, String> funcComponents = extractFunctionalityComponents(page);
                 cleanDom(page);
+                Map<String, String> funcComponents = extractFunctionalityComponents(page);
                 String rawText              = extractText(page);
                 List<ImageData> images      = extractImages(page, context, label);
                 List<LinkData> links        = extractLinks(page, label);
@@ -388,21 +388,186 @@ public class ContentExtractor {
         @SuppressWarnings("unchecked")
         Map<String, Object> raw = (Map<String, Object>) page.evaluate("""
             () => {
-                const count = (selectors) => document.querySelectorAll(selectors).length.toString();
+                const getDetails = (selectors, formatter) => {
+                    const elements = Array.from(document.querySelectorAll(selectors));
+                    const count = elements.length.toString();
+                    const details = elements.map(formatter)
+                                             .map(d => d.trim().replace(/\\s+/g, ' '))
+                                             .filter(d => d.length > 0);
+                    const detailsStr = details.join(', ');
+                    return count + '|' + (detailsStr ? detailsStr : '[empty]');
+                };
                 
+                // ── Helper: detect button-like <a> tags ──
+                const isVisualButton = (el) => {
+                    if (el.tagName !== 'A') return false;
+                    const cs = window.getComputedStyle(el);
+                    // Check for button-like classes
+                    const cls = el.className || '';
+                    if (/\\b(btn|button|cta)\\b/i.test(cls)) return true;
+                    // Check for pill/rounded shape with bg color
+                    const bg = cs.backgroundColor;
+                    const hasBackground = bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent';
+                    const br = parseFloat(cs.borderRadius);
+                    const hasBorder = cs.border && cs.border !== 'none' && !cs.border.startsWith('0');
+                    if (hasBackground && br > 3) return true;
+                    if (hasBorder && br > 3) return true;
+                    // Check role="button"
+                    if (el.getAttribute('role') === 'button') return true;
+                    return false;
+                };
+
+                // ── Helper: filter out carousel pagination/dot buttons ──
+                const isCarouselDot = (el) => {
+                    const cls = (el.className || '').toLowerCase();
+                    const aria = (el.getAttribute('aria-label') || '').toLowerCase();
+                    const role = (el.getAttribute('role') || '').toLowerCase();
+                    // Swiper/carousel pagination bullets
+                    if (/pagination|bullet|dot|swiper-pagination|carousel-indicator|slick-dot/.test(cls)) return true;
+                    // aria-label like "Carousel Page 1", "Go to slide 2", "Page 1"
+                    if (/carousel\\s*page|go to slide|slide \\d|page \\d/i.test(aria)) return true;
+                    // data-slide-to attribute (Bootstrap carousel)
+                    if (el.hasAttribute('data-slide-to') || el.hasAttribute('data-bs-slide-to')) return true;
+                    // Previous/Next carousel navigation arrows
+                    if (/carousel-control|slick-prev|slick-next|swiper-button/.test(cls)) return true;
+                    if (/previous|next\\s*(slide|page)|prev\\s*(slide|page)/i.test(aria)) return true;
+                    return false;
+                };
+
+                // ── Buttons: real action buttons only, excluding carousel pagination ──
+                const buttonEls = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], .btn, [role="button"]'))
+                    .filter(el => !isCarouselDot(el) && el.tagName !== 'A');
+                const buttonCount = buttonEls.length;
+                const buttonDetails = buttonEls.map(el => (el.innerText || el.value || el.placeholder || el.getAttribute('aria-label') || el.getAttribute('title') || '').trim().replace(/\\s+/g, ' '))
+                    .filter(d => d.length > 0);
+
+                // ── CTA Links: <a> tags that visually look like buttons ──
+                const ctaEls = Array.from(document.querySelectorAll('a'))
+                    .filter(el => isVisualButton(el))
+                    .filter(el => {
+                        const text = (el.innerText || '').trim();
+                        return text.length > 0 && text.length < 100; // reasonable button text
+                    });
+                const ctaCount = ctaEls.length;
+                const ctaDetails = ctaEls.map(el => {
+                    const text = (el.innerText || '').trim().replace(/\\s+/g, ' ');
+                    const href = el.getAttribute('href') || '';
+                    return text + (href ? ' -> ' + href : '');
+                }).filter(d => d.length > 0);
+
+                // ── Zoomable Images: broad detection ──
+                const zoomSelectors = [
+                    'img[data-zoom]', 'img[data-zoom-src]', 'img.zoom', 'img.zoomable',
+                    'img[data-fancybox]', '[data-fancybox] img',
+                    'img[data-lightbox]', '[data-lightbox] img',
+                    'img[data-mfp-src]', '.mfp-image img',
+                    '.magnific-popup img', '.lightbox img',
+                    'img[data-action="zoom"]',
+                    '.gallery img', '.zoom-image img',
+                    '.magnify img', '[class*="magnif"] img', '[class*="zoom"] img'
+                ];
+                // Also detect images wrapped in <a> tags pointing to image files
+                const zoomableSet = new Set();
+                document.querySelectorAll(zoomSelectors.join(', ')).forEach(el => {
+                    const img = el.tagName === 'IMG' ? el : el.querySelector('img');
+                    if (img) zoomableSet.add(img);
+                });
+                // Images inside <a> tags where href points to an image file
+                document.querySelectorAll('a[href] img').forEach(img => {
+                    const a = img.closest('a');
+                    const href = (a && a.getAttribute('href')) || '';
+                    if (/\\.(jpg|jpeg|png|gif|webp|svg|bmp|avif)(\\?|$)/i.test(href)) {
+                        zoomableSet.add(img);
+                    }
+                });
+                // Images with onclick/event handlers containing magnify or zoom
+                document.querySelectorAll('img').forEach(img => {
+                    if (zoomableSet.has(img)) return;
+                    
+                    const hasZoomHandler = (el) => {
+                        if (!el || !el.attributes) return false;
+                        for (let j = 0; j < el.attributes.length; j++) {
+                            const attr = el.attributes[j];
+                            if (/magnif|zoom/i.test(attr.value) && /click|tap|action|on/i.test(attr.name)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+
+                    // Check the image itself
+                    if (hasZoomHandler(img)) {
+                        zoomableSet.add(img);
+                        return;
+                    }
+
+                    // Check parent elements (up to 3 levels)
+                    let parent = img.parentElement;
+                    for (let i = 0; i < 3 && parent; i++) {
+                        if (hasZoomHandler(parent)) {
+                            zoomableSet.add(img);
+                            return;
+                        }
+                        parent = parent.parentElement;
+                    }
+                });
+                const zoomableArr = Array.from(zoomableSet);
+                const zoomCount = zoomableArr.length;
+                const zoomDetails = zoomableArr.map(el => {
+                    const src = el.getAttribute('src') || el.src || '';
+                    const parts = src.split('/');
+                    const filename = parts[parts.length - 1] || src;
+                    const alt = el.getAttribute('alt') || '';
+                    return alt ? filename + ' ("' + alt + '")' : filename;
+                }).filter(d => d.length > 0);
+
                 return {
-                    'Buttons': count('button, input[type="button"], input[type="submit"], .btn, [role="button"]'),
-                    'Clickable Images': count('a img, img[onclick], img[style*="cursor: pointer"], img[style*="cursor:pointer"]'),
-                    'Zoomable Images': count('img[data-zoom], img.zoom, img.zoomable'),
-                    'Modals / Popups': count('[data-toggle="modal"], [data-bs-toggle="modal"], .modal, dialog'),
-                    'Carousels / Sliders': count('.carousel, .swiper, .slick-slider'),
-                    'Accordions / Toggles': count('details, .accordion'),
-                    'Video/Audio Players': count('video, audio, iframe[src*="youtube.com"], iframe[src*="vimeo.com"]'),
-                    'Dropdowns / Selects': count('select, .dropdown, [data-toggle="dropdown"], [data-bs-toggle="dropdown"]'),
-                    'Forms / Inputs': count('form, input[type="text"], input[type="checkbox"], input[type="radio"], textarea'),
-                    'Tabs': count('[role="tab"], .nav-tabs'),
-                    'Tooltips': count('[data-toggle="tooltip"], [data-bs-toggle="tooltip"], [title]'),
-                    'Iframes': count('iframe')
+                    'Buttons': buttonCount + '|' + (buttonDetails.length ? buttonDetails.join(', ') : '[empty]'),
+                    'CTA Links (Button-styled)': ctaCount + '|' + (ctaDetails.length ? ctaDetails.join(', ') : '[empty]'),
+                    'Clickable Images': getDetails('a img, img[onclick], img[style*="cursor: pointer"], img[style*="cursor:pointer"]', 
+                        el => {
+                            const src = el.getAttribute('src') || el.src || '';
+                            const parts = src.split('/');
+                            const filename = parts[parts.length - 1] || src;
+                            const alt = el.getAttribute('alt') || '';
+                            return alt ? filename + ' ("' + alt + '")' : filename;
+                        }),
+                    'Zoomable Images': zoomCount + '|' + (zoomDetails.length ? zoomDetails.join(', ') : '[empty]'),
+                    'Modals': getDetails('.modal, dialog', el => el.id ? '#' + el.id : (el.className ? '.' + el.className.split(' ')[0] : 'dialog')),
+                    'Popups': getDetails('[data-toggle="modal"], [data-bs-toggle="modal"]', el => el.innerText || el.getAttribute('aria-label') || el.id || ''),
+                    'Carousels': getDetails('.carousel, .swiper-container, .swiper', el => el.id ? '#' + el.id : (el.className ? '.' + el.className.split(' ')[0] : '.carousel')),
+                    'Sliders': getDetails('.slick-slider, .owl-carousel', el => el.id ? '#' + el.id : (el.className ? '.' + el.className.split(' ')[0] : '.slider')),
+                    'Accordions': getDetails('.accordion', el => el.id ? '#' + el.id : '.accordion'),
+                    'Toggles': getDetails('details', el => {
+                        const summary = el.querySelector('summary');
+                        return summary ? summary.innerText : 'details';
+                    }),
+                    'Video Players': getDetails('video, iframe[src*="youtube.com"], iframe[src*="vimeo.com"]', 
+                        el => {
+                            const src = el.getAttribute('src') || el.src || '';
+                            const name = src ? (src.includes('youtube.com') ? 'YouTube' : src.includes('vimeo.com') ? 'Vimeo' : 'Video') : 'HTML5 Video';
+                            const parts = src.split('/');
+                            const filename = parts[parts.length - 1] || '';
+                            return filename ? name + ' (' + filename.split('?')[0] + ')' : name;
+                        }),
+                    'Audio Players': getDetails('audio', el => {
+                        const src = el.getAttribute('src') || el.src || '';
+                        const parts = src.split('/');
+                        return parts[parts.length - 1] ? 'Audio (' + parts[parts.length - 1].split('?')[0] + ')' : 'Audio Player';
+                    }),
+                    'Dropdowns': getDetails('.dropdown, [data-toggle="dropdown"], [data-bs-toggle="dropdown"]', 
+                        el => el.innerText.trim().split('\\n')[0] || el.id || 'Dropdown'),
+                    'Selects': getDetails('select', el => el.name || el.id || 'select'),
+                    'Forms': getDetails('form', el => el.id ? '#' + el.id : (el.action ? el.action.split('/').pop() : 'form')),
+                    'Inputs': getDetails('input[type="text"], input[type="checkbox"], input[type="radio"], textarea', 
+                        el => (el.name ? el.name : '') + (el.type ? ' (' + el.type + ')' : '')),
+                    'Tabs': getDetails('[role="tab"], .nav-tabs', el => el.innerText || ''),
+                    'Tooltips': getDetails('[data-toggle="tooltip"], [data-bs-toggle="tooltip"], [title]', 
+                        el => el.getAttribute('title') || el.innerText || 'Tooltip'),
+                    'Iframes': getDetails('iframe', el => {
+                        const src = el.getAttribute('src') || '';
+                        return src ? src.split('/').pop() : 'iframe';
+                    })
                 };
             }
         """);

@@ -76,6 +76,8 @@ public class ReportFormatter {
         SiteData b = result.siteB();
         SimilarityScores s = result.similarityScores();
         String ts = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String labelA = "Site A (" + extractDomain(a.getUrl()) + ")";
+        String labelB = "Site B (" + extractDomain(b.getUrl()) + ")";
 
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>");
@@ -138,9 +140,9 @@ public class ReportFormatter {
         sb.append("</div></div>");
 
         // ── Section 1: Metadata
-        sb.append(renderMapDiff("1. Metadata", result.metadataDiff(), a.getMetadata(), b.getMetadata()));
+        sb.append(renderMapDiff("1. Metadata", result.metadataDiff(), a.getMetadata(), b.getMetadata(), "Site A", "Site B"));
         // ── Section 2: DataLayer
-        sb.append(renderMapDiff("2. Site Data Layer", result.dataLayerDiff(), a.getDataLayer(), b.getDataLayer()));
+        sb.append(renderMapDiff("2. Site Data Layer", result.dataLayerDiff(), a.getDataLayer(), b.getDataLayer(), "Site A", "Site B"));
 
         // ── Section 3: Text
         sb.append("<div class='block'>");
@@ -249,7 +251,7 @@ public class ReportFormatter {
         sb.append("</tbody></table></div>");
 
         // ── Section 6: Functionality Components
-        sb.append(renderMapDiff("6. Functionality Components", result.functionalityDiff(), a.getFunctionalityComponents(), b.getFunctionalityComponents()));
+        sb.append(renderFunctionalityDiff("6. Functionality Components", result.functionalityDiff(), a.getFunctionalityComponents(), b.getFunctionalityComponents(), extractDomain(a.getUrl()), extractDomain(b.getUrl())));
 
         // ── Section 7: Additional Plugin Rule Results
         if (!result.additionalRuleResults().isEmpty()) {
@@ -294,13 +296,13 @@ public class ReportFormatter {
         return "score-poor";
     }
 
-    private String renderMapDiff(String title, MapDiff diff, Map<String, String> mapA, Map<String, String> mapB) {
+    private String renderMapDiff(String title, MapDiff diff, Map<String, String> mapA, Map<String, String> mapB, String labelA, String labelB) {
         StringBuilder sb = new StringBuilder();
         sb.append("<div class='block'>");
         sb.append("<div class='section-title'>").append(title).append(" <span class='result-inline ")
           .append(diff.matches() ? "pass" : "fail").append("'>")
           .append(diff.matches() ? "PASS" : "MISMATCH").append("</span></div>");
-        sb.append("<table><thead><tr><th>Key</th><th>Site A Value</th><th>Site B Value</th><th>Status</th></tr></thead><tbody>");
+        sb.append("<table><thead><tr><th>Key</th><th>").append(esc(labelA)).append("</th><th>").append(esc(labelB)).append("</th><th>Status</th></tr></thead><tbody>");
         Set<String> allKeys = new LinkedHashSet<>(); allKeys.addAll(mapA.keySet()); allKeys.addAll(mapB.keySet());
         for (String key : allKeys) {
             String va = mapA.get(key), vb = mapB.get(key);
@@ -311,6 +313,67 @@ public class ReportFormatter {
             sb.append("<td>").append(vb != null ? esc(vb) : "<em class='na'>not present</em>").append("</td>");
             sb.append("<td class='status-cell ").append(isDiff ? "fail" : "pass").append("'>")
               .append(isDiff ? (va == null ? "MISSING IN A" : vb == null ? "MISSING IN B" : "DIFF") : "MATCH")
+              .append("</td></tr>");
+        }
+        sb.append("</tbody></table></div>");
+        return sb.toString();
+    }
+
+    private String renderFunctionalityDiff(String title, MapDiff diff, Map<String, String> mapA, Map<String, String> mapB, String domainA, String domainB) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div class='block'>");
+        sb.append("<div class='section-title'>").append(title).append(" <span class='result-inline ")
+          .append(diff.matches() ? "pass" : "fail").append("'>")
+          .append(diff.matches() ? "PASS" : "MISMATCH").append("</span></div>");
+        
+        sb.append("<div class='note' style='margin-bottom: 12px; font-style: normal; color: #444;'>")
+          .append("Site A: <b>").append(esc(domainA)).append("</b> &nbsp;|&nbsp; ")
+          .append("Site B: <b>").append(esc(domainB)).append("</b></div>");
+        
+        sb.append("<table><thead><tr>");
+        sb.append("<th style='width:16%'>Key</th>");
+        sb.append("<th style='width:12%'>Site A (Count)</th>");
+        sb.append("<th style='width:28%'>Site A Details</th>");
+        sb.append("<th style='width:12%'>Site B (Count)</th>");
+        sb.append("<th style='width:28%'>Site B Details</th>");
+        sb.append("<th style='width:10%'>Status</th>");
+        sb.append("</tr></thead><tbody>");
+        
+        Set<String> allKeys = new LinkedHashSet<>(); allKeys.addAll(mapA.keySet()); allKeys.addAll(mapB.keySet());
+        for (String key : allKeys) {
+            String vaRaw = mapA.get(key), vbRaw = mapB.get(key);
+            boolean isDiff = !Objects.equals(vaRaw, vbRaw);
+            
+            String countA = "0", detailsA = "";
+            if (vaRaw != null) {
+                if (vaRaw.contains("|")) {
+                    String[] parts = vaRaw.split("\\|", 2);
+                    countA = parts[0];
+                    detailsA = parts[1];
+                } else {
+                    countA = vaRaw;
+                }
+            }
+            
+            String countB = "0", detailsB = "";
+            if (vbRaw != null) {
+                if (vbRaw.contains("|")) {
+                    String[] parts = vbRaw.split("\\|", 2);
+                    countB = parts[0];
+                    detailsB = parts[1];
+                } else {
+                    countB = vbRaw;
+                }
+            }
+            
+            sb.append("<tr").append(isDiff ? " class='row-fail'" : "").append(">");
+            sb.append("<td class='key-cell'>").append(esc(key)).append("</td>");
+            sb.append("<td>").append(esc(countA)).append("</td>");
+            sb.append("<td class='src-cell' style='font-size:7.5pt;color:#555'>").append(detailsA.equals("[empty]") ? "" : esc(detailsA)).append("</td>");
+            sb.append("<td>").append(esc(countB)).append("</td>");
+            sb.append("<td class='src-cell' style='font-size:7.5pt;color:#555'>").append(detailsB.equals("[empty]") ? "" : esc(detailsB)).append("</td>");
+            sb.append("<td class='status-cell ").append(isDiff ? "fail" : "pass").append("'>")
+              .append(isDiff ? (vaRaw == null ? "MISSING IN A" : vbRaw == null ? "MISSING IN B" : "DIFF") : "MATCH")
               .append("</td></tr>");
         }
         sb.append("</tbody></table></div>");

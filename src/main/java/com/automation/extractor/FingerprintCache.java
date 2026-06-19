@@ -51,6 +51,7 @@ public final class FingerprintCache {
         List<LinkData>  links;
         Map<String, String> metadata;
         Map<String, String> dataLayer;
+        Map<String, String> functionalityComponents;
         long extractionTimeMillis;
 
         CachedEntry() {}
@@ -105,11 +106,12 @@ public final class FingerprintCache {
         List<LinkData>  links    = entry.links     != null ? entry.links    : List.of();
         Map<String, String> meta = entry.metadata  != null ? entry.metadata : Map.of();
         Map<String, String> dl   = entry.dataLayer != null ? entry.dataLayer: Map.of();
+        Map<String, String> fc   = entry.functionalityComponents != null ? entry.functionalityComponents : Map.of();
 
         return new SiteData(
                 extractLabel(url), url,
                 entry.rawText != null ? entry.rawText : "",
-                images, links, meta, dl,
+                images, links, meta, dl, fc,
                 entry.extractionTimeMillis
         );
     }
@@ -133,6 +135,7 @@ public final class FingerprintCache {
         entry.links                = data.getLinks();
         entry.metadata             = data.getMetadata();
         entry.dataLayer            = data.getDataLayer();
+        entry.functionalityComponents = data.getFunctionalityComponents();
         entry.extractionTimeMillis = data.getExtractionTimeMillis();
         store.put(url, entry);
     }
