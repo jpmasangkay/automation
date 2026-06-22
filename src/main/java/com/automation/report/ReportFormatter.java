@@ -206,9 +206,17 @@ public class ReportFormatter {
             boolean isPass = m.status().equals("MATCH") || m.status().equals("VISUAL MATCH");
             String cls = m.status().equals("MATCH") ? "pass" : m.status().equals("VISUAL MATCH") ? "warn" : "fail";
             sb.append("<tr").append(isPass ? "" : " class='row-fail'").append(">");
-            sb.append("<td class='src-cell'>").append(m.imgA() != null ? esc(m.imgA().getSrc()) : "<em class='na'>N/A</em>").append("</td>");
+            String srcA = m.imgA() != null ? esc(m.imgA().getSrc()) : "<em class='na'>N/A</em>";
+            if (m.imgA() != null && m.imgA().getAltText() != null && !m.imgA().getAltText().isEmpty()) {
+                srcA += "<br/><span style='font-size:7.5pt;color:#666'>Alt: " + esc(m.imgA().getAltText()) + "</span>";
+            }
+            sb.append("<td class='src-cell'>").append(srcA).append("</td>");
             sb.append("<td class='hash-cell'>").append(m.imgA() != null ? m.imgA().getHash().substring(0, 8) + "…" : "N/A").append("</td>");
-            sb.append("<td class='src-cell'>").append(m.imgB() != null ? esc(m.imgB().getSrc()) : "<em class='na'>N/A</em>").append("</td>");
+            String srcB = m.imgB() != null ? esc(m.imgB().getSrc()) : "<em class='na'>N/A</em>";
+            if (m.imgB() != null && m.imgB().getAltText() != null && !m.imgB().getAltText().isEmpty()) {
+                srcB += "<br/><span style='font-size:7.5pt;color:#666'>Alt: " + esc(m.imgB().getAltText()) + "</span>";
+            }
+            sb.append("<td class='src-cell'>").append(srcB).append("</td>");
             sb.append("<td class='hash-cell'>").append(m.imgB() != null ? m.imgB().getHash().substring(0, 8) + "…" : "N/A").append("</td>");
             sb.append("<td class='status-cell ").append(cls).append("'>").append(m.status()).append("</td></tr>");
         }

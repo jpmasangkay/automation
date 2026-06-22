@@ -208,7 +208,7 @@ public class ContentExtractor {
         @SuppressWarnings("unchecked")
         List<Map<String, String>> imgInfoList = (List<Map<String, String>>) page.evaluate(
             "() => Array.from(document.images)" +
-            ".map(img => ({ src: img.getAttribute('src')||'', currentSrc: img.currentSrc||img.src||'' }))" +
+            ".map(img => ({ src: img.getAttribute('src')||'', currentSrc: img.currentSrc||img.src||'', alt: img.getAttribute('alt')||'' }))" +
             ".filter(info => info.currentSrc.toLowerCase().startsWith('http'))");
 
         List<ImageData> images = java.util.Collections.synchronizedList(new ArrayList<>());
@@ -250,7 +250,7 @@ public class ContentExtractor {
                                 if (response.statusCode() == 200) {
                                     byte[] imageBytes = response.body();
                                     String hash = md5(imageBytes);
-                                    images.add(new ImageData(0, src.isBlank() ? currentSrc : src, hash, hash));
+                                    images.add(new ImageData(0, src.isBlank() ? currentSrc : src, info.get("alt"), hash, hash));
                                     break;
                                 } else if (response.statusCode() == 429 && attempt < maxRetries) {
                                     // Rate limited, wait much longer to cool down
@@ -282,7 +282,7 @@ public class ContentExtractor {
         List<ImageData> sortedImages = new ArrayList<>();
         int index = 0;
         for (ImageData img : images) {
-            sortedImages.add(new ImageData(index++, img.getSrc(), img.getHash(), img.getPerceptualHash()));
+            sortedImages.add(new ImageData(index++, img.getSrc(), img.getAltText(), img.getHash(), img.getPerceptualHash()));
         }
         return sortedImages;
     }
