@@ -201,22 +201,20 @@ public class ReportFormatter {
             sb.append("<tr><td class='stat-label'>Visual Match</td><td class='status-cell warn'>").append(result.imageDiff().visualMatchImagesCount()).append("</td></tr>");
         sb.append("<tr><td class='stat-label'>Mismatched</td><td>").append(result.imageDiff().mismatchCount()).append("</td></tr>");
         sb.append("</tbody></table>");
-        sb.append("<table><thead><tr><th style='width:31%'>Site A Src</th><th style='width:10%'>A Hash</th><th style='width:31%'>Site B Src</th><th style='width:10%'>B Hash</th><th style='width:14%'>Status</th></tr></thead><tbody>");
+        sb.append("<table><thead><tr><th style='width:22%'>Site A Src</th><th style='width:15%'>Site A Alt</th><th style='width:8%'>A Hash</th><th style='width:22%'>Site B Src</th><th style='width:15%'>Site B Alt</th><th style='width:8%'>B Hash</th><th style='width:10%'>Status</th></tr></thead><tbody>");
         for (ImageMatch m : result.imageDiff().matchesList()) {
             boolean isPass = m.status().equals("MATCH") || m.status().equals("VISUAL MATCH");
             String cls = m.status().equals("MATCH") ? "pass" : m.status().equals("VISUAL MATCH") ? "warn" : "fail";
             sb.append("<tr").append(isPass ? "" : " class='row-fail'").append(">");
             String srcA = m.imgA() != null ? esc(m.imgA().getSrc()) : "<em class='na'>N/A</em>";
-            if (m.imgA() != null && m.imgA().getAltText() != null && !m.imgA().getAltText().isEmpty()) {
-                srcA += "<br/><span style='font-size:7.5pt;color:#666'>Alt: " + esc(m.imgA().getAltText()) + "</span>";
-            }
+            String altA = m.imgA() != null && m.imgA().getAltText() != null && !m.imgA().getAltText().isEmpty() ? esc(m.imgA().getAltText()) : "<em class='na'>N/A</em>";
             sb.append("<td class='src-cell'>").append(srcA).append("</td>");
+            sb.append("<td class='src-cell'>").append(altA).append("</td>");
             sb.append("<td class='hash-cell'>").append(m.imgA() != null ? m.imgA().getHash().substring(0, 8) + "…" : "N/A").append("</td>");
             String srcB = m.imgB() != null ? esc(m.imgB().getSrc()) : "<em class='na'>N/A</em>";
-            if (m.imgB() != null && m.imgB().getAltText() != null && !m.imgB().getAltText().isEmpty()) {
-                srcB += "<br/><span style='font-size:7.5pt;color:#666'>Alt: " + esc(m.imgB().getAltText()) + "</span>";
-            }
+            String altB = m.imgB() != null && m.imgB().getAltText() != null && !m.imgB().getAltText().isEmpty() ? esc(m.imgB().getAltText()) : "<em class='na'>N/A</em>";
             sb.append("<td class='src-cell'>").append(srcB).append("</td>");
+            sb.append("<td class='src-cell'>").append(altB).append("</td>");
             sb.append("<td class='hash-cell'>").append(m.imgB() != null ? m.imgB().getHash().substring(0, 8) + "…" : "N/A").append("</td>");
             sb.append("<td class='status-cell ").append(cls).append("'>").append(m.status()).append("</td></tr>");
         }
