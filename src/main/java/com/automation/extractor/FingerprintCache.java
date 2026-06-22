@@ -85,7 +85,7 @@ public final class FingerprintCache {
             return null;
         }
 
-        // Fingerprint check – at least one fingerprint must match
+        // Fingerprint check - at least one fingerprint must match
         boolean etagMatch = freshEtag != null && !freshEtag.isBlank()
                 && freshEtag.equals(entry.etag);
         boolean lastModMatch = freshLastMod != null && !freshLastMod.isBlank()
@@ -100,7 +100,7 @@ public final class FingerprintCache {
             return null;
         }
 
-        logger.info("[CACHE HIT] {} – skipping Playwright extraction", url);
+        logger.info("[CACHE HIT] {} - skipping Playwright extraction", url);
         // Reconstruct SiteData; screenshot omitted (empty) for cached entries
         List<ImageData> images   = entry.images   != null ? entry.images   : List.of();
         List<LinkData>  links    = entry.links     != null ? entry.links    : List.of();
@@ -160,7 +160,7 @@ public final class FingerprintCache {
 
     private void load() {
         if (!Files.exists(CACHE_FILE)) {
-            logger.debug("No fingerprint cache found – starting fresh");
+            logger.debug("No fingerprint cache found - starting fresh");
             return;
         }
         try {

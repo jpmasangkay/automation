@@ -1,14 +1,122 @@
 {
-  "https://www.campus.sanofi/in": {
-    "url": "https://www.campus.sanofi/in",
-    "cachedAtEpochMs": 1781883132591,
-    "rawText": "Skip To Main Content\n\nThis website is intended exclusively for Registered Medical Practitioners (RMP’s) registered with the National Medical Commission (NMC) and their respective State Medical Councils/statutory authorities in India.\n\nWelcome To Campus Sanofi India\n\nThe online portal for healthcare professionals where science, knowledge, and education meet\n\nSign up\nLog in\nWhat\u0027s new in Sanofi Campus\n\nDiabetes\n\nRead More\n\nInfectious Diseases and Vaccines\n\nRead More\n\nKidney Transplant\n\nRead More\nMore about science\n\nChoose a therapeutic area to find related scientific content\n\nDiabetes\n\nRead More\n\nKidney Transplant\n\nRead More\n\nInfectious Diseases and Vaccines\n\nRead More\nLatest trends\n\nExplore the most popular scientific content among Sanofi Campus users\n\nSoli-CGM study\n\nEffect of iGlarLixi on continuous glucose monitoring measured time in range in insulin-naive adults with suboptimally controlled type 2 diabetes\n\nLearn more\nFixed Ratio Combination in Diabetes Care Webinar Key Takeaway\n\nFixed Ratio Combination (FRC) simplify diabetes management by combining complementary agents in a single injection. Our webinar explored the clinical evidence and practical applications of FRC therapies in managing type 2 diabetes. Watch this exclusive video to explore the key highlights from the Fixed Ratio Combination in Diabetes Care Webinar\n\nLearn more\nCONGRESS-HIGHLIGHTS\nATTD 2026\n\nAdvanced Technologies \u0026 Treatments for Diabetes\n\nLearn more\nInsulinToolKit\n\nAre you looking for a simplification tool for insulin initiation and titration in your patients? The wait is over. \nInsulinToolKit is a Decision Support tool designed to support patients with initiation and titration of their insulin regimes in a simplified manner to help optimize glycemic control.\n\nLearn more\nGLOBAL \u0026 INDIAN BURDEN OF DIABETES WITH ITS PATHOPHYSIOLOGY \u0026 PROGRESSION OF THE DISEASE\nLearn more\nCOMPLICATIONS OF DIABETES IF NOT CONTROLLED\nLearn more\nGLOBAL \u0026 INDIAN BURDEN OF DIABETES WITH ITS PATHOPHYSIOLOGY \u0026 PROGRESSION OF THE DISEASE\nLearn more\nCONGRESS-HIGHLIGHTS\nEASD 2025: European Association for the study of Diabetes\nLearn more\nSupport for your patients\n\nDiscover the selection of support materials for patients from different therapeutic areas\n\nView all\nMEET-OUR-RARE-DISEASE-FIGHTERS\nFrom Diagnosis to Recovery: Akash Prasad’s Battle with MPS I\nLearn more\nMEET-OUR-RARE-DISEASE-FIGHTERS\nLiving Well with Gaucher: Alka Singh’s Testimony of Early Diagnosis and Treatment\nLearn more\nMULTIPLE-SCLEROSIS\nWhat you should know about LEMTRADA® (alemtuzumab)\n\nCall your neurologist right away to report these symptoms no matter if they are new, worsening or returning symptoms. Seek medical attention if you cannot reach your own doctor, and make sure you show them this card.\n\nLearn more\nMULTIPLE-SCLEROSIS\nLemtrada Treatment Guide\n\nImportant safety information you should know when starting therapy with LEMTRADA (alemtuzumab)\n\nLearn more\nA healthcare professional’s guide\nLearn more\nHealthcare professional checklist\nLearn more\nDiscover Easy Diabetes Management Tips\nLearn more\nAccess all premium content\n\nEnjoy scientific studies, courses, events, clinical cases and much more on Campus.\n\nFor healthcare professionals only.\n\nDo you already have a Campus account? Sign in\n\nCreate your account in 2 minutes\n\nThis website is intended exclusively for Registered Medical Practitioners (RMP’s) registered with the National Medical Commission (NMC) and their respective State Medical Councils/statutory authorities in India.",
+  "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html": {
+    "url": "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
+    "etag": "\"63e40de8-243f\"",
+    "lastModified": "Wed, 08 Feb 2023 21:02:32 GMT",
+    "cachedAtEpochMs": 1782115482703,
+    "rawText": "Home  Books  Poetry A Light in the Attic\nA Light in the Attic\n\n£51.77\n\n In stock (22 available)\n\n      \n\nWarning! This is a demo website for web scraping purposes. Prices and ratings here were randomly assigned and have no real meaning.\nProduct Description\n\nIt\u0027s hard to imagine a world without A Light in the Attic. This now-classic collection of poetry and drawings from Shel Silverstein celebrates its 20th anniversary with this special edition. Silverstein\u0027s humorous and creative verse can amuse the dowdiest of readers. Lemon-faced adults and fidgety kids sit still and read these rhythmic words and laugh and smile and love th It\u0027s hard to imagine a world without A Light in the Attic. This now-classic collection of poetry and drawings from Shel Silverstein celebrates its 20th anniversary with this special edition. Silverstein\u0027s humorous and creative verse can amuse the dowdiest of readers. Lemon-faced adults and fidgety kids sit still and read these rhythmic words and laugh and smile and love that Silverstein. Need proof of his genius? RockabyeRockabye baby, in the treetopDon\u0027t you know a treetopIs no safe place to rock?And who put you up there,And your cradle, too?Baby, I think someone down here\u0027sGot it in for you. Shel, you never sounded so good. ...more\n\nProduct Information\nUPC\ta897fe39b1053632\nProduct Type\tBooks\nPrice (excl. tax)\t£51.77\nPrice (incl. tax)\t£51.77\nTax\t£0.00\nAvailability\tIn stock (22 available)\nNumber of reviews\t0",
     "images": [
       {
         "index": 0,
-        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Infectious-Diseases-Vaccines.jpg/jcr:content.jpg",
-        "hash": "a1f1900dedc977afe8d0861bd9d190ce",
-        "perceptualHash": "a1f1900dedc977afe8d0861bd9d190ce"
+        "src": "../../media/cache/fe/72/fe72f0532301ec28892ae79a629a293c.jpg",
+        "hash": "c21e5caeaa751d1a4d6b527015d9e9ee",
+        "perceptualHash": "c21e5caeaa751d1a4d6b527015d9e9ee"
+      }
+    ],
+    "links": [
+      {
+        "originalHref": "../category/books_1/index.html",
+        "slug": "books_1",
+        "linkText": "Books"
+      },
+      {
+        "originalHref": "../category/books/poetry_23/index.html",
+        "slug": "poetry_23",
+        "linkText": "Poetry"
+      }
+    ],
+    "metadata": {
+      "Title": "A Light in the Attic | Books to Scrape - Sandbox",
+      "content-type": "text/html; charset\u003dUTF-8",
+      "created": "24th Jun 2016 09:29",
+      "description": "It\u0027s hard to imagine a world without A Light in the Attic. This now-classic collection of poetry and drawings from Shel Silverstein celebrates its 20th anniversary with this special edition. Silverstein\u0027s humorous and creative verse can amuse the dowdiest of readers. Lemon-faced adults and fidgety kids sit still and read these rhythmic words and laugh and smile and love th It\u0027s hard to imagine a world without A Light in the Attic. This now-classic collection of poetry and drawings from Shel Silverstein celebrates its 20th anniversary with this special edition. Silverstein\u0027s humorous and creative verse can amuse the dowdiest of readers. Lemon-faced adults and fidgety kids sit still and read these rhythmic words and laugh and smile and love that Silverstein. Need proof of his genius? RockabyeRockabye baby, in the treetopDon\u0027t you know a treetopIs no safe place to rock?And who put you up there,And your cradle, too?Baby, I think someone down here\u0027sGot it in for you. Shel, you never sounded so good. ...more",
+      "viewport": "width\u003ddevice-width",
+      "robots": "NOARCHIVE,NOCACHE"
+    },
+    "dataLayer": {},
+    "functionalityComponents": {
+      "Buttons": "0|[empty]",
+      "CTA Links (Button-styled)": "0|[empty]",
+      "Clickable Images": "0|[empty]",
+      "Zoomable Images": "0|[empty]",
+      "Modals": "0|[empty]",
+      "Popups": "0|[empty]",
+      "Carousels": "1|#product_gallery",
+      "Sliders": "0|[empty]",
+      "Accordions": "0|[empty]",
+      "Toggles": "0|[empty]",
+      "Video Players": "0|[empty]",
+      "Audio Players": "0|[empty]",
+      "Dropdowns": "0|[empty]",
+      "Selects": "0|[empty]",
+      "Forms": "0|[empty]",
+      "Inputs": "0|[empty]",
+      "Tabs": "0|[empty]",
+      "Tooltips": "0|[empty]",
+      "Iframes": "0|[empty]"
+    },
+    "extractionTimeMillis": 8848
+  },
+  "https://www.scrapethissite.com/pages/simple/": {
+    "url": "https://www.scrapethissite.com/pages/simple/",
+    "cachedAtEpochMs": 1782115483029,
+    "rawText": "Countries of the World: A Simple Example 250 items\n\nA single page that lists information about all the countries in the world. Good for those just get started with web scraping. Practice looking for patterns in the HTML that will allow you to extract information about each country. Then, build a simple web scraper that makes a request to this page, parses the HTML and prints out each country\u0027s name.\n\n There are 4 video lessons that show you how to scrape this page.\n\nData via http://peric.github.io/GetCountries/\n\nAndorra\nCapital: Andorra la Vella\nPopulation: 84000\nArea (km2): 468.0\n\nUnited Arab Emirates\nCapital: Abu Dhabi\nPopulation: 4975593\nArea (km2): 82880.0\n\nAfghanistan\nCapital: Kabul\nPopulation: 29121286\nArea (km2): 647500.0\n\nAntigua and Barbuda\nCapital: St. John\u0027s\nPopulation: 86754\nArea (km2): 443.0\n\nAnguilla\nCapital: The Valley\nPopulation: 13254\nArea (km2): 102.0\n\nAlbania\nCapital: Tirana\nPopulation: 2986952\nArea (km2): 28748.0\n\nArmenia\nCapital: Yerevan\nPopulation: 2968000\nArea (km2): 29800.0\n\nAngola\nCapital: Luanda\nPopulation: 13068161\nArea (km2): 1246700.0\n\nAntarctica\nCapital: None\nPopulation: 0\nArea (km2): 1.4E7\n\nArgentina\nCapital: Buenos Aires\nPopulation: 41343201\nArea (km2): 2766890.0\n\nAmerican Samoa\nCapital: Pago Pago\nPopulation: 57881\nArea (km2): 199.0\n\nAustria\nCapital: Vienna\nPopulation: 8205000\nArea (km2): 83858.0\n\nAustralia\nCapital: Canberra\nPopulation: 21515754\nArea (km2): 7686850.0\n\nAruba\nCapital: Oranjestad\nPopulation: 71566\nArea (km2): 193.0\n\nÅland\nCapital: Mariehamn\nPopulation: 26711\nArea (km2): 1580.0\n\nAzerbaijan\nCapital: Baku\nPopulation: 8303512\nArea (km2): 86600.0\n\nBosnia and Herzegovina\nCapital: Sarajevo\nPopulation: 4590000\nArea (km2): 51129.0\n\nBarbados\nCapital: Bridgetown\nPopulation: 285653\nArea (km2): 431.0\n\nBangladesh\nCapital: Dhaka\nPopulation: 156118464\nArea (km2): 144000.0\n\nBelgium\nCapital: Brussels\nPopulation: 10403000\nArea (km2): 30510.0\n\nBurkina Faso\nCapital: Ouagadougou\nPopulation: 16241811\nArea (km2): 274200.0\n\nBulgaria\nCapital: Sofia\nPopulation: 7148785\nArea (km2): 110910.0\n\nBahrain\nCapital: Manama\nPopulation: 738004\nArea (km2): 665.0\n\nBurundi\nCapital: Bujumbura\nPopulation: 9863117\nArea (km2): 27830.0\n\nBenin\nCapital: Porto-Novo\nPopulation: 9056010\nArea (km2): 112620.0\n\nSaint Barthélemy\nCapital: Gustavia\nPopulation: 8450\nArea (km2): 21.0\n\nBermuda\nCapital: Hamilton\nPopulation: 65365\nArea (km2): 53.0\n\nBrunei\nCapital: Bandar Seri Begawan\nPopulation: 395027\nArea (km2): 5770.0\n\nBolivia\nCapital: Sucre\nPopulation: 9947418\nArea (km2): 1098580.0\n\nBonaire\nCapital: Kralendijk\nPopulation: 18012\nArea (km2): 328.0\n\nBrazil\nCapital: Brasília\nPopulation: 201103330\nArea (km2): 8511965.0\n\nBahamas\nCapital: Nassau\nPopulation: 301790\nArea (km2): 13940.0\n\nBhutan\nCapital: Thimphu\nPopulation: 699847\nArea (km2): 47000.0\n\nBouvet Island\nCapital: None\nPopulation: 0\nArea (km2): 49.0\n\nBotswana\nCapital: Gaborone\nPopulation: 2029307\nArea (km2): 600370.0\n\nBelarus\nCapital: Minsk\nPopulation: 9685000\nArea (km2): 207600.0\n\nBelize\nCapital: Belmopan\nPopulation: 314522\nArea (km2): 22966.0\n\nCanada\nCapital: Ottawa\nPopulation: 33679000\nArea (km2): 9984670.0\n\nCocos [Keeling] Islands\nCapital: West Island\nPopulation: 628\nArea (km2): 14.0\n\nDemocratic Republic of the Congo\nCapital: Kinshasa\nPopulation: 70916439\nArea (km2): 2345410.0\n\nCentral African Republic\nCapital: Bangui\nPopulation: 4844927\nArea (km2): 622984.0\n\nRepublic of the Congo\nCapital: Brazzaville\nPopulation: 3039126\nArea (km2): 342000.0\n\nSwitzerland\nCapital: Bern\nPopulation: 7581000\nArea (km2): 41290.0\n\nIvory Coast\nCapital: Yamoussoukro\nPopulation: 21058798\nArea (km2): 322460.0\n\nCook Islands\nCapital: Avarua\nPopulation: 21388\nArea (km2): 240.0\n\nChile\nCapital: Santiago\nPopulation: 16746491\nArea (km2): 756950.0\n\nCameroon\nCapital: Yaoundé\nPopulation: 19294149\nArea (km2): 475440.0\n\nChina\nCapital: Beijing\nPopulation: 1330044000\nArea (km2): 9596960.0\n\nColombia\nCapital: Bogotá\nPopulation: 47790000\nArea (km2): 1138910.0\n\nCosta Rica\nCapital: San José\nPopulation: 4516220\nArea (km2): 51100.0\n\nCuba\nCapital: Havana\nPopulation: 11423000\nArea (km2): 110860.0\n\nCape Verde\nCapital: Praia\nPopulation: 508659\nArea (km2): 4033.0\n\nCuracao\nCapital: Willemstad\nPopulation: 141766\nArea (km2): 444.0\n\nChristmas Island\nCapital: Flying Fish Cove\nPopulation: 1500\nArea (km2): 135.0\n\nCyprus\nCapital: Nicosia\nPopulation: 1102677\nArea (km2): 9250.0\n\nCzech Republic\nCapital: Prague\nPopulation: 10476000\nArea (km2): 78866.0\n\nGermany\nCapital: Berlin\nPopulation: 81802257\nArea (km2): 357021.0\n\nDjibouti\nCapital: Djibouti\nPopulation: 740528\nArea (km2): 23000.0\n\nDenmark\nCapital: Copenhagen\nPopulation: 5484000\nArea (km2): 43094.0\n\nDominica\nCapital: Roseau\nPopulation: 72813\nArea (km2): 754.0\n\nDominican Republic\nCapital: Santo Domingo\nPopulation: 9823821\nArea (km2): 48730.0\n\nAlgeria\nCapital: Algiers\nPopulation: 34586184\nArea (km2): 2381740.0\n\nEcuador\nCapital: Quito\nPopulation: 14790608\nArea (km2): 283560.0\n\nEstonia\nCapital: Tallinn\nPopulation: 1291170\nArea (km2): 45226.0\n\nEgypt\nCapital: Cairo\nPopulation: 80471869\nArea (km2): 1001450.0\n\nWestern Sahara\nCapital: Laâyoune / El Aaiún\nPopulation: 273008\nArea (km2): 266000.0\n\nEritrea\nCapital: Asmara\nPopulation: 5792984\nArea (km2): 121320.0\n\nSpain\nCapital: Madrid\nPopulation: 46505963\nArea (km2): 504782.0\n\nEthiopia\nCapital: Addis Ababa\nPopulation: 88013491\nArea (km2): 1127127.0\n\nFinland\nCapital: Helsinki\nPopulation: 5244000\nArea (km2): 337030.0\n\nFiji\nCapital: Suva\nPopulation: 875983\nArea (km2): 18270.0\n\nFalkland Islands\nCapital: Stanley\nPopulation: 2638\nArea (km2): 12173.0\n\nMicronesia\nCapital: Palikir\nPopulation: 107708\nArea (km2): 702.0\n\nFaroe Islands\nCapital: Tórshavn\nPopulation: 48228\nArea (km2): 1399.0\n\nFrance\nCapital: Paris\nPopulation: 64768389\nArea (km2): 547030.0\n\nGabon\nCapital: Libreville\nPopulation: 1545255\nArea (km2): 267667.0\n\nUnited Kingdom\nCapital: London\nPopulation: 62348447\nArea (km2): 244820.0\n\nGrenada\nCapital: St. George\u0027s\nPopulation: 107818\nArea (km2): 344.0\n\nGeorgia\nCapital: Tbilisi\nPopulation: 4630000\nArea (km2): 69700.0\n\nFrench Guiana\nCapital: Cayenne\nPopulation: 195506\nArea (km2): 91000.0\n\nGuernsey\nCapital: St Peter Port\nPopulation: 65228\nArea (km2): 78.0\n\nGhana\nCapital: Accra\nPopulation: 24339838\nArea (km2): 239460.0\n\nGibraltar\nCapital: Gibraltar\nPopulation: 27884\nArea (km2): 6.5\n\nGreenland\nCapital: Nuuk\nPopulation: 56375\nArea (km2): 2166086.0\n\nGambia\nCapital: Bathurst\nPopulation: 1593256\nArea (km2): 11300.0\n\nGuinea\nCapital: Conakry\nPopulation: 10324025\nArea (km2): 245857.0\n\nGuadeloupe\nCapital: Basse-Terre\nPopulation: 443000\nArea (km2): 1780.0\n\nEquatorial Guinea\nCapital: Malabo\nPopulation: 1014999\nArea (km2): 28051.0\n\nGreece\nCapital: Athens\nPopulation: 11000000\nArea (km2): 131940.0\n\nSouth Georgia and the South Sandwich Islands\nCapital: Grytviken\nPopulation: 30\nArea (km2): 3903.0\n\nGuatemala\nCapital: Guatemala City\nPopulation: 13550440\nArea (km2): 108890.0\n\nGuam\nCapital: Hagåtña\nPopulation: 159358\nArea (km2): 549.0\n\nGuinea-Bissau\nCapital: Bissau\nPopulation: 1565126\nArea (km2): 36120.0\n\nGuyana\nCapital: Georgetown\nPopulation: 748486\nArea (km2): 214970.0\n\nHong Kong\nCapital: Hong Kong\nPopulation: 6898686\nArea (km2): 1092.0\n\nHeard Island and McDonald Islands\nCapital: None\nPopulation: 0\nArea (km2): 412.0\n\nHonduras\nCapital: Tegucigalpa\nPopulation: 7989415\nArea (km2): 112090.0\n\nCroatia\nCapital: Zagreb\nPopulation: 4491000\nArea (km2): 56542.0\n\nHaiti\nCapital: Port-au-Prince\nPopulation: 9648924\nArea (km2): 27750.0\n\nHungary\nCapital: Budapest\nPopulation: 9982000\nArea (km2): 93030.0\n\nIndonesia\nCapital: Jakarta\nPopulation: 242968342\nArea (km2): 1919440.0\n\nIreland\nCapital: Dublin\nPopulation: 4622917\nArea (km2): 70280.0\n\nIsrael\nCapital: None\nPopulation: 7353985\nArea (km2): 20770.0\n\nIsle of Man\nCapital: Douglas\nPopulation: 75049\nArea (km2): 572.0\n\nIndia\nCapital: New Delhi\nPopulation: 1173108018\nArea (km2): 3287590.0\n\nBritish Indian Ocean Territory\nCapital: None\nPopulation: 4000\nArea (km2): 60.0\n\nIraq\nCapital: Baghdad\nPopulation: 29671605\nArea (km2): 437072.0\n\nIran\nCapital: Tehran\nPopulation: 76923300\nArea (km2): 1648000.0\n\nIceland\nCapital: Reykjavik\nPopulation: 308910\nArea (km2): 103000.0\n\nItaly\nCapital: Rome\nPopulation: 60340328\nArea (km2): 301230.0\n\nJersey\nCapital: Saint Helier\nPopulation: 90812\nArea (km2): 116.0\n\nJamaica\nCapital: Kingston\nPopulation: 2847232\nArea (km2): 10991.0\n\nJordan\nCapital: Amman\nPopulation: 6407085\nArea (km2): 92300.0\n\nJapan\nCapital: Tokyo\nPopulation: 127288000\nArea (km2): 377835.0\n\nKenya\nCapital: Nairobi\nPopulation: 40046566\nArea (km2): 582650.0\n\nKyrgyzstan\nCapital: Bishkek\nPopulation: 5776500\nArea (km2): 198500.0\n\nCambodia\nCapital: Phnom Penh\nPopulation: 14453680\nArea (km2): 181040.0\n\nKiribati\nCapital: Tarawa\nPopulation: 92533\nArea (km2): 811.0\n\nComoros\nCapital: Moroni\nPopulation: 773407\nArea (km2): 2170.0\n\nSaint Kitts and Nevis\nCapital: Basseterre\nPopulation: 51134\nArea (km2): 261.0\n\nNorth Korea\nCapital: Pyongyang\nPopulation: 22912177\nArea (km2): 120540.0\n\nSouth Korea\nCapital: Seoul\nPopulation: 48422644\nArea (km2): 98480.0\n\nKuwait\nCapital: Kuwait City\nPopulation: 2789132\nArea (km2): 17820.0\n\nCayman Islands\nCapital: George Town\nPopulation: 44270\nArea (km2): 262.0\n\nKazakhstan\nCapital: Astana\nPopulation: 15340000\nArea (km2): 2717300.0\n\nLaos\nCapital: Vientiane\nPopulation: 6368162\nArea (km2): 236800.0\n\nLebanon\nCapital: Beirut\nPopulation: 4125247\nArea (km2): 10400.0\n\nSaint Lucia\nCapital: Castries\nPopulation: 160922\nArea (km2): 616.0\n\nLiechtenstein\nCapital: Vaduz\nPopulation: 35000\nArea (km2): 160.0\n\nSri Lanka\nCapital: Colombo\nPopulation: 21513990\nArea (km2): 65610.0\n\nLiberia\nCapital: Monrovia\nPopulation: 3685076\nArea (km2): 111370.0\n\nLesotho\nCapital: Maseru\nPopulation: 1919552\nArea (km2): 30355.0\n\nLithuania\nCapital: Vilnius\nPopulation: 2944459\nArea (km2): 65200.0\n\nLuxembourg\nCapital: Luxembourg\nPopulation: 497538\nArea (km2): 2586.0\n\nLatvia\nCapital: Riga\nPopulation: 2217969\nArea (km2): 64589.0\n\nLibya\nCapital: Tripoli\nPopulation: 6461454\nArea (km2): 1759540.0\n\nMorocco\nCapital: Rabat\nPopulation: 31627428\nArea (km2): 446550.0\n\nMonaco\nCapital: Monaco\nPopulation: 32965\nArea (km2): 1.95\n\nMoldova\nCapital: Chişinău\nPopulation: 4324000\nArea (km2): 33843.0\n\nMontenegro\nCapital: Podgorica\nPopulation: 666730\nArea (km2): 14026.0\n\nSaint Martin\nCapital: Marigot\nPopulation: 35925\nArea (km2): 53.0\n\nMadagascar\nCapital: Antananarivo\nPopulation: 21281844\nArea (km2): 587040.0\n\nMarshall Islands\nCapital: Majuro\nPopulation: 65859\nArea (km2): 181.3\n\nMacedonia\nCapital: Skopje\nPopulation: 2062294\nArea (km2): 25333.0\n\nMali\nCapital: Bamako\nPopulation: 13796354\nArea (km2): 1240000.0\n\nMyanmar [Burma]\nCapital: Naypyitaw\nPopulation: 53414374\nArea (km2): 678500.0\n\nMongolia\nCapital: Ulan Bator\nPopulation: 3086918\nArea (km2): 1565000.0\n\nMacao\nCapital: Macao\nPopulation: 449198\nArea (km2): 254.0\n\nNorthern Mariana Islands\nCapital: Saipan\nPopulation: 53883\nArea (km2): 477.0\n\nMartinique\nCapital: Fort-de-France\nPopulation: 432900\nArea (km2): 1100.0\n\nMauritania\nCapital: Nouakchott\nPopulation: 3205060\nArea (km2): 1030700.0\n\nMontserrat\nCapital: Plymouth\nPopulation: 9341\nArea (km2): 102.0\n\nMalta\nCapital: Valletta\nPopulation: 403000\nArea (km2): 316.0\n\nMauritius\nCapital: Port Louis\nPopulation: 1294104\nArea (km2): 2040.0\n\nMaldives\nCapital: Malé\nPopulation: 395650\nArea (km2): 300.0\n\nMalawi\nCapital: Lilongwe\nPopulation: 15447500\nArea (km2): 118480.0\n\nMexico\nCapital: Mexico City\nPopulation: 112468855\nArea (km2): 1972550.0\n\nMalaysia\nCapital: Kuala Lumpur\nPopulation: 28274729\nArea (km2): 329750.0\n\nMozambique\nCapital: Maputo\nPopulation: 22061451\nArea (km2): 801590.0\n\nNamibia\nCapital: Windhoek\nPopulation: 2128471\nArea (km2): 825418.0\n\nNew Caledonia\nCapital: Noumea\nPopulation: 216494\nArea (km2): 19060.0\n\nNiger\nCapital: Niamey\nPopulation: 15878271\nArea (km2): 1267000.0\n\nNorfolk Island\nCapital: Kingston\nPopulation: 1828\nArea (km2): 34.6\n\nNigeria\nCapital: Abuja\nPopulation: 154000000\nArea (km2): 923768.0\n\nNicaragua\nCapital: Managua\nPopulation: 5995928\nArea (km2): 129494.0\n\nNetherlands\nCapital: Amsterdam\nPopulation: 16645000\nArea (km2): 41526.0\n\nNorway\nCapital: Oslo\nPopulation: 5009150\nArea (km2): 324220.0\n\nNepal\nCapital: Kathmandu\nPopulation: 28951852\nArea (km2): 140800.0\n\nNauru\nCapital: Yaren\nPopulation: 10065\nArea (km2): 21.0\n\nNiue\nCapital: Alofi\nPopulation: 2166\nArea (km2): 260.0\n\nNew Zealand\nCapital: Wellington\nPopulation: 4252277\nArea (km2): 268680.0\n\nOman\nCapital: Muscat\nPopulation: 2967717\nArea (km2): 212460.0\n\nPanama\nCapital: Panama City\nPopulation: 3410676\nArea (km2): 78200.0\n\nPeru\nCapital: Lima\nPopulation: 29907003\nArea (km2): 1285220.0\n\nFrench Polynesia\nCapital: Papeete\nPopulation: 270485\nArea (km2): 4167.0\n\nPapua New Guinea\nCapital: Port Moresby\nPopulation: 6064515\nArea (km2): 462840.0\n\nPhilippines\nCapital: Manila\nPopulation: 99900177\nArea (km2): 300000.0\n\nPakistan\nCapital: Islamabad\nPopulation: 184404791\nArea (km2): 803940.0\n\nPoland\nCapital: Warsaw\nPopulation: 38500000\nArea (km2): 312685.0\n\nSaint Pierre and Miquelon\nCapital: Saint-Pierre\nPopulation: 7012\nArea (km2): 242.0\n\nPitcairn Islands\nCapital: Adamstown\nPopulation: 46\nArea (km2): 47.0\n\nPuerto Rico\nCapital: San Juan\nPopulation: 3916632\nArea (km2): 9104.0\n\nPalestine\nCapital: None\nPopulation: 3800000\nArea (km2): 5970.0\n\nPortugal\nCapital: Lisbon\nPopulation: 10676000\nArea (km2): 92391.0\n\nPalau\nCapital: Melekeok\nPopulation: 19907\nArea (km2): 458.0\n\nParaguay\nCapital: Asunción\nPopulation: 6375830\nArea (km2): 406750.0\n\nQatar\nCapital: Doha\nPopulation: 840926\nArea (km2): 11437.0\n\nRéunion\nCapital: Saint-Denis\nPopulation: 776948\nArea (km2): 2517.0\n\nRomania\nCapital: Bucharest\nPopulation: 21959278\nArea (km2): 237500.0\n\nSerbia\nCapital: Belgrade\nPopulation: 7344847\nArea (km2): 88361.0\n\nRussia\nCapital: Moscow\nPopulation: 140702000\nArea (km2): 1.71E7\n\nRwanda\nCapital: Kigali\nPopulation: 11055976\nArea (km2): 26338.0\n\nSaudi Arabia\nCapital: Riyadh\nPopulation: 25731776\nArea (km2): 1960582.0\n\nSolomon Islands\nCapital: Honiara\nPopulation: 559198\nArea (km2): 28450.0\n\nSeychelles\nCapital: Victoria\nPopulation: 88340\nArea (km2): 455.0\n\nSudan\nCapital: Khartoum\nPopulation: 35000000\nArea (km2): 1861484.0\n\nSweden\nCapital: Stockholm\nPopulation: 9828655\nArea (km2): 449964.0\n\nSingapore\nCapital: Singapore\nPopulation: 4701069\nArea (km2): 692.7\n\nSaint Helena\nCapital: Jamestown\nPopulation: 7460\nArea (km2): 410.0\n\nSlovenia\nCapital: Ljubljana\nPopulation: 2007000\nArea (km2): 20273.0\n\nSvalbard and Jan Mayen\nCapital: Longyearbyen\nPopulation: 2550\nArea (km2): 62049.0\n\nSlovakia\nCapital: Bratislava\nPopulation: 5455000\nArea (km2): 48845.0\n\nSierra Leone\nCapital: Freetown\nPopulation: 5245695\nArea (km2): 71740.0\n\nSan Marino\nCapital: San Marino\nPopulation: 31477\nArea (km2): 61.2\n\nSenegal\nCapital: Dakar\nPopulation: 12323252\nArea (km2): 196190.0\n\nSomalia\nCapital: Mogadishu\nPopulation: 10112453\nArea (km2): 637657.0\n\nSuriname\nCapital: Paramaribo\nPopulation: 492829\nArea (km2): 163270.0\n\nSouth Sudan\nCapital: Juba\nPopulation: 8260490\nArea (km2): 644329.0\n\nSão Tomé and Príncipe\nCapital: São Tomé\nPopulation: 175808\nArea (km2): 1001.0\n\nEl Salvador\nCapital: San Salvador\nPopulation: 6052064\nArea (km2): 21040.0\n\nSint Maarten\nCapital: Philipsburg\nPopulation: 37429\nArea (km2): 21.0\n\nSyria\nCapital: Damascus\nPopulation: 22198110\nArea (km2): 185180.0\n\nSwaziland\nCapital: Mbabane\nPopulation: 1354051\nArea (km2): 17363.0\n\nTurks and Caicos Islands\nCapital: Cockburn Town\nPopulation: 20556\nArea (km2): 430.0\n\nChad\nCapital: N\u0027Djamena\nPopulation: 10543464\nArea (km2): 1284000.0\n\nFrench Southern Territories\nCapital: Port-aux-Français\nPopulation: 140\nArea (km2): 7829.0\n\nTogo\nCapital: Lomé\nPopulation: 6587239\nArea (km2): 56785.0\n\nThailand\nCapital: Bangkok\nPopulation: 67089500\nArea (km2): 514000.0\n\nTajikistan\nCapital: Dushanbe\nPopulation: 7487489\nArea (km2): 143100.0\n\nTokelau\nCapital: None\nPopulation: 1466\nArea (km2): 10.0\n\nEast Timor\nCapital: Dili\nPopulation: 1154625\nArea (km2): 15007.0\n\nTurkmenistan\nCapital: Ashgabat\nPopulation: 4940916\nArea (km2): 488100.0\n\nTunisia\nCapital: Tunis\nPopulation: 10589025\nArea (km2): 163610.0\n\nTonga\nCapital: Nuku\u0027alofa\nPopulation: 122580\nArea (km2): 748.0\n\nTurkey\nCapital: Ankara\nPopulation: 77804122\nArea (km2): 780580.0\n\nTrinidad and Tobago\nCapital: Port of Spain\nPopulation: 1228691\nArea (km2): 5128.0\n\nTuvalu\nCapital: Funafuti\nPopulation: 10472\nArea (km2): 26.0\n\nTaiwan\nCapital: Taipei\nPopulation: 22894384\nArea (km2): 35980.0\n\nTanzania\nCapital: Dodoma\nPopulation: 41892895\nArea (km2): 945087.0\n\nUkraine\nCapital: Kiev\nPopulation: 45415596\nArea (km2): 603700.0\n\nUganda\nCapital: Kampala\nPopulation: 33398682\nArea (km2): 236040.0\n\nU.S. Minor Outlying Islands\nCapital: None\nPopulation: 0\nArea (km2): 0.0\n\nUnited States\nCapital: Washington\nPopulation: 310232863\nArea (km2): 9629091.0\n\nUruguay\nCapital: Montevideo\nPopulation: 3477000\nArea (km2): 176220.0\n\nUzbekistan\nCapital: Tashkent\nPopulation: 27865738\nArea (km2): 447400.0\n\nVatican City\nCapital: Vatican City\nPopulation: 921\nArea (km2): 0.44\n\nSaint Vincent and the Grenadines\nCapital: Kingstown\nPopulation: 104217\nArea (km2): 389.0\n\nVenezuela\nCapital: Caracas\nPopulation: 27223228\nArea (km2): 912050.0\n\nBritish Virgin Islands\nCapital: Road Town\nPopulation: 21730\nArea (km2): 153.0\n\nU.S. Virgin Islands\nCapital: Charlotte Amalie\nPopulation: 108708\nArea (km2): 352.0\n\nVietnam\nCapital: Hanoi\nPopulation: 89571130\nArea (km2): 329560.0\n\nVanuatu\nCapital: Port Vila\nPopulation: 221552\nArea (km2): 12200.0\n\nWallis and Futuna\nCapital: Mata-Utu\nPopulation: 16025\nArea (km2): 274.0\n\nSamoa\nCapital: Apia\nPopulation: 192001\nArea (km2): 2944.0\n\nKosovo\nCapital: Pristina\nPopulation: 1800000\nArea (km2): 10908.0\n\nYemen\nCapital: Sanaa\nPopulation: 23495361\nArea (km2): 527970.0\n\nMayotte\nCapital: Mamoudzou\nPopulation: 159042\nArea (km2): 374.0\n\nSouth Africa\nCapital: Pretoria\nPopulation: 49000000\nArea (km2): 1219912.0\n\nZambia\nCapital: Lusaka\nPopulation: 13460305\nArea (km2): 752614.0\n\nZimbabwe\nCapital: Harare\nPopulation: 11651858\nArea (km2): 390580.0\n",
+    "images": [],
+    "links": [
+      {
+        "originalHref": "/lessons/",
+        "slug": "lessons",
+        "linkText": "4 video lessons"
+      },
+      {
+        "originalHref": "http://peric.github.io/GetCountries/",
+        "slug": "GetCountries",
+        "linkText": "http://peric.github.io/GetCountries/"
+      }
+    ],
+    "metadata": {
+      "Title": "Countries of the World: A Simple Example | Scrape This Site | A public sandbox for learning web scraping",
+      "viewport": "width\u003ddevice-width, initial-scale\u003d1.0",
+      "description": "A single page that lists information about all the countries in the world. Good for those just get started with web scraping.",
+      "robots": "noindex"
+    },
+    "dataLayer": {
+      "dataLayer.0": "config",
+      "dataLayer.1": "AW-950945448"
+    },
+    "functionalityComponents": {
+      "Buttons": "0|[empty]",
+      "CTA Links (Button-styled)": "0|[empty]",
+      "Clickable Images": "0|[empty]",
+      "Zoomable Images": "0|[empty]",
+      "Modals": "0|[empty]",
+      "Popups": "0|[empty]",
+      "Carousels": "0|[empty]",
+      "Sliders": "0|[empty]",
+      "Accordions": "0|[empty]",
+      "Toggles": "0|[empty]",
+      "Video Players": "0|[empty]",
+      "Audio Players": "0|[empty]",
+      "Dropdowns": "0|[empty]",
+      "Selects": "0|[empty]",
+      "Forms": "0|[empty]",
+      "Inputs": "0|[empty]",
+      "Tabs": "0|[empty]",
+      "Tooltips": "0|[empty]",
+      "Iframes": "0|[empty]"
+    },
+    "extractionTimeMillis": 9172
+  },
+  "https://www.campus.sanofi/in": {
+    "url": "https://www.campus.sanofi/in",
+    "cachedAtEpochMs": 1782118053803,
+    "rawText": "Skip To Main Content\n\nThis website is intended exclusively for Registered Medical Practitioners (RMP’s) registered with the National Medical Commission (NMC) and their respective State Medical Councils/statutory authorities in India.\n\nWelcome To Campus Sanofi India\n\nThe online portal for healthcare professionals where science, knowledge, and education meet\n\nSign up\nLog in\nWhat\u0027s new in Sanofi Campus\n\nDiabetes\n\nRead More\n\nInfectious Diseases and Vaccines\n\nRead More\n\nKidney Transplant\n\nRead More\nMore about science\n\nChoose a therapeutic area to find related scientific content\n\nDiabetes\n\nRead More\n\nKidney Transplant\n\nRead More\n\nInfectious Diseases and Vaccines\n\nRead More\nLatest trends\n\nExplore the most popular scientific content among Sanofi Campus users\n\nSoli-CGM study\n\nEffect of iGlarLixi on continuous glucose monitoring measured time in range in insulin-naive adults with suboptimally controlled type 2 diabetes\n\nLearn more\nFixed Ratio Combination in Diabetes Care Webinar Key Takeaway\n\nFixed Ratio Combination (FRC) simplify diabetes management by combining complementary agents in a single injection. Our webinar explored the clinical evidence and practical applications of FRC therapies in managing type 2 diabetes. Watch this exclusive video to explore the key highlights from the Fixed Ratio Combination in Diabetes Care Webinar\n\nLearn more\nCONGRESS-HIGHLIGHTS\nATTD 2026\n\nAdvanced Technologies \u0026 Treatments for Diabetes\n\nLearn more\nInsulinToolKit\n\nAre you looking for a simplification tool for insulin initiation and titration in your patients? The wait is over. \nInsulinToolKit is a Decision Support tool designed to support patients with initiation and titration of their insulin regimes in a simplified manner to help optimize glycemic control.\n\nLearn more\nCOMPLICATIONS OF DIABETES IF NOT CONTROLLED\nLearn more\nGLOBAL \u0026 INDIAN BURDEN OF DIABETES WITH ITS PATHOPHYSIOLOGY \u0026 PROGRESSION OF THE DISEASE\nLearn more\nGLOBAL \u0026 INDIAN BURDEN OF DIABETES WITH ITS PATHOPHYSIOLOGY \u0026 PROGRESSION OF THE DISEASE\nLearn more\nCONGRESS-HIGHLIGHTS\nEASD 2025: European Association for the study of Diabetes\nLearn more\nSupport for your patients\n\nDiscover the selection of support materials for patients from different therapeutic areas\n\nView all\nMEET-OUR-RARE-DISEASE-FIGHTERS\nFrom Diagnosis to Recovery: Akash Prasad’s Battle with MPS I\nLearn more\nMEET-OUR-RARE-DISEASE-FIGHTERS\nLiving Well with Gaucher: Alka Singh’s Testimony of Early Diagnosis and Treatment\nLearn more\nMULTIPLE-SCLEROSIS\nWhat you should know about LEMTRADA® (alemtuzumab)\n\nCall your neurologist right away to report these symptoms no matter if they are new, worsening or returning symptoms. Seek medical attention if you cannot reach your own doctor, and make sure you show them this card.\n\nLearn more\nMULTIPLE-SCLEROSIS\nLemtrada Treatment Guide\n\nImportant safety information you should know when starting therapy with LEMTRADA (alemtuzumab)\n\nLearn more\nA healthcare professional’s guide\nLearn more\nHealthcare professional checklist\nLearn more\nDiscover Easy Diabetes Management Tips\nLearn more\nAccess all premium content\n\nEnjoy scientific studies, courses, events, clinical cases and much more on Campus.\n\nFor healthcare professionals only.\n\nDo you already have a Campus account? Sign in\n\nCreate your account in 2 minutes\n\nThis website is intended exclusively for Registered Medical Practitioners (RMP’s) registered with the National Medical Commission (NMC) and their respective State Medical Councils/statutory authorities in India.",
+    "images": [
+      {
+        "index": 0,
+        "src": "/dam/jcr:7587e2a2-2e46-4008-978c-5e2ccb239855/Main%20Banner_Campus%20Site%2001-01.2024-05-08-07-55-45.svg",
+        "hash": "a16fcdfbda418d1fd19a60d2e2822ca8",
+        "perceptualHash": "a16fcdfbda418d1fd19a60d2e2822ca8"
       },
       {
         "index": 1,
@@ -18,15 +126,15 @@
       },
       {
         "index": 2,
-        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Kidney-Transplant.jpg/jcr:content.jpg",
-        "hash": "5bd97170abb11bb0faf52e2c36e04393",
-        "perceptualHash": "5bd97170abb11bb0faf52e2c36e04393"
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Infectious-Diseases-Vaccines.jpg/jcr:content.jpg",
+        "hash": "a1f1900dedc977afe8d0861bd9d190ce",
+        "perceptualHash": "a1f1900dedc977afe8d0861bd9d190ce"
       },
       {
         "index": 3,
-        "src": "/dam/jcr:d887e836-c3a8-4bae-b8f8-6a7a85f1519d/thumbnail.2025-11-10-11-31-05.svg",
-        "hash": "0dd6e468766661ee684e04b65d7144ed",
-        "perceptualHash": "0dd6e468766661ee684e04b65d7144ed"
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Kidney-Transplant.jpg/jcr:content.jpg",
+        "hash": "5bd97170abb11bb0faf52e2c36e04393",
+        "perceptualHash": "5bd97170abb11bb0faf52e2c36e04393"
       },
       {
         "index": 4,
@@ -36,111 +144,111 @@
       },
       {
         "index": 5,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/Diabetes/webinar/thumb-img.png/jcr:content/thumb-img.jpg",
-        "hash": "e2fa6cf7d22fd101093d30e96d9bbd96",
-        "perceptualHash": "e2fa6cf7d22fd101093d30e96d9bbd96"
-      },
-      {
-        "index": 6,
-        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Infectious-Diseases-Vaccines.jpg/jcr:content.jpg",
-        "hash": "a1f1900dedc977afe8d0861bd9d190ce",
-        "perceptualHash": "a1f1900dedc977afe8d0861bd9d190ce"
-      },
-      {
-        "index": 7,
-        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Kidney-Transplant.jpg/jcr:content.jpg",
-        "hash": "5bd97170abb11bb0faf52e2c36e04393",
-        "perceptualHash": "5bd97170abb11bb0faf52e2c36e04393"
-      },
-      {
-        "index": 8,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/Diabetes/2026-attd-postcongress-highlights/web-banner.jpg/jcr:content/web-banner.jpg",
-        "hash": "c6deb3b905e81865f49ee53f5294a431",
-        "perceptualHash": "c6deb3b905e81865f49ee53f5294a431"
-      },
-      {
-        "index": 9,
-        "src": "/dam/jcr:d97a7aee-7e5e-409a-bcb1-0c1543e446cb/lemtrada-thumbnail-v1.2025-11-14-06-19-37.svg",
-        "hash": "73fe94d4f19d5990638cee3879fade86",
-        "perceptualHash": "73fe94d4f19d5990638cee3879fade86"
-      },
-      {
-        "index": 10,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "c95ec182800d9344b722d1a4dc8eb4e4",
-        "perceptualHash": "c95ec182800d9344b722d1a4dc8eb4e4"
-      },
-      {
-        "index": 11,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/insulin-toolkit/insulin-toolkit.jpg/jcr:content/insulin-toolkit.jpg",
-        "hash": "3dabe6ae37ebb2e642cde23aaeb147b9",
-        "perceptualHash": "3dabe6ae37ebb2e642cde23aaeb147b9"
-      },
-      {
-        "index": 12,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "1530d8d18445a8792c63b4c3295bcc8e",
-        "perceptualHash": "1530d8d18445a8792c63b4c3295bcc8e"
-      },
-      {
-        "index": 13,
         "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/article-image/soli-cgm-study/webinar-thumbnail.png/jcr:content/webinar-thumbnail.png",
         "hash": "309d23316659bb9b5f449f8004ec7c6d",
         "perceptualHash": "309d23316659bb9b5f449f8004ec7c6d"
       },
       {
-        "index": 14,
-        "src": "/dam/jcr:5cd83aea-e6bc-41a3-b93b-b92717f88f8f/image-3.2023-09-22-14-07-26.webp",
-        "hash": "f191985476b479f7925e49f29d344694",
-        "perceptualHash": "f191985476b479f7925e49f29d344694"
+        "index": 6,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/Diabetes/webinar/thumb-img.png/jcr:content/thumb-img.jpg",
+        "hash": "e2fa6cf7d22fd101093d30e96d9bbd96",
+        "perceptualHash": "e2fa6cf7d22fd101093d30e96d9bbd96"
       },
       {
-        "index": 15,
-        "src": "/dam/jcr:7587e2a2-2e46-4008-978c-5e2ccb239855/Main%20Banner_Campus%20Site%2001-01.2024-05-08-07-55-45.svg",
-        "hash": "a16fcdfbda418d1fd19a60d2e2822ca8",
-        "perceptualHash": "a16fcdfbda418d1fd19a60d2e2822ca8"
+        "index": 7,
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Infectious-Diseases-Vaccines.jpg/jcr:content.jpg",
+        "hash": "a1f1900dedc977afe8d0861bd9d190ce",
+        "perceptualHash": "a1f1900dedc977afe8d0861bd9d190ce"
       },
       {
-        "index": 16,
+        "index": 8,
+        "src": "/.imaging/default/dam/campus-sanofi-in/category-icons/Kidney-Transplant.jpg/jcr:content.jpg",
+        "hash": "5bd97170abb11bb0faf52e2c36e04393",
+        "perceptualHash": "5bd97170abb11bb0faf52e2c36e04393"
+      },
+      {
+        "index": 9,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/insulin-toolkit/insulin-toolkit.jpg/jcr:content/insulin-toolkit.jpg",
+        "hash": "3dabe6ae37ebb2e642cde23aaeb147b9",
+        "perceptualHash": "3dabe6ae37ebb2e642cde23aaeb147b9"
+      },
+      {
+        "index": 10,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-in/science/Diabetes/2026-attd-postcongress-highlights/web-banner.jpg/jcr:content/web-banner.jpg",
+        "hash": "c6deb3b905e81865f49ee53f5294a431",
+        "perceptualHash": "c6deb3b905e81865f49ee53f5294a431"
+      },
+      {
+        "index": 11,
         "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
         "hash": "a4eb8f1f8d5a240daa4a1d718db6c74b",
         "perceptualHash": "a4eb8f1f8d5a240daa4a1d718db6c74b"
       },
       {
-        "index": 17,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "4ba39d53f9d854289e724d5149bdd47e",
-        "perceptualHash": "4ba39d53f9d854289e724d5149bdd47e"
-      },
-      {
-        "index": 18,
-        "src": "/dam/jcr:c22e053f-0af5-4b69-96ec-de27d14a54ee/alka-singh-gaucher-mobile-banner.2025-11-14-07-04-18.svg",
-        "hash": "cf693234ea08fb50b3b8d02189d19120",
-        "perceptualHash": "cf693234ea08fb50b3b8d02189d19120"
-      },
-      {
-        "index": 19,
-        "src": "/dam/jcr:7f4187ac-3a42-4af8-8ec2-84848426b0ca/akash-thumb-abhishek-banerjee.2025-11-28-06-33-42.svg",
-        "hash": "c6af649a525030e1a1697cac8e700d80",
-        "perceptualHash": "c6af649a525030e1a1697cac8e700d80"
-      },
-      {
-        "index": 20,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "eca147b3cb3f345432fb40317187d305",
-        "perceptualHash": "eca147b3cb3f345432fb40317187d305"
-      },
-      {
-        "index": 21,
+        "index": 12,
         "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
         "hash": "520806c17cc1861adbb67a88c4048ffd",
         "perceptualHash": "520806c17cc1861adbb67a88c4048ffd"
       },
       {
-        "index": 22,
+        "index": 13,
+        "src": "/dam/jcr:7f4187ac-3a42-4af8-8ec2-84848426b0ca/akash-thumb-abhishek-banerjee.2025-11-28-06-33-42.svg",
+        "hash": "c6af649a525030e1a1697cac8e700d80",
+        "perceptualHash": "c6af649a525030e1a1697cac8e700d80"
+      },
+      {
+        "index": 14,
         "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
         "hash": "697a9f029b0dbc651e35026089c68c3c",
         "perceptualHash": "697a9f029b0dbc651e35026089c68c3c"
+      },
+      {
+        "index": 15,
+        "src": "/dam/jcr:c22e053f-0af5-4b69-96ec-de27d14a54ee/alka-singh-gaucher-mobile-banner.2025-11-14-07-04-18.svg",
+        "hash": "cf693234ea08fb50b3b8d02189d19120",
+        "perceptualHash": "cf693234ea08fb50b3b8d02189d19120"
+      },
+      {
+        "index": 16,
+        "src": "/dam/jcr:d887e836-c3a8-4bae-b8f8-6a7a85f1519d/thumbnail.2025-11-10-11-31-05.svg",
+        "hash": "0dd6e468766661ee684e04b65d7144ed",
+        "perceptualHash": "0dd6e468766661ee684e04b65d7144ed"
+      },
+      {
+        "index": 17,
+        "src": "/dam/jcr:d97a7aee-7e5e-409a-bcb1-0c1543e446cb/lemtrada-thumbnail-v1.2025-11-14-06-19-37.svg",
+        "hash": "73fe94d4f19d5990638cee3879fade86",
+        "perceptualHash": "73fe94d4f19d5990638cee3879fade86"
+      },
+      {
+        "index": 18,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "c95ec182800d9344b722d1a4dc8eb4e4",
+        "perceptualHash": "c95ec182800d9344b722d1a4dc8eb4e4"
+      },
+      {
+        "index": 19,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "4ba39d53f9d854289e724d5149bdd47e",
+        "perceptualHash": "4ba39d53f9d854289e724d5149bdd47e"
+      },
+      {
+        "index": 20,
+        "src": "/dam/jcr:5cd83aea-e6bc-41a3-b93b-b92717f88f8f/image-3.2023-09-22-14-07-26.webp",
+        "hash": "f191985476b479f7925e49f29d344694",
+        "perceptualHash": "f191985476b479f7925e49f29d344694"
+      },
+      {
+        "index": 21,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "1530d8d18445a8792c63b4c3295bcc8e",
+        "perceptualHash": "1530d8d18445a8792c63b4c3295bcc8e"
+      },
+      {
+        "index": 22,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "eca147b3cb3f345432fb40317187d305",
+        "perceptualHash": "eca147b3cb3f345432fb40317187d305"
       }
     ],
     "links": [
@@ -195,11 +303,6 @@
         "linkText": "Learn more"
       },
       {
-        "originalHref": "/in/science/diabetes/ar/global-indian-statistics-diabetes-prevalence",
-        "slug": "global-indian-statistics-diabetes-prevalence",
-        "linkText": "Learn more"
-      },
-      {
         "originalHref": "/in/science/diabetes/ar/uncontrolled-diabetes-complications",
         "slug": "uncontrolled-diabetes-complications",
         "linkText": "Learn more"
@@ -207,6 +310,11 @@
       {
         "originalHref": "/in/science/diabetes/ar/global-indian-statistics-diabetes-prevalence-Dr-Mangesh-Tiwaskar",
         "slug": "global-indian-statistics-diabetes-prevalence-Dr-Mangesh-Tiwaskar",
+        "linkText": "Learn more"
+      },
+      {
+        "originalHref": "/in/science/diabetes/ar/global-indian-statistics-diabetes-prevalence",
+        "slug": "global-indian-statistics-diabetes-prevalence",
         "linkText": "Learn more"
       },
       {
@@ -303,417 +411,205 @@
       "Tooltips": "3|Sign up, Log in, Create your account in 2 minutes",
       "Iframes": "0|[empty]"
     },
-    "extractionTimeMillis": 8845
+    "extractionTimeMillis": 17304
   },
-  "https://www.campus.sanofi/mx": {
-    "url": "https://www.campus.sanofi/mx",
-    "cachedAtEpochMs": 1781883131931,
-    "rawText": "Skip To Main Content\nEste sitio es exclusivo para profesionales de la salud en México.\nBienvenido a Campus Sanofi México\n\nRecursos médicos y educación continua para profesionales de la salud en México.\n\nObtén acceso completo al sitio.\nAcceda a un soporte líder a nivel mundial para su área terapéutica.\n\nElija su área terapéutica a continuación para aprovechar nuestros amplios recursos.\n\nCardiovascular Diabetes Enfermedades raras Esclerosis Múltiple Hematología Inmunología Oncología Osteoartritis Trasplantes Vacunas\n\n\nNo te pierdas estos enlaces clave.\n\nAcademia Sanofi Productos Sanofi \n\nContenido destacado\nRol inmunológico\n\nEsta infografía proporciona una visión detallada de por qué todos los lactantes menores de 12 meses están en mayor riesgo.\n\nObtén más información\nRegístrate para obtener acceso completo.\n\n¿Eres un profesional de la salud registrado? Regístrate en menos de un minuto para acceder a las últimas actualizaciones y recursos que apoyarán tu práctica y te ayudarán a ofrecer mejores resultados para tus pacientes.\n\nObtén acceso completo.\n¿Necesitas reportar un efecto indeseable con un medicamento?\n\nEstimado usuario, te informamos que por ley, en México, los efectos indeseables y reacciones secundarias de los medicamentos deben ser notificados a la autoridad sanitaria, por lo que te solicitamos atentamente que para atender tu caso, te comuniques al teléfono 01 800 123 41 41 (gratuito) o, bien, al (55)54844965, o vía correo electrónico: fv-imed@sanofi.com\n\nVía correo electrónico\nLo más reciente en ciencia y educación.\nVer todo\nVACUNAS\n\n5 jun 2026\n\nVacunación contra Influenza en Adultos Mayores\n\nLa ciencia acaba de mostrarnos un camino claro. FLUNITY High Dose analizó a más de 466,000 adultos ≥60 años en Dinamarca y España. El resultado: contundente.\n\nLeer más\nVACUNAS\n\n4 jun 2026\n\nInfluenza y el Corazón: Protección Cardiovascular con Alta Dosis\n\nHoy sabemos que la influenza no solo afecta a los pulmones, también puede desencadenar eventos cardiovasculares graves en adultos mayores. El estudio FLUNITY High Dose, con más de 466,000 adultos de edad ≥60 años, analizó cómo la vacuna contra la influenza de alta dosis puede reducir estos riesgos.\n\nLeer más\nVACUNAS\n\n4 jun 2026\n\nImpacto del nirsevimab luego de dos temporadas en la prevención de la hospitalización por VSR\n\nEl estudio NIRSE-GAL evaluó la efectividad del nirsevimab en Galicia tras su incorporación universal para todos los recién nacidos desde 2023. Este estudio longitudinal, de base poblacional y prospectivo, demostró un impacto sustancial en la salud pública infantil con reducciones significativas en hospitalizaciones por VSR.\n\nLeer más\nVACUNAS\n\n3 jun 2026\n\nVacunación Universal contra Influenza en México\n\nLa influenza representa un desafío importante para la salud pública en México. Ampliar la cobertura de vacunación más allá de los grupos de alto riesgo podría contribuir a una mayor protección a nivel poblacional.\n\nLeer más\nVACUNAS\n\n3 jun 2026\n\nHipertensión + Influenza: Una Combinación de Alto Riesgo\n\nEn México, millones de adultos viven con hipertensión. Durante la temporada de influenza, ese diagnóstico se vuelve un riesgo crítico: la hipertensión aumenta significativamente el riesgo de eventos cardiovasculares agudos en pacientes infectados por influenza.\n\nLeer más\nVACUNAS\n\n28 may 2026\n\nEstudio NIRSE-CL: lecciones de salud pública en la prevención del VSR a escala nacional\n\nEl estudio NIRSE-CL documenta la implementación del primer programa nacional de prevención del VSR en América Latina, realizado en Chile con más de 145,000 lactantes. Sus resultados ofrecen evidencia de efectividad a escala poblacional y lecciones operativas sobre cobertura, oportunidad de administración e integración al sistema de inmunizaciones, con implicaciones relevantes para el diseño de políticas sanitarias en México y la región.\n\nLeer más\nVACUNAS\n\n28 may 2026\n\nEstudio BEAR: impacto de anticuerpos monoclonales contra VSR en el uso de recursos de salud\n\nEl estudio BEAR evaluó el impacto de anticuerpos monoclonales de acción prolongada en el uso de recursos del sistema de salud durante la temporada de VSR 2023-2024, en una cohorte de más de 15,000 lactantes sanos. Los hallazgos documentan reducciones significativas en consultas ambulatorias, visitas a urgencias y hospitalizaciones relacionadas con VSR. Acceda a los resultados desagregados por nivel de atención y sus implicaciones para la práctica clínica en contextos de alta cobertura.\n\nLeer más\nVACUNAS\n\n27 may 2026\n\nSeguridad de anticuerpos monoclonales contra VSR en neonatos prematuros hospitalizados: evidencia del mundo real\n\nLa seguridad de los anticuerpos monoclonales de acción prolongada para la prevención del VSR en neonatos prematuros ha sido evaluada en condiciones reales de uso hospitalario. Un estudio observacional prospectivo en 103 neonatos con edad gestacional ≤37 semanas caracteriza el perfil de seguridad en unidades neonatales, con foco en los eventos adversos más relevantes y las consideraciones de monitoreo según grado de prematuridad.\n\nLeer más\n¿Por qué\nSanofi Campus México?\n\nCampus Sanofi México también se adapta a los desafíos actuales de la práctica médica, como el manejo de enfermedades crónicas, la implementación de terapias innovadoras y la actualización constante frente a las nuevas investigaciones. Al utilizar esta plataforma, los médicos tienen acceso a contenido creado para apoyar decisiones clínicas informadas, promoviendo un mejor cuidado de sus pacientes y resultados más efectivos.\n\nExplora Sanofi México\n\nContenido médico actualizado para profesionales de la salud.\n\nCampus Sanofi México reúne áreas terapéuticas, recursos científicos y materiales educativos para apoyar la práctica clínica basada en evidencia.",
-    "images": [
-      {
-        "index": 0,
-        "src": "/dam/jcr:2d8ab801-7181-4930-a870-c8d277b07125/Group%203361906.2025-11-07-18-40-26.png",
-        "hash": "532c847c25cdceed8444038b4384d604",
-        "perceptualHash": "532c847c25cdceed8444038b4384d604"
-      },
-      {
-        "index": 1,
-        "src": "/.imaging/webp/sanofi-templates/w1080-16-9/dam/campus-sanofi-mx/new-layout/homepage/logout/images/Group-3362294.png/jcr:content/Group%203362294.png",
-        "hash": "e32e6e6cb42377c8bbe7efdac423646f",
-        "perceptualHash": "e32e6e6cb42377c8bbe7efdac423646f"
-      },
-      {
-        "index": 2,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "5a6a21e17caa64a16115e17e52667c46",
-        "perceptualHash": "5a6a21e17caa64a16115e17e52667c46"
-      },
-      {
-        "index": 3,
-        "src": "/dam/jcr:30b09791-3841-4596-a7b2-719eb0176637/Isolation_Mode.2025-11-07-16-33-26.png",
-        "hash": "90361c7569b9cddbff5848a71e707b77",
-        "perceptualHash": "90361c7569b9cddbff5848a71e707b77"
-      },
-      {
-        "index": 4,
-        "src": "/.imaging/webp/sanofi-templates/w1080-16-9/dam/campus-sanofi-mx/new-layout/homepage/logout/images/Frame-1000006714.png/jcr:content/Frame%201000006717.png",
-        "hash": "cc4a38d0179673f3800aaf19b3c66480",
-        "perceptualHash": "cc4a38d0179673f3800aaf19b3c66480"
-      },
-      {
-        "index": 5,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-mx/article/ciencia/Vacunas/influenza/vacunacion-influenza-adultos-mayores/Thumbnail.jpg/jcr:content/Thumbnail.jpg",
-        "hash": "fb6654a9cb76fba825d5cdffd76f7f75",
-        "perceptualHash": "fb6654a9cb76fba825d5cdffd76f7f75"
-      },
-      {
-        "index": 6,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-mx/article/ciencia/Vacunas/influenza/influenza-corazon-proteccion-cardiovascular/Imagen-externa.jpg/jcr:content/Imagen%20externa.jpg",
-        "hash": "e87917640bbf4fd8345b35d75c365fde",
-        "perceptualHash": "e87917640bbf4fd8345b35d75c365fde"
-      },
-      {
-        "index": 7,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-mx/article/ciencia/Vacunas/vsr/Impacto-del-nirsevimab-dos-temporadas/Thumbnail.jpg/jcr:content/Thumbnail.jpg",
-        "hash": "8115d892753a206aaf335a7e309d1dfc",
-        "perceptualHash": "8115d892753a206aaf335a7e309d1dfc"
-      },
-      {
-        "index": 8,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "45ceef91445faf2b1d487b883ddf5638",
-        "perceptualHash": "45ceef91445faf2b1d487b883ddf5638"
-      },
-      {
-        "index": 9,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "f0d6c3043cf0815c2ff694b374c39b9f",
-        "perceptualHash": "f0d6c3043cf0815c2ff694b374c39b9f"
-      },
-      {
-        "index": 10,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "11c775eeac03c6e2023743a3291554be",
-        "perceptualHash": "11c775eeac03c6e2023743a3291554be"
-      },
-      {
-        "index": 11,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-mx/article/ciencia/Vacunas/influenza/vacunacion-universal-contra-influenza/IMG-EXTERNA-MP4_Daana-Chavez.jpg/jcr:content/IMG%20EXTERNA%20MP4_Daana%20Chavez.jpg",
-        "hash": "4bdc53d6456ca1518fe1b0428dfd2714",
-        "perceptualHash": "4bdc53d6456ca1518fe1b0428dfd2714"
-      },
-      {
-        "index": 12,
-        "src": "/.imaging/default/dam/campus-sanofi-mx/new-layout/homepage/login/images/1cd797a340b204432d8e193ccf6846caa224ddb7-(4).jpg/jcr:content.jpg",
-        "hash": "914c7c808abdfe09c5b96ef00152c652",
-        "perceptualHash": "914c7c808abdfe09c5b96ef00152c652"
-      },
-      {
-        "index": 13,
-        "src": "https://siteintercept.qualtrics.com/static/q-siteintercept/~/img/svg-close-btn-black-1.svg",
-        "hash": "7a60c821f354b7733cd27bbaf9bddca8",
-        "perceptualHash": "7a60c821f354b7733cd27bbaf9bddca8"
-      }
-    ],
+  "https://www.scrapethissite.com/pages/forms/": {
+    "url": "https://www.scrapethissite.com/pages/forms/",
+    "cachedAtEpochMs": 1782115482028,
+    "rawText": "Hockey Teams: Forms, Searching and Pagination 25 items\n\nBrowse through a database of NHL team stats since 1990. Practice building a scraper that handles common website interface components. Take a look at how pagination and search elements change the URL as your browse. Build a web scraper that can conduct searches and paginate through the results.\n\n There are 8 video lessons that show you how to scrape this page.\n\nData via http://www.opensourcesports.com/hockey/\n\nSearch for Teams:    \nTeam Name\tYear\tWins\tLosses\tOT Losses\tWin %\tGoals For (GF)\tGoals Against (GA)\t+ / -\nBoston Bruins\t1990\t44\t24\t\t0.55\t299\t264\t35\nBuffalo Sabres\t1990\t31\t30\t\t0.388\t292\t278\t14\nCalgary Flames\t1990\t46\t26\t\t0.575\t344\t263\t81\nChicago Blackhawks\t1990\t49\t23\t\t0.613\t284\t211\t73\nDetroit Red Wings\t1990\t34\t38\t\t0.425\t273\t298\t-25\nEdmonton Oilers\t1990\t37\t37\t\t0.463\t272\t272\t0\nHartford Whalers\t1990\t31\t38\t\t0.388\t238\t276\t-38\nLos Angeles Kings\t1990\t46\t24\t\t0.575\t340\t254\t86\nMinnesota North Stars\t1990\t27\t39\t\t0.338\t256\t266\t-10\nMontreal Canadiens\t1990\t39\t30\t\t0.487\t273\t249\t24\nNew Jersey Devils\t1990\t32\t33\t\t0.4\t272\t264\t8\nNew York Islanders\t1990\t25\t45\t\t0.312\t223\t290\t-67\nNew York Rangers\t1990\t36\t31\t\t0.45\t297\t265\t32\nPhiladelphia Flyers\t1990\t33\t37\t\t0.412\t252\t267\t-15\nPittsburgh Penguins\t1990\t41\t33\t\t0.512\t342\t305\t37\nQuebec Nordiques\t1990\t16\t50\t\t0.2\t236\t354\t-118\nSt. Louis Blues\t1990\t47\t22\t\t0.588\t310\t250\t60\nToronto Maple Leafs\t1990\t23\t46\t\t0.287\t241\t318\t-77\nVancouver Canucks\t1990\t28\t43\t\t0.35\t243\t315\t-72\nWashington Capitals\t1990\t37\t36\t\t0.463\t258\t258\t0\nWinnipeg Jets\t1990\t26\t43\t\t0.325\t260\t288\t-28\nBoston Bruins\t1991\t36\t32\t\t0.45\t270\t275\t-5\nBuffalo Sabres\t1991\t31\t37\t\t0.388\t289\t299\t-10\nCalgary Flames\t1991\t31\t37\t\t0.388\t296\t305\t-9\nChicago Blackhawks\t1991\t36\t29\t\t0.45\t257\t236\t21\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n»\nPer Page\n25\n50\n100",
+    "images": [],
     "links": [
       {
-        "originalHref": "/mx/login",
-        "slug": "login",
-        "linkText": "Obtén acceso completo al sitio."
+        "originalHref": "/lessons/",
+        "slug": "lessons",
+        "linkText": "8 video lessons"
       },
       {
-        "originalHref": "/mx/ciencia/cardiovascular",
-        "slug": "cardiovascular",
-        "linkText": "Cardiovascular"
+        "originalHref": "http://www.opensourcesports.com/hockey/",
+        "slug": "hockey",
+        "linkText": "http://www.opensourcesports.com/hockey/"
       },
       {
-        "originalHref": "/mx/ciencia/diabetes",
-        "slug": "diabetes",
-        "linkText": "Diabetes"
-      },
-      {
-        "originalHref": "/mx/ciencia/enfermedades-raras",
-        "slug": "enfermedades-raras",
-        "linkText": "Enfermedades raras"
-      },
-      {
-        "originalHref": "/mx/ciencia/esclerosis-multiple",
-        "slug": "esclerosis-multiple",
-        "linkText": "Esclerosis Múltiple"
-      },
-      {
-        "originalHref": "/mx/ciencia/hematologia",
-        "slug": "hematologia",
-        "linkText": "Hematología"
-      },
-      {
-        "originalHref": "/mx/ciencia/inmunologia",
-        "slug": "inmunologia",
-        "linkText": "Inmunología"
-      },
-      {
-        "originalHref": "/mx/ciencia/oncologia",
-        "slug": "oncologia",
-        "linkText": "Oncología"
-      },
-      {
-        "originalHref": "/mx/ciencia/osteoartritis",
-        "slug": "osteoartritis",
-        "linkText": "Osteoartritis"
-      },
-      {
-        "originalHref": "/mx/ciencia/trasplantes",
-        "slug": "trasplantes",
-        "linkText": "Trasplantes"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas",
-        "slug": "vacunas",
-        "linkText": "Vacunas"
-      },
-      {
-        "originalHref": "/mx/academia",
-        "slug": "academia",
-        "linkText": "Academia Sanofi"
-      },
-      {
-        "originalHref": "/mx/producto",
-        "slug": "producto",
-        "linkText": "Productos Sanofi"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/vsr/ar/rol-inmunologico",
-        "slug": "rol-inmunologico",
-        "linkText": "Obtén más información"
-      },
-      {
-        "originalHref": "mailto:fv-imed@sanofi.com",
-        "slug": "mailto:fv-imed@sanofi",
-        "linkText": "fv-imed@sanofi.com"
-      },
-      {
-        "originalHref": "/mx/ciencia",
-        "slug": "ciencia",
-        "linkText": "Ver todo"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/influenza/ar/vacunacion-influenza-adultos-mayores",
-        "slug": "vacunacion-influenza-adultos-mayores",
-        "linkText": "Leer más"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/influenza/ar/influenza-corazon-proteccion-cardiovascular",
-        "slug": "influenza-corazon-proteccion-cardiovascular",
-        "linkText": "Leer más"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/vsr/ar/impacto-del-nirsevimab-dos-temporadas",
-        "slug": "impacto-del-nirsevimab-dos-temporadas",
-        "linkText": "Leer más"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/influenza/ar/vacunacion-universal-contra-influenza",
-        "slug": "vacunacion-universal-contra-influenza",
-        "linkText": "Leer más"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/influenza/ar/hipertension-influenza-combinacion-de-alto-riesgo",
-        "slug": "hipertension-influenza-combinacion-de-alto-riesgo",
-        "linkText": "Leer más"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/vsr/ar/prevencion-del-vrs-lecciones-de-salud-publica",
-        "slug": "prevencion-del-vrs-lecciones-de-salud-publica",
-        "linkText": "Leer más"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/vsr/ar/estudio-bear-nirsevimab-mejora-el-uso-de-recursos",
-        "slug": "estudio-bear-nirsevimab-mejora-el-uso-de-recursos",
-        "linkText": "Leer más"
-      },
-      {
-        "originalHref": "/mx/ciencia/vacunas/vsr/ar/seguridad-de-nirsevimab-en-niños-prematuros",
-        "slug": "seguridad-de-nirsevimab-en-niños-prematuros",
-        "linkText": "Leer más"
-      },
-      {
-        "originalHref": "https://www.sanofi.com/es/mexico",
-        "slug": "mexico",
-        "linkText": "Explora Sanofi México"
+        "originalHref": "/pages/forms/?page_num\u003d1",
+        "slug": "forms",
+        "linkText": "1"
       }
     ],
     "metadata": {
-      "Title": "Inicio",
+      "Title": "Hockey Teams: Forms, Searching and Pagination | Scrape This Site | A public sandbox for learning web scraping",
       "viewport": "width\u003ddevice-width, initial-scale\u003d1.0",
-      "og:url": "https://www.campus.sanofi/mx/",
-      "og:locale": "es_MX",
-      "og:site_name": "",
-      "twitter:card": "summary_large_image",
-      "twitter:url": "https://www.campus.sanofi/mx/",
-      "title": "Educación médica para HCPs | Sanofi México",
-      "description": "Accede a recursos, cursos y materiales científicos en Campus Sanofi México. Educación médica continua para profesionales de la salud.",
-      "keywords": "Sanofi México, campus sanofi méxico, educación médica, sanofi méxico, formación médica continua, profesionales de la salud en mexico, sanofi méxico",
-      "algo:security": "UNLOCKED",
-      "algo:id": "08792d67-fbc3-4b19-bb53-510da74c5007_es-MX"
+      "description": "Browse through a database of NHL team stats since 1990. Practice building a scraper that handles common website interface components.",
+      "robots": "noindex"
     },
     "dataLayer": {
-      "dataLayer.event": "metadata",
-      "dataLayer.device": "desktop",
-      "dataLayer.platform": "magnolia",
-      "dataLayer.language": "es",
-      "dataLayer.siteType": "advise",
-      "dataLayer.brandWebsiteType": "multibrand",
-      "dataLayer.country": "mexico",
-      "dataLayer.target": "hcp \u0026amp; consumers / patients",
-      "dataLayer.gbu": "Cross bu",
-      "dataLayer.pageName": "Inicio",
-      "dataLayer.gtm.uniqueEventId": "12"
+      "dataLayer.0": "config",
+      "dataLayer.1": "AW-950945448"
     },
     "functionalityComponents": {
-      "Buttons": "15|link for Ver todo, link for Leer más, link for Leer más, link for Leer más, link for Leer más, link for Leer más, link for Leer más, link for Leer más, link for Leer más, página anterior, página siguiente, Contenido médico actualizado para profesionales de la salud.",
-      "CTA Links (Button-styled)": "18|Skip To Main Content -\u003e #mainContent, Obtén acceso completo al sitio. -\u003e /mx/login, Cardiovascular -\u003e /mx/ciencia/cardiovascular, Diabetes -\u003e /mx/ciencia/diabetes, Enfermedades raras -\u003e /mx/ciencia/enfermedades-raras, Esclerosis Múltiple -\u003e /mx/ciencia/esclerosis-multiple, Hematología -\u003e /mx/ciencia/hematologia, Inmunología -\u003e /mx/ciencia/inmunologia, Oncología -\u003e /mx/ciencia/oncologia, Osteoartritis -\u003e /mx/ciencia/osteoartritis, Trasplantes -\u003e /mx/ciencia/trasplantes, Vacunas -\u003e /mx/ciencia/vacunas, Academia Sanofi -\u003e /mx/academia, Productos Sanofi -\u003e /mx/producto, Obtén más información -\u003e /mx/ciencia/vacunas/vsr/ar/rol-inmunologico, Obtén acceso completo. -\u003e /mx/login, Vía correo electrónico -\u003e mailto:fv-imed@sanofi.com, Explora Sanofi México -\u003e https://www.sanofi.com/es/mexico",
+      "Buttons": "1|Search",
+      "CTA Links (Button-styled)": "1|1 -\u003e /pages/forms/?page_num\u003d1",
       "Clickable Images": "0|[empty]",
       "Zoomable Images": "0|[empty]",
       "Modals": "0|[empty]",
       "Popups": "0|[empty]",
-      "Carousels": "1|.carousel",
+      "Carousels": "0|[empty]",
       "Sliders": "0|[empty]",
-      "Accordions": "1|.accordion",
+      "Accordions": "0|[empty]",
       "Toggles": "0|[empty]",
       "Video Players": "0|[empty]",
       "Audio Players": "0|[empty]",
       "Dropdowns": "0|[empty]",
-      "Selects": "0|[empty]",
-      "Forms": "0|[empty]",
-      "Inputs": "0|[empty]",
+      "Selects": "1|per_page",
+      "Forms": "1|[empty]",
+      "Inputs": "1|q (text)",
       "Tabs": "0|[empty]",
-      "Tooltips": "5|Obtén acceso completo al sitio., Obtén más información, Obtén acceso completo., Vía correo electrónico, Explora Sanofi México",
-      "Iframes": "1|iframe"
+      "Tooltips": "0|[empty]",
+      "Iframes": "0|[empty]"
     },
-    "extractionTimeMillis": 8144
+    "extractionTimeMillis": 8172
   },
   "https://www.campus.sanofi/ph": {
     "url": "https://www.campus.sanofi/ph",
-    "cachedAtEpochMs": 1781883131421,
+    "cachedAtEpochMs": 1782118049671,
     "rawText": "Skip To Main Content\nWelcome To Campus Sanofi PH\n\nDo you already have an account on Campus Sanofi Philippines?\nSign in to receive personalized recommendations\n\nRegister\nLog in\nBrowse the latest medical information\nDIABETES\nLEARN\n\nMay 18, 2026\n\nE-learning Course – Foundations of Diabetes Management\nLearn more\nCARDIOLOGY\nREAD\n\nMay 12, 2026\n\nAntihypertensive Adherence \u0026 Persistence with ARBs\n\nExplore how ARBs improve adherence and persistence in hypertension treatment vs other therapies.\n\nLearn more\nCARDIOLOGY\nREAD\n\nApr 22, 2026\n\nHypertension Management Updates\n\nLatest ACC 2026 congress insights on hypertension management, single-pill combinations, blood pressure variability, and cardiovascular outcomes\n\nLearn more\nINFLUENZA\n\nMar 19, 2026\n\nHow to Use: Pre-filled Syringe with Luer lock and soft tip cap\n\nWatch step-by-step video guide on using pre-filled syringe with Luer Lock adapter for influenza vaccine administration. Proper technique tutorial.\n\nLearn more\nINFLUENZA\nREAD\n\nMar 19, 2026\n\nOver 70 Years of Leadership in Influenza Vaccines\n\nSanofi has been at the forefront of influenza vaccine development for over 70 years, delivering more than 5 billion doses across 100+ countries and immunizing over 250 million people annually. With a robust global network of production sites spanning Canada, France, Mexico, the United States, Australia, and China, Sanofi continues to invest in cutting-edge R\u0026D across egg-based, recombinant, and mRNA platforms — ensuring the world gets the right shot against flu\n\nLearn more\nCARDIOLOGY\nREAD\n\nMar 10, 2026\n\nManaging Nocturnal Hypertension: Key Insights from the Asian Expert Consensus\n\nExplore key recommendations from the Asian Expert Consensus on Nocturnal Hypertension Management, covering diagnosis, epidemiology, cardiovascular risks, and treatment strategies — including lifestyle modifications and long-acting antihypertensive agents — to guide optimal nighttime blood pressure control in clinical practice.\n\nLearn more\nDIABETES\n\nJan 6, 2026\n\nMedical-on-the-Go:\n\nPeriodontitis: the oft-overlooked complication of diabetes\n\nLearn more\nDIABETES\nREAD\n\nDec 29, 2025\n\nMedical-On-The-Go: The Soli-SWITCH study\n\nSwitching from premixed insulin to iGlarLixi in people with Type 2 diabetes\n\nLearn more\nWhat\u0027s new in Campus?\nStart Learning Now\nGo to Facebook Page\nMore about Science\nDiabetes\nCardiology\nNephrology\nThrombosis\nDiphtheria\nHaemophilus Influenza Type B\nInfluenza\nInvasive Meningococcal Disease\nPertussis\nPoliomyelitis\nTetanus\nFor General Inquires – Contact us\n \n\nAdverse events \u0026 product safety\n\nIf you experience any adverse event, i.e., any unfavorable and unintended sign (an abnormal laboratory finding), symptom, or disease temporarily associated with the use of a medical product, please email it to PV.Philippines@sanofi.com \n\n\n \n\nTo report a product technical complaint, please contact our Quality Affairs team:\n\n \n\nVoicemail (non-business hours): +632-8859-5555 extension #1\nEmail: Philippines.PTC@sanofi.com\n\n \n\n \n\nFor Pharma Medical inquiries, click HERE to submit a question. \n\nFor Vaccine Medical inquiries, send an email to: medinfo.vaccines.ph@sanofi.com\n\n \n\n \n\nFor Data Privacy requests and concerns:\n \n\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.)\nData Privacy: privacy.PH@sanofi.com\n \nFor Data subject requests:\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.): OneTrust\nFor General Inquires – Contact us\n \n\nAdverse events \u0026 product safety\n\nIf you experience any adverse event, i.e., any unfavorable and unintended sign (an abnormal laboratory finding), symptom, or disease temporarily associated with the use of a medical product, please email it to PV.Philippines@sanofi.com \n\n\n \n\nTo report a product technical complaint, please contact our Quality Affairs team:\n\n \n\nVoicemail (non-business hours): +632-8859-5555 extension #1\nEmail: Philippines.PTC@sanofi.com\n\n \n\n \n\nFor Pharma Medical inquiries, click HERE to submit a question. \n\nFor Vaccine Medical inquiries, send an email to: medinfo.vaccines.ph@sanofi.com\n\n \n\n \n\nFor Data Privacy requests and concerns:\n \n\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.)\nData Privacy: privacy.PH@sanofi.com\n \nFor Data subject requests:\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.): OneTrust",
     "images": [
       {
         "index": 0,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/2026_W_Medical_on_the_go/thumb-mary-clestelyn-anne-1-1080-810.jpg/jcr:content/thumb-mary-clestelyn-anne-1-1080-810.jpg",
-        "hash": "7b8e062eb6e68af1b986d489ab59620e",
-        "perceptualHash": "7b8e062eb6e68af1b986d489ab59620e"
-      },
-      {
-        "index": 1,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Influenza/how-to-use/thumbnail.png/jcr:content/thumbnail.png",
-        "hash": "28409b4f971f55a78bf27d0827584959",
-        "perceptualHash": "28409b4f971f55a78bf27d0827584959"
-      },
-      {
-        "index": 2,
-        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Home/Campus-Flu-Banner-2_Jenny-Batocabe.jpg/jcr:content/Campus%20Flu%20Banner%202_Jenny%20Batocabe.jpg",
-        "hash": "df37206cf95442356c5f88b266594137",
-        "perceptualHash": "df37206cf95442356c5f88b266594137"
-      },
-      {
-        "index": 3,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Influenza/flu-vaccines-legacy/influenza-thumbnail.png/jcr:content/influenza-thumbnail.png",
-        "hash": "16fa7b46f23e42540cbb1118bec31949",
-        "perceptualHash": "16fa7b46f23e42540cbb1118bec31949"
-      },
-      {
-        "index": 4,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Diabetes.png/jcr:content/Science-Diabetes.png",
-        "hash": "255fcecc0e048a7d01dd2912c9eb95e3",
-        "perceptualHash": "255fcecc0e048a7d01dd2912c9eb95e3"
-      },
-      {
-        "index": 5,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Cardiology.png/jcr:content/Science-Cardiology.png",
-        "hash": "91f21d1460fb9f13ea3e0bd702f29f0b",
-        "perceptualHash": "91f21d1460fb9f13ea3e0bd702f29f0b"
-      },
-      {
-        "index": 6,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Cardiology/thumbnail-mgmt-nocturnal-hypertension.png/jcr:content/thumbnail-mgmt-nocturnal-hypertension.png",
-        "hash": "91616380ef452dfa824d10603cb00c23",
-        "perceptualHash": "91616380ef452dfa824d10603cb00c23"
-      },
-      {
-        "index": 7,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/articles/Acc-2026-American-College-of-Cardiology/thumbnail.jpg/jcr:content/thumbnail.jpg",
-        "hash": "107c9447ecb4aaabac1d3df23bd52b5d",
-        "perceptualHash": "107c9447ecb4aaabac1d3df23bd52b5d"
-      },
-      {
-        "index": 8,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-CKD.png/jcr:content/Science-CKD.png",
-        "hash": "6a9c3769935bfb0caa5c02c0eb6e57a3",
-        "perceptualHash": "6a9c3769935bfb0caa5c02c0eb6e57a3"
-      },
-      {
-        "index": 9,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Diphtheria.png/jcr:content/Science-Diphtheria.png",
-        "hash": "84efeefa2e4fa7885910388b95c29c7c",
-        "perceptualHash": "84efeefa2e4fa7885910388b95c29c7c"
-      },
-      {
-        "index": 10,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Thrombosis.png/jcr:content/Science-Thrombosis.png",
-        "hash": "e9738c7da5474c38f5e9c609f1ca4070",
-        "perceptualHash": "e9738c7da5474c38f5e9c609f1ca4070"
-      },
-      {
-        "index": 11,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-HIB.png/jcr:content/Science-HIB.png",
-        "hash": "3f36d777b7c4195177ec2dc63ce13d61",
-        "perceptualHash": "3f36d777b7c4195177ec2dc63ce13d61"
-      },
-      {
-        "index": 12,
-        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Science/Diabetes/e-learning-course-foundation-of-diabetes-management/diabetes-management-e-learning.png/jcr:content/diabetes-management-e-learning.jpg",
-        "hash": "115d195fb5bb1012ac054d29119d8a86",
-        "perceptualHash": "115d195fb5bb1012ac054d29119d8a86"
-      },
-      {
-        "index": 13,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-IMD.png/jcr:content/Science-IMD.png",
-        "hash": "8a1e77b944a318d11417404e4b118410",
-        "perceptualHash": "8a1e77b944a318d11417404e4b118410"
-      },
-      {
-        "index": 14,
-        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Home/202504_Diabetes_FB.png/jcr:content/202504_Diabetes_FB.png",
-        "hash": "71711963b46167c5c8bcb490d0182031",
-        "perceptualHash": "71711963b46167c5c8bcb490d0182031"
-      },
-      {
-        "index": 15,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Polio.png/jcr:content/Science-Polio.png",
-        "hash": "c1b34d53b9bb3cd03392b4d947fb2483",
-        "perceptualHash": "c1b34d53b9bb3cd03392b4d947fb2483"
-      },
-      {
-        "index": 16,
-        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Influenza.png/jcr:content/Science-Influenza.png",
-        "hash": "a1255ba949194561b98101792aee509e",
-        "perceptualHash": "a1255ba949194561b98101792aee509e"
-      },
-      {
-        "index": 17,
-        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
-        "hash": "c446646a95cd43c36d25583fdaea3dbc",
-        "perceptualHash": "c446646a95cd43c36d25583fdaea3dbc"
-      },
-      {
-        "index": 18,
-        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/2025_The_Soli_SWITCH_study/soil-switch-thumbnail.webp/jcr:content/soil-switch-thumbnail.webp",
-        "hash": "53389c867c15dd23049164920bb58c8f",
-        "perceptualHash": "53389c867c15dd23049164920bb58c8f"
-      },
-      {
-        "index": 19,
         "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Cardiology/persistence-thumbnail.png/jcr:content/persistence-thumbnail.png",
         "hash": "b7acbb236d3f526a2e6bd1cc6a442488",
         "perceptualHash": "b7acbb236d3f526a2e6bd1cc6a442488"
       },
       {
-        "index": 20,
+        "index": 1,
         "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Diabetes/e-learning-course-foundation-of-diabetes-management/thumbnail-v1.png/jcr:content/thumbnail-v1.png",
         "hash": "52cde896c680abaa4dc91e1b3006a644",
         "perceptualHash": "52cde896c680abaa4dc91e1b3006a644"
       },
       {
-        "index": 21,
+        "index": 2,
+        "src": "/.imaging/default/dam/campus-sanofi-ph/Home/Banner-Home.png/jcr:content.png",
+        "hash": "42d15fd98d32a05ef408905c44335513",
+        "perceptualHash": "42d15fd98d32a05ef408905c44335513"
+      },
+      {
+        "index": 3,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/articles/Acc-2026-American-College-of-Cardiology/thumbnail.jpg/jcr:content/thumbnail.jpg",
+        "hash": "107c9447ecb4aaabac1d3df23bd52b5d",
+        "perceptualHash": "107c9447ecb4aaabac1d3df23bd52b5d"
+      },
+      {
+        "index": 4,
+        "src": "/.imaging/webp/sanofi-templates/w384-4-3/dam/campus-sanofi-ph/Science/Influenza/how-to-use/thumbnail.png/jcr:content/thumbnail.png",
+        "hash": "28409b4f971f55a78bf27d0827584959",
+        "perceptualHash": "28409b4f971f55a78bf27d0827584959"
+      },
+      {
+        "index": 5,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "cbfe16defed9c692fdbc3a02e1b8dc77",
+        "perceptualHash": "cbfe16defed9c692fdbc3a02e1b8dc77"
+      },
+      {
+        "index": 6,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "74c06eb4e06da3ea025f305d8b536b68",
+        "perceptualHash": "74c06eb4e06da3ea025f305d8b536b68"
+      },
+      {
+        "index": 7,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "ef18c96864391cebaf3a9d10724cdd3c",
+        "perceptualHash": "ef18c96864391cebaf3a9d10724cdd3c"
+      },
+      {
+        "index": 8,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "bb4589881e4fb7ad280b3a39e74b752d",
+        "perceptualHash": "bb4589881e4fb7ad280b3a39e74b752d"
+      },
+      {
+        "index": 9,
+        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Science/Diabetes/e-learning-course-foundation-of-diabetes-management/diabetes-management-e-learning.png/jcr:content/diabetes-management-e-learning.jpg",
+        "hash": "115d195fb5bb1012ac054d29119d8a86",
+        "perceptualHash": "115d195fb5bb1012ac054d29119d8a86"
+      },
+      {
+        "index": 10,
+        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Home/Campus-Flu-Banner-2_Jenny-Batocabe.jpg/jcr:content/Campus%20Flu%20Banner%202_Jenny%20Batocabe.jpg",
+        "hash": "df37206cf95442356c5f88b266594137",
+        "perceptualHash": "df37206cf95442356c5f88b266594137"
+      },
+      {
+        "index": 11,
+        "src": "/.imaging/webp/sanofi-templates/w1080/dam/campus-sanofi-ph/Home/202504_Diabetes_FB.png/jcr:content/202504_Diabetes_FB.png",
+        "hash": "71711963b46167c5c8bcb490d0182031",
+        "perceptualHash": "71711963b46167c5c8bcb490d0182031"
+      },
+      {
+        "index": 12,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "c446646a95cd43c36d25583fdaea3dbc",
+        "perceptualHash": "c446646a95cd43c36d25583fdaea3dbc"
+      },
+      {
+        "index": 13,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "c446646a95cd43c36d25583fdaea3dbc",
+        "perceptualHash": "c446646a95cd43c36d25583fdaea3dbc"
+      },
+      {
+        "index": 14,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "c446646a95cd43c36d25583fdaea3dbc",
+        "perceptualHash": "c446646a95cd43c36d25583fdaea3dbc"
+      },
+      {
+        "index": 15,
+        "src": "/.resources/sanofi-lm-uikit/themes/uikit/src/img/placeholder.png",
+        "hash": "c446646a95cd43c36d25583fdaea3dbc",
+        "perceptualHash": "c446646a95cd43c36d25583fdaea3dbc"
+      },
+      {
+        "index": 16,
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Diphtheria.png/jcr:content/Science-Diphtheria.png",
+        "hash": "84efeefa2e4fa7885910388b95c29c7c",
+        "perceptualHash": "84efeefa2e4fa7885910388b95c29c7c"
+      },
+      {
+        "index": 17,
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-IMD.png/jcr:content/Science-IMD.png",
+        "hash": "8a1e77b944a318d11417404e4b118410",
+        "perceptualHash": "8a1e77b944a318d11417404e4b118410"
+      },
+      {
+        "index": 18,
         "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Perstussis.png/jcr:content/Science-Perstussis.png",
         "hash": "43ae9dbf5b6f3d0111f6aeeea91586ab",
         "perceptualHash": "43ae9dbf5b6f3d0111f6aeeea91586ab"
       },
       {
+        "index": 19,
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Influenza.png/jcr:content/Science-Influenza.png",
+        "hash": "a1255ba949194561b98101792aee509e",
+        "perceptualHash": "a1255ba949194561b98101792aee509e"
+      },
+      {
+        "index": 20,
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Polio.png/jcr:content/Science-Polio.png",
+        "hash": "c1b34d53b9bb3cd03392b4d947fb2483",
+        "perceptualHash": "c1b34d53b9bb3cd03392b4d947fb2483"
+      },
+      {
+        "index": 21,
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-HIB.png/jcr:content/Science-HIB.png",
+        "hash": "3f36d777b7c4195177ec2dc63ce13d61",
+        "perceptualHash": "3f36d777b7c4195177ec2dc63ce13d61"
+      },
+      {
         "index": 22,
-        "src": "/.imaging/default/dam/campus-sanofi-ph/Home/Banner-Home.png/jcr:content.png",
-        "hash": "42d15fd98d32a05ef408905c44335513",
-        "perceptualHash": "42d15fd98d32a05ef408905c44335513"
+        "src": "/.imaging/webp/sanofi-templates/category-w100/dam/campus-sanofi-ph/Home/Science-Tetanus.png/jcr:content/Science-Tetanus.png",
+        "hash": "d6dfde3ac5477936b8bc95d5e6f1fb17",
+        "perceptualHash": "d6dfde3ac5477936b8bc95d5e6f1fb17"
       },
       {
         "index": 23,
@@ -875,124 +771,6 @@
       "Tooltips": "15|Register, Log in, Start Learning Now, Step Up for Diabetes PH, Diabetes, Cardiology, Nephrology, Thrombosis, Diphtheria, Haemophilus Influenza Type B, Influenza, Invasive Meningococcal Disease, Pertussis, Poliomyelitis, Tetanus",
       "Iframes": "1|iframe"
     },
-    "extractionTimeMillis": 7671
-  },
-  "https://www.campus.sanofi/ph/login": {
-    "url": "https://www.campus.sanofi/ph/login",
-    "cachedAtEpochMs": 1781883128818,
-    "rawText": "Skip To Main Content\nPhilippines Preference Center Login\nEmail address *\nPassword *\n\nThe password is not visible\n\nRemember me\nForgot your password?\nLogin\nStill don\u0027t have an account? Register\nFor General Inquires – Contact us\n \n\nAdverse events \u0026 product safety\n\nIf you experience any adverse event, i.e., any unfavorable and unintended sign (an abnormal laboratory finding), symptom, or disease temporarily associated with the use of a medical product, please email it to PV.Philippines@sanofi.com \n\n\n \n\nTo report a product technical complaint, please contact our Quality Affairs team:\n\n \n\nVoicemail (non-business hours): +632-8859-5555 extension #1\nEmail: Philippines.PTC@sanofi.com\n\n \n\n \n\nFor Pharma Medical inquiries, click HERE to submit a question. \n\nFor Vaccine Medical inquiries, send an email to: medinfo.vaccines.ph@sanofi.com\n\n \n\n \n\nFor Data Privacy requests and concerns:\n \n\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.)\nData Privacy: privacy.PH@sanofi.com\n \nFor Data subject requests:\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.): OneTrust\nFor General Inquires – Contact us\n \n\nAdverse events \u0026 product safety\n\nIf you experience any adverse event, i.e., any unfavorable and unintended sign (an abnormal laboratory finding), symptom, or disease temporarily associated with the use of a medical product, please email it to PV.Philippines@sanofi.com \n\n\n \n\nTo report a product technical complaint, please contact our Quality Affairs team:\n\n \n\nVoicemail (non-business hours): +632-8859-5555 extension #1\nEmail: Philippines.PTC@sanofi.com\n\n \n\n \n\nFor Pharma Medical inquiries, click HERE to submit a question. \n\nFor Vaccine Medical inquiries, send an email to: medinfo.vaccines.ph@sanofi.com\n\n \n\n \n\nFor Data Privacy requests and concerns:\n \n\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.)\nData Privacy: privacy.PH@sanofi.com\n \nFor Data subject requests:\nSanofi General Medicines (under sanofi-aventis Philippines, Inc.): OneTrust",
-    "images": [],
-    "links": [
-      {
-        "originalHref": "https://www.campus.sanofi/ph/login?screenToRender\u003dforgotPassword",
-        "slug": "login",
-        "linkText": "Forgot your password?"
-      },
-      {
-        "originalHref": "/ph/",
-        "slug": "ph",
-        "linkText": "Back to home"
-      },
-      {
-        "originalHref": "https://www.campus.sanofi/ph/registration",
-        "slug": "registration",
-        "linkText": "Register"
-      },
-      {
-        "originalHref": "https://www.sanofi.com/en/philippines/contact",
-        "slug": "contact",
-        "linkText": "Contact us"
-      },
-      {
-        "originalHref": "mailto:PV.Philippines@sanofi.com",
-        "slug": "mailto:PV.Philippines@sanofi",
-        "linkText": "PV.Philippines@sanofi.com"
-      },
-      {
-        "originalHref": "tel:+632-8859-5555",
-        "slug": "tel:+632-8859-5555",
-        "linkText": "+632-8859-5555"
-      },
-      {
-        "originalHref": "mailto:Philippines.PTC@sanofi.com?subject\u003dProduct%20Technical%20Complaint",
-        "slug": "mailto:Philippines.PTC@sanofi",
-        "linkText": "Philippines.PTC@sanofi.com"
-      },
-      {
-        "originalHref": "https://www.sanofimedicalinformation.com/s/submit-a-question?language\u003den_US\u0026CN\u003dOTH",
-        "slug": "submit-a-question",
-        "linkText": "HERE"
-      },
-      {
-        "originalHref": "mailto:medinfo.vaccines.ph@sanofi.com",
-        "slug": "mailto:medinfo.vaccines.ph@sanofi",
-        "linkText": "medinfo.vaccines.ph@sanofi.com"
-      },
-      {
-        "originalHref": "mailto:privacy.ph@sanofi.com?subject\u003dData%20Privacy%20Concern",
-        "slug": "mailto:privacy.ph@sanofi",
-        "linkText": "privacy.PH@sanofi.com"
-      },
-      {
-        "originalHref": "http://privacyportal-eu.onetrust.com/webform/dd85e611-5592-4331-b346-b8739f63f687/a02f5bbc-d820-431e-8549-50e9994da67b",
-        "slug": "a02f5bbc-d820-431e-8549-50e9994da67b",
-        "linkText": "OneTrust"
-      }
-    ],
-    "metadata": {
-      "Title": "Login",
-      "viewport": "width\u003ddevice-width, initial-scale\u003d1.0",
-      "og:url": "https://www.campus.sanofi/ph/login",
-      "og:locale": "en_PH",
-      "og:site_name": "",
-      "twitter:card": "summary_large_image",
-      "twitter:url": "https://www.campus.sanofi/ph/login",
-      "algo:security": "UNLOCKED",
-      "algo:id": "1d9b47c9-951c-4d2d-a678-0d5f4cfa43d0_en-PH"
-    },
-    "dataLayer": {
-      "dataLayer.event": "metadata",
-      "dataLayer.device": "desktop",
-      "dataLayer.platform": "magnolia",
-      "dataLayer.language": "en",
-      "dataLayer.siteType": "advise",
-      "dataLayer.brandWebsiteType": "multibrand",
-      "dataLayer.region": "apac",
-      "dataLayer.country": "philippines",
-      "dataLayer.target": "hcp",
-      "dataLayer.brand": "Multi-Brand",
-      "dataLayer.brand_id": "Multi-Brand",
-      "dataLayer.gbu": "Cross bu",
-      "dataLayer.franchise": "null",
-      "dataLayer.franchise_id": "null",
-      "dataLayer.therapeutic_area": "null",
-      "dataLayer.therapeutic_area_id": "null",
-      "dataLayer.pageName": "Login",
-      "dataLayer.indication": "null",
-      "dataLayer.indication_id": "null",
-      "dataLayer.gtm.uniqueEventId": "12"
-    },
-    "functionalityComponents": {
-      "Buttons": "5|show password, Login, Resend Email Verification, expand",
-      "CTA Links (Button-styled)": "1|Skip To Main Content -\u003e #mainContent",
-      "Clickable Images": "0|[empty]",
-      "Zoomable Images": "0|[empty]",
-      "Modals": "0|[empty]",
-      "Popups": "0|[empty]",
-      "Carousels": "0|[empty]",
-      "Sliders": "0|[empty]",
-      "Accordions": "0|[empty]",
-      "Toggles": "0|[empty]",
-      "Video Players": "0|[empty]",
-      "Audio Players": "0|[empty]",
-      "Dropdowns": "0|[empty]",
-      "Selects": "0|[empty]",
-      "Forms": "2|submissions, submissions",
-      "Inputs": "1|(checkbox)",
-      "Tabs": "0|[empty]",
-      "Tooltips": "0|[empty]",
-      "Iframes": "0|[empty]"
-    },
-    "extractionTimeMillis": 5060
+    "extractionTimeMillis": 13171
   }
 }

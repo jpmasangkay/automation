@@ -22,6 +22,7 @@ public class ContentExtractor {
     private final FingerprintCache cache;
     private static final Set<String> GENERIC_SLUGS = new HashSet<>(Arrays.asList(
             "index", "index.html", "home", "default", "main", "..", "."));
+    private static final Semaphore GLOBAL_IMAGE_SEMAPHORE = new Semaphore(3); // Global concurrency limit
     private final java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
             .followRedirects(java.net.http.HttpClient.Redirect.ALWAYS)
             .build();
@@ -45,7 +46,7 @@ public class ContentExtractor {
                     .uri(java.net.URI.create(url))
                     .method("HEAD", java.net.http.HttpRequest.BodyPublishers.noBody())
                     .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-                    .timeout(java.time.Duration.ofSeconds(4))
+                    .timeout(java.time.Duration.ofSeconds(Config.getTimeoutSeconds()))
                     .build();
             java.net.http.HttpResponse<Void> response = httpClient.send(request, 
                     java.net.http.HttpResponse.BodyHandlers.discarding());
@@ -220,22 +221,49 @@ public class ContentExtractor {
                     String currentSrc = info.get("currentSrc");
                     String downloadUrl = stripCacheBustingParams(currentSrc);
                     try {
-                        // Native HTTP request to download image bytes concurrently
-                        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
-                                .uri(java.net.URI.create(downloadUrl))
-                                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-                                .timeout(java.time.Duration.ofSeconds(4))
-                                .build();
-                        
-                        java.net.http.HttpResponse<byte[]> response = this.httpClient.send(request, 
-                                java.net.http.HttpResponse.BodyHandlers.ofByteArray());
-                        
-                        if (response.statusCode() == 200) {
-                            byte[] imageBytes = response.body();
-                            String hash = md5(imageBytes);
-                            images.add(new ImageData(0, src.isBlank() ? currentSrc : src, hash, hash));
-                        } else {
-                            logger.debug("Failed to download image {}, status code: {}", downloadUrl, response.statusCode());
+                        GLOBAL_IMAGE_SEMAPHORE.acquire();
+                        try {
+                            // Small delay to prevent instant bursts across threads
+                            Thread.sleep(150);
+                            
+                            // Dynamic User-Agent Routing
+                            String userAgent;
+                            String lowerUrl = downloadUrl.toLowerCase();
+                            if (lowerUrl.contains("wikipedia.org") || lowerUrl.contains("wikimedia.org")) {
+                                userAgent = "SiteContentComparator/1.0 (Contact: admin@example.com)";
+                            } else {
+                                userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+                            }
+                            
+                            // Native HTTP request to download image bytes concurrently
+                            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                                    .uri(java.net.URI.create(downloadUrl))
+                                    .header("User-Agent", userAgent)
+                                    .timeout(java.time.Duration.ofSeconds(Config.getTimeoutSeconds()))
+                                    .build();
+                            
+                            int maxRetries = 2;
+                            for (int attempt = 0; attempt <= maxRetries; attempt++) {
+                                java.net.http.HttpResponse<byte[]> response = this.httpClient.send(request, 
+                                        java.net.http.HttpResponse.BodyHandlers.ofByteArray());
+                                
+                                if (response.statusCode() == 200) {
+                                    byte[] imageBytes = response.body();
+                                    String hash = md5(imageBytes);
+                                    images.add(new ImageData(0, src.isBlank() ? currentSrc : src, hash, hash));
+                                    break;
+                                } else if (response.statusCode() == 429 && attempt < maxRetries) {
+                                    // Rate limited, wait much longer to cool down
+                                    int waitTime = 4000 + (attempt * 3000);
+                                    logger.debug("Rate limited (429) downloading {}, retrying in {}ms (attempt {})...", downloadUrl, waitTime, attempt + 1);
+                                    Thread.sleep(waitTime);
+                                } else {
+                                    logger.debug("Failed to download image {}, status code: {}", downloadUrl, response.statusCode());
+                                    break;
+                                }
+                            }
+                        } finally {
+                            GLOBAL_IMAGE_SEMAPHORE.release();
                         }
                     } catch (Exception e) {
                         logger.debug("Skipped image {}: {}", downloadUrl, e.getMessage());

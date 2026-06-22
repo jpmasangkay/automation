@@ -1,7 +1,7 @@
 package com.automation.model;
 
 /**
- * Normalized similarity scores (0–100%) for each comparison dimension.
+ * Normalized similarity scores (0-100%) for each comparison dimension.
  * Computed using Jaccard similarity (|A ∩ B| / |A ∪ B|) for text and links,
  * and ratio-based scoring for images and map-based checks.
  */
